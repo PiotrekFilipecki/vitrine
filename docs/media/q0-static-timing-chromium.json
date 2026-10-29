@@ -1,0 +1,313 @@
+{
+  "dclAt": 0.2,
+  "readyCount": 15,
+  "msAllCards": 1277.8,
+  "cards": 12,
+  "modes": {
+    "live": 1,
+    "baked": 14
+  },
+  "fallbacks": [],
+  "ready": [
+    {
+      "effect": "mesh",
+      "mode": "live",
+      "cached": false,
+      "ms": 36,
+      "bake": null,
+      "at": 104.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 310,
+      "bake": {
+        "total": 290,
+        "wait": 112,
+        "render": 166,
+        "blob": 12,
+        "main": 11,
+        "upload": 0,
+        "read": 11,
+        "gpu": 155,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "1524x1142"
+      },
+      "at": 378.8
+    },
+    {
+      "effect": "paper",
+      "mode": "baked",
+      "cached": false,
+      "ms": 788,
+      "bake": {
+        "total": 734,
+        "wait": 263,
+        "render": 388,
+        "blob": 83,
+        "main": 8,
+        "upload": 0,
+        "read": 8,
+        "gpu": 381,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "902x590"
+      },
+      "at": 856.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 800,
+      "bake": {
+        "total": 495,
+        "wait": 392,
+        "render": 88,
+        "blob": 14,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 85,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "1226x1622"
+      },
+      "at": 868.8
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 855,
+      "bake": {
+        "total": 60,
+        "wait": 23,
+        "render": 35,
+        "blob": 2,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 32,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 923.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 895,
+      "bake": {
+        "total": 40,
+        "wait": 14,
+        "render": 24,
+        "blob": 2,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 21,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 963.3
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 922,
+      "bake": {
+        "total": 27,
+        "wait": 5,
+        "render": 19,
+        "blob": 4,
+        "main": 3,
+        "upload": 2,
+        "read": 0,
+        "gpu": 16,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 990.4
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 954,
+      "bake": {
+        "total": 32,
+        "wait": 12,
+        "render": 18,
+        "blob": 2,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 16,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1022.3
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 988,
+      "bake": {
+        "total": 34,
+        "wait": 13,
+        "render": 19,
+        "blob": 2,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 16,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1056.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1019,
+      "bake": {
+        "total": 31,
+        "wait": 12,
+        "render": 18,
+        "blob": 2,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 16,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1087.9
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1054,
+      "bake": {
+        "total": 35,
+        "wait": 15,
+        "render": 18,
+        "blob": 2,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 16,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1123
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1086,
+      "bake": {
+        "total": 31,
+        "wait": 12,
+        "render": 17,
+        "blob": 2,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 15,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1154.9
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1120,
+      "bake": {
+        "total": 34,
+        "wait": 14,
+        "render": 18,
+        "blob": 2,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 16,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1188.8
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1155,
+      "bake": {
+        "total": 34,
+        "wait": 14,
+        "render": 19,
+        "blob": 2,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 17,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1223.2
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1209,
+      "bake": {
+        "total": 55,
+        "wait": 14,
+        "render": 38,
+        "blob": 3,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 35,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 1277.8
+    }
+  ],
+  "after": {
+    "canvases": 1,
+    "meshCanvas": 1,
+    "bakerHosts": 0,
+    "uniqueCardImages": 12
+  },
+  "console": [
+    "[warning] [.WebGL-0x12c0226ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x12c0226ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x12c0226ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x12c0226ea00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ]
+}

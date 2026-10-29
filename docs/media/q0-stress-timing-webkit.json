@@ -1,0 +1,363 @@
+{
+  "dclAt": 0,
+  "readyCount": 25,
+  "msAllCards": 696,
+  "cards": 24,
+  "modes": {
+    "live": 1,
+    "baked": 24
+  },
+  "fallbacks": [],
+  "ready": [
+    {
+      "effect": "mesh",
+      "mode": "live",
+      "cached": false,
+      "ms": 38,
+      "bake": null,
+      "at": 77
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 140,
+      "bake": {
+        "total": 89,
+        "wait": 74,
+        "render": 5,
+        "blob": 10,
+        "main": 0,
+        "upload": 0,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 178
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 140,
+      "bake": null,
+      "at": 178
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 180,
+      "bake": null,
+      "at": 218
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 180,
+      "bake": {
+        "total": 40,
+        "wait": 17,
+        "render": 18,
+        "blob": 5,
+        "main": 13,
+        "upload": 12,
+        "read": 1,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 218
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 231,
+      "bake": {
+        "total": 40,
+        "wait": 14,
+        "render": 21,
+        "blob": 5,
+        "main": 16,
+        "upload": 16,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 269
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 231,
+      "bake": null,
+      "at": 269
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 243,
+      "bake": null,
+      "at": 281
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 243,
+      "bake": {
+        "total": 24,
+        "wait": 2,
+        "render": 17,
+        "blob": 5,
+        "main": 12,
+        "upload": 12,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 281
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 289,
+      "bake": null,
+      "at": 327
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 289,
+      "bake": {
+        "total": 33,
+        "wait": 6,
+        "render": 22,
+        "blob": 5,
+        "main": 17,
+        "upload": 17,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 327
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 301,
+      "bake": null,
+      "at": 339
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 301,
+      "bake": {
+        "total": 25,
+        "wait": 1,
+        "render": 19,
+        "blob": 5,
+        "main": 14,
+        "upload": 14,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 339
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 328,
+      "bake": {
+        "total": 27,
+        "wait": 3,
+        "render": 19,
+        "blob": 5,
+        "main": 14,
+        "upload": 14,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 366
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 328,
+      "bake": null,
+      "at": 366
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 356,
+      "bake": {
+        "total": 27,
+        "wait": 4,
+        "render": 18,
+        "blob": 5,
+        "main": 13,
+        "upload": 13,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 394
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 356,
+      "bake": null,
+      "at": 394
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 431,
+      "bake": null,
+      "at": 469
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 431,
+      "bake": {
+        "total": 75,
+        "wait": 51,
+        "render": 19,
+        "blob": 5,
+        "main": 14,
+        "upload": 14,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 469
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 509,
+      "bake": {
+        "total": 78,
+        "wait": 51,
+        "render": 21,
+        "blob": 6,
+        "main": 16,
+        "upload": 16,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 547
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 509,
+      "bake": null,
+      "at": 547
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 583,
+      "bake": {
+        "total": 75,
+        "wait": 51,
+        "render": 18,
+        "blob": 6,
+        "main": 14,
+        "upload": 13,
+        "read": 1,
+        "gpu": 4,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 621
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 583,
+      "bake": null,
+      "at": 621
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 658,
+      "bake": {
+        "total": 74,
+        "wait": 50,
+        "render": 19,
+        "blob": 5,
+        "main": 13,
+        "upload": 13,
+        "read": 0,
+        "gpu": 6,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 696
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 658,
+      "bake": null,
+      "at": 696
+    }
+  ],
+  "after": {
+    "canvases": 1,
+    "heroCanvas": 1,
+    "bakerHosts": 0
+  },
+  "console": []
+}

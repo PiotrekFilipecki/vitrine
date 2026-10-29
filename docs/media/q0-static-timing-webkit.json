@@ -1,0 +1,308 @@
+{
+  "dclAt": 1,
+  "readyCount": 15,
+  "msAllCards": 1110,
+  "cards": 12,
+  "modes": {
+    "live": 1,
+    "baked": 14
+  },
+  "fallbacks": [],
+  "ready": [
+    {
+      "effect": "mesh",
+      "mode": "live",
+      "cached": false,
+      "ms": 75,
+      "bake": null,
+      "at": 146
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 165,
+      "bake": {
+        "total": 126,
+        "wait": 80,
+        "render": 13,
+        "blob": 33,
+        "main": 6,
+        "upload": 0,
+        "read": 6,
+        "gpu": 7,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "1524x1142"
+      },
+      "at": 236
+    },
+    {
+      "effect": "paper",
+      "mode": "baked",
+      "cached": false,
+      "ms": 215,
+      "bake": {
+        "total": 123,
+        "wait": 91,
+        "render": 5,
+        "blob": 27,
+        "main": 1,
+        "upload": 0,
+        "read": 1,
+        "gpu": 4,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "902x592"
+      },
+      "at": 286
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 255,
+      "bake": {
+        "total": 93,
+        "wait": 80,
+        "render": 8,
+        "blob": 5,
+        "main": 3,
+        "upload": 2,
+        "read": 1,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 326
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 318,
+      "bake": {
+        "total": 63,
+        "wait": 51,
+        "render": 7,
+        "blob": 5,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 389
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 381,
+      "bake": {
+        "total": 64,
+        "wait": 50,
+        "render": 8,
+        "blob": 6,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 452
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 447,
+      "bake": {
+        "total": 65,
+        "wait": 51,
+        "render": 7,
+        "blob": 7,
+        "main": 2,
+        "upload": 2,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 518
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 511,
+      "bake": {
+        "total": 64,
+        "wait": 50,
+        "render": 8,
+        "blob": 6,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 582
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 576,
+      "bake": {
+        "total": 65,
+        "wait": 50,
+        "render": 8,
+        "blob": 7,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 647
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 641,
+      "bake": {
+        "total": 65,
+        "wait": 51,
+        "render": 8,
+        "blob": 6,
+        "main": 4,
+        "upload": 3,
+        "read": 1,
+        "gpu": 4,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 712
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 705,
+      "bake": {
+        "total": 64,
+        "wait": 50,
+        "render": 8,
+        "blob": 6,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 776
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 771,
+      "bake": {
+        "total": 66,
+        "wait": 50,
+        "render": 9,
+        "blob": 7,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 6,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 842
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 837,
+      "bake": {
+        "total": 66,
+        "wait": 51,
+        "render": 8,
+        "blob": 7,
+        "main": 3,
+        "upload": 3,
+        "read": 0,
+        "gpu": 5,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 908
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 914,
+      "bake": {
+        "total": 75,
+        "wait": 51,
+        "render": 15,
+        "blob": 9,
+        "main": 9,
+        "upload": 8,
+        "read": 1,
+        "gpu": 6,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "612x734"
+      },
+      "at": 985
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1039,
+      "bake": {
+        "total": 121,
+        "wait": 73,
+        "render": 25,
+        "blob": 23,
+        "main": 19,
+        "upload": 17,
+        "read": 2,
+        "gpu": 6,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "1226x1622"
+      },
+      "at": 1110
+    }
+  ],
+  "after": {
+    "canvases": 1,
+    "meshCanvas": 1,
+    "bakerHosts": 0,
+    "uniqueCardImages": 12
+  },
+  "console": []
+}

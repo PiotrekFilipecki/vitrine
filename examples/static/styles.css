@@ -1,5 +1,20 @@
 /* NIWWTS No.06 · VITRINE demo. Tokens follow the shop identity: paper + ink + one accent, radius 0, no shadows,
    typographic contrast on the width axis of one family (Archivo wdth 62–125). */
+
+/* Q0: Archivo from the repo (OFL, examples/fonts/archivo) instead of Google Fonts. The third-party font arriving late
+   moved the whole <main> (Lighthouse CLS 0.329 on the P4 page); same-origin + preload removes the extra origin. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('../fonts/archivo/archivo-latin-wdth-wght.woff2') format('woff2');
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --paper: #f1ece2;
   --ink: #151311;
@@ -153,6 +168,11 @@ code {
   gap: 24px;
   align-items: start;
 }
+/* Q0: grid items default to min-width: auto, so the <pre> pushed the page 15 px (390) to 88 px (1024) wider than
+   the viewport since P4; with 0 the code scrolls inside its block as intended. */
+.stack {
+  min-width: 0;
+}
 .stack__kicker {
   margin: 0 0 10px;
   font-size: 12px;
@@ -229,40 +249,161 @@ code {
   text-align: right;
 }
 
-/* hero: the mesh is a surface, the title sits on an ink plate that overlaps it (frame within a frame) */
-.hero {
-  position: relative;
-  margin: 24px calc(-1 * var(--margin)) 0;
-  min-height: 62vh;
+/* hero (Q0): a proof print under a loupe. 38 / 62, the print bleeds off the right edge; the loupe is the cursor and
+   the one signature; the mesh is the colour bar at the foot of the proof, an effect in its place, not a backdrop. */
+.proof {
+  margin-top: 24px;
   display: grid;
+  grid-template-columns: 38fr 62fr;
+  grid-template-areas: 'text figure';
+  column-gap: 42px;
   align-items: end;
 }
-.hero__field {
-  position: absolute;
-  inset: 0;
-  background: var(--ink);
+.proof__text {
+  grid-area: text;
+  padding-bottom: 34px;
 }
-.hero__plate {
-  position: relative;
-  margin: 0 0 -1px var(--margin);
-  max-width: 62%;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 20px 24px 22px;
+.proof__kicker {
+  margin: 0 0 18px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue-rice);
 }
-.hero__title {
+.proof__title {
   margin: 0;
   font-weight: 700;
   font-stretch: 62%;
   font-size: clamp(64px, 10.4vw, 150px);
-  line-height: 0.88;
+  line-height: 0.86;
   letter-spacing: -0.02em;
 }
-.hero__lede {
-  margin: 14px 0 0;
-  max-width: 34ch;
-  font-size: 16px;
-  font-stretch: 100%;
+.proof__lede {
+  margin: 22px 0 0;
+  max-width: 36ch;
+  font-size: 17px;
+  line-height: 1.4;
+}
+.proof__hint {
+  margin: 26px 0 0;
+  padding-top: 8px;
+  border-top: var(--hair) solid var(--ink);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  max-width: 44ch;
+}
+.proof__hint--touch {
+  display: none;
+}
+@media (hover: none) {
+  .proof__hint--pointer {
+    display: none;
+  }
+  .proof__hint--touch {
+    display: inline;
+  }
+}
+.proof__figure {
+  grid-area: figure;
+  margin: 0 calc(-1 * var(--margin)) 0 0;
+}
+.proof__frame {
+  --lx: 31%;
+  --ly: 36%;
+  --lr: clamp(64px, 9.5vw, 148px);
+  position: relative;
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  color: inherit;
+  font: inherit;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+@media (hover: hover) and (pointer: fine) {
+  .proof__frame {
+    cursor: none;
+  }
+}
+.proof__frame:focus-visible {
+  /* outside the print: inside it, an ink ring vanished over the dark parts of the dither (a11y-gate, 2.4.7) */
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+.proof__print {
+  /* display: block before the element is defined too: an undefined custom element is inline, the photo painted at
+     another size first and the upgrade produced a second, later LCP candidate (Q0 measurement). */
+  display: block;
+  aspect-ratio: 4 / 3;
+}
+.proof__print img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* The baked print is masked by a hard-edged circle: inside it, the content <img> shows through. */
+.proof__print > .vitrine-layer {
+  -webkit-mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), transparent 100%, #000 100%);
+  mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), transparent 100%, #000 100%);
+}
+.proof__loupe {
+  position: absolute;
+  left: var(--lx);
+  top: var(--ly);
+  width: calc(2 * var(--lr));
+  height: calc(2 * var(--lr));
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--ink);
+  outline: 2px solid var(--paper);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.proof__frame[aria-pressed='true'] .proof__loupe,
+.proof__print:not([data-vitrine-state='baked']) + .proof__loupe {
+  /* no print yet (loading, ?effects=off, no WebGL2): nothing for the loupe to look through */
+  display: none;
+}
+.proof__frame[aria-pressed='true'] .vitrine-layer {
+  opacity: 0;
+}
+.proof__caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-right: var(--margin);
+  padding-top: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+}
+/* the colour bar along the foot of the proof, like the control strip on a press sheet */
+.proof__mesh {
+  display: block;
+  height: 28px;
+  background: var(--ink);
+}
+
+/* stress page: the live mesh as a band above the grid */
+.stress-band {
+  margin-top: 24px;
+}
+.stress-band__mesh {
+  display: block;
+  height: 120px;
+  background: var(--ink);
+}
+.stress-band__label {
+  margin: 8px 0 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 /* catalogue: hairline grid like a contact sheet; first cell is the lead (2 columns) */
@@ -306,8 +447,27 @@ code {
   background: var(--paper);
   min-width: 0;
 }
+/* Q0: the lead card spans 2 × 2. Its card is taken out of flow, so the two rows are as tall as their other cards and
+   the lead fills them: no empty band under the neighbours (v0.1: lead 2 × 1 next to cards of half its height). */
 .cell--lead {
   grid-column: span 2;
+  grid-row: span 2;
+  position: relative;
+}
+.cell--lead .card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cell--lead vitrine-shader {
+  flex: 1 1 auto;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+.cell--lead vitrine-shader img {
+  height: 100%;
+  object-fit: cover;
 }
 .card {
   display: block;
@@ -361,9 +521,12 @@ code {
   overflow-wrap: anywhere;
 }
 
-/* closing plate: ink cell that completes the sheet (4 columns: 24 cards + lead = 25 units, plate = 3) */
+/* closing plate: ink cell that completes the sheet. 4 columns: lead 4 units + 11 cards + plate 1 = 16 = 4 rows;
+   2 columns: lead 2 + 11 + 1 = 14 = 7 rows. The stress page has no plate: 24 cards = 6 or 12 full rows. */
 .cell--plate {
-  grid-column: span 3;
+  /* Q0: the plate takes the height of its row instead of setting it (390 px: its text made the row 20 % taller
+     than the TYPE card next to it). */
+  contain: size;
   background: var(--ink);
   color: var(--paper);
   padding: 20px 22px;
@@ -375,10 +538,13 @@ code {
 .plate__text {
   margin: 0;
   max-width: 44ch;
-  font-size: clamp(18px, 2vw, 26px);
+  font-size: clamp(15px, 2vw, 26px);
   font-weight: 500;
   font-stretch: 100%;
   line-height: 1.25;
+}
+.plate__meta a {
+  color: inherit;
 }
 .plate__meta {
   margin: 0;
@@ -459,11 +625,44 @@ code {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .cell--plate {
-    grid-column: span 1; /* 2 columns: 25 units + 1 = 13 full rows */
+  .cell--lead {
+    grid-row: auto;
   }
-  .hero__plate {
-    max-width: 88%;
+  .cell--plate {
+    padding: 14px;
+    gap: 14px;
+  }
+  .cell--lead .card {
+    position: static;
+    display: block;
+  }
+  .cell--lead vitrine-shader {
+    aspect-ratio: var(--vitrine-aspect, 5 / 6);
+  }
+  .cell--lead vitrine-shader img {
+    height: auto;
+  }
+  .proof {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'text'
+      'figure';
+  }
+  .proof__text {
+    padding-bottom: 22px;
+  }
+  .proof__figure {
+    margin: 0 calc(-1 * var(--margin));
+  }
+  .proof__print {
+    aspect-ratio: 4 / 5;
+  }
+  .proof__caption {
+    margin: 0 var(--margin);
+  }
+  .proof__caption {
+    flex-direction: column;
+    gap: 2px;
   }
   .editorial,
   .credit,
@@ -478,7 +677,7 @@ code {
     flex-direction: column;
     gap: 2px;
   }
-  .hero__title {
+  .proof__title {
     font-size: clamp(64px, 24vw, 120px);
   }
   .editorial__text {

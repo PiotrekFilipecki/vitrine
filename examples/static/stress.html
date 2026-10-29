@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VITRINE · stress page: 24 cards and a live mesh</title>
+    <meta
+      name="description"
+      content="Stress page for VITRINE: 24 dithered cards from 1600 px originals and one live mesh, the worst case of the v0.1 demo, kept for the measurements in the README."
+    />
+    <link
+      rel="preload"
+      href="../fonts/archivo/archivo-latin-wdth-wght.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module">
+      // Same probe as index.html: counts ready events; `?effects=off` keeps the element out (Lighthouse comparison).
+      const stats = {
+        dclAt: 0,
+        readyCount: 0,
+        msAllCards: null,
+        cards: 0,
+        modes: {},
+        fallbacks: [],
+        ready: [],
+      };
+      window.__vitrine = stats;
+      const t0 = performance.now();
+      document.addEventListener('DOMContentLoaded', () => {
+        stats.dclAt = +(performance.now() - t0).toFixed(1);
+        stats.cards = document.querySelectorAll('.grid vitrine-shader').length;
+      });
+      let cardsReady = 0;
+      document.addEventListener('vitrine:ready', (e) => {
+        stats.readyCount += 1;
+        stats.modes[e.detail.mode] = (stats.modes[e.detail.mode] ?? 0) + 1;
+        stats.ready.push({
+          effect: e.detail.effect,
+          mode: e.detail.mode,
+          cached: e.detail.cached,
+          ms: e.detail.ms,
+          bake: e.detail.bake ?? null,
+          at: +(performance.now() - t0).toFixed(1),
+        });
+        if (e.target.closest('.grid') && ++cardsReady === stats.cards) {
+          stats.msAllCards = +(performance.now() - t0).toFixed(1);
+        }
+      });
+      document.addEventListener('vitrine:fallback', (e) => stats.fallbacks.push(e.detail));
+      if (!new URLSearchParams(location.search).has('effects')) {
+        import('../../packages/element/dist/index.js');
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#catalogue">Skip to the grid</a>
+    <header class="masthead">
+      <p class="masthead__brand">VITRINE</p>
+      <p class="masthead__issue">
+        <span>Stress page · 24 cards · 1600 px originals · 1 live mesh</span>
+        <span class="masthead__stacks"><a href="./">Back to the demo</a></span>
+      </p>
+      <p class="masthead__note">The worst case of the v0.1 demo, kept as-is for the numbers in the README.</p>
+    </header>
+
+    <main>
+      <section class="stress-band" aria-label="Live mesh">
+        <vitrine-shader
+          id="hero"
+          class="stress-band__mesh"
+          effect="mesh"
+          preset="drop-night"
+          aria-hidden="true"
+        ></vitrine-shader>
+        <p class="stress-band__label">mesh · drop-night · live: animates while the 24 cards are printed</p>
+      </section>
+
+      <section id="catalogue" class="catalogue" aria-labelledby="catalogue-title">
+        <div class="catalogue__head">
+          <h1 id="catalogue-title" class="catalogue__title">24 cards</h1>
+          <p class="catalogue__count">
+            12 products twice · dither / newsprint · no srcset, every texture is the 1600 × 1920 original
+          </p>
+        </div>
+        <ul class="grid grid--stress">
+          <li class="cell">
+            <a class="card" href="#pc-008-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/01-tee-el-funkador.webp"
+                  alt="EL FUNKADOR — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-008 · Tee</span>
+                <span class="card__title">EL FUNKADOR</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-003-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/02-print-uptown-saturday-descent.webp"
+                  alt="UPTOWN SATURDAY DESCENT — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-003 · Print</span>
+                <span class="card__title">UPTOWN SATURDAY DESCENT</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-001-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/03-tee-molnar.webp"
+                  alt="ROTATION — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-001 · Tee</span>
+                <span class="card__title">ROTATION</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-002-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/04-print-opart_accent.webp"
+                  alt="INTERFERENCE — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-002 · Print</span>
+                <span class="card__title">INTERFERENCE</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-004-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/05-tee-the-hustle-recursive.webp"
+                  alt="THE HUSTLE (RECURSIVE) — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-004 · Tee</span>
+                <span class="card__title">THE HUSTLE (RECURSIVE)</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-003-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/06-print-flow.webp"
+                  alt="FLOW — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-003 · Print</span>
+                <span class="card__title">FLOW</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-004-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/07-tee-bauhaus_accent.webp"
+                  alt="STACK — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-004 · Tee</span>
+                <span class="card__title">STACK</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-001-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/08-print-faded-in-studio-54.webp"
+                  alt="FADED IN STUDIO 54 — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-001 · Print</span>
+                <span class="card__title">FADED IN STUDIO 54</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-007-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/09-tee-ollie.webp"
+                  alt="OLLIE — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-007 · Tee</span>
+                <span class="card__title">OLLIE</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-007-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/10-print-kredki-warm.webp"
+                  alt="CRAYONS (WARM) — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-007 · Print</span>
+                <span class="card__title">CRAYONS (WARM)</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-005-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/11-tee-mothership-reflection.webp"
+                  alt="MOTHERSHIP REFLECTION — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-005 · Tee</span>
+                <span class="card__title">MOTHERSHIP REFLECTION</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-009-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/12-print-type_accent.webp"
+                  alt="TYPE — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-009 · Print</span>
+                <span class="card__title">TYPE</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-008-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/01-tee-el-funkador.webp"
+                  alt="EL FUNKADOR — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-008 · Tee</span>
+                <span class="card__title">EL FUNKADOR</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-003-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/02-print-uptown-saturday-descent.webp"
+                  alt="UPTOWN SATURDAY DESCENT — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-003 · Print</span>
+                <span class="card__title">UPTOWN SATURDAY DESCENT</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-001-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/03-tee-molnar.webp"
+                  alt="ROTATION — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-001 · Tee</span>
+                <span class="card__title">ROTATION</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-002-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/04-print-opart_accent.webp"
+                  alt="INTERFERENCE — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-002 · Print</span>
+                <span class="card__title">INTERFERENCE</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-004-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/05-tee-the-hustle-recursive.webp"
+                  alt="THE HUSTLE (RECURSIVE) — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-004 · Tee</span>
+                <span class="card__title">THE HUSTLE (RECURSIVE)</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-003-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/06-print-flow.webp"
+                  alt="FLOW — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-003 · Print</span>
+                <span class="card__title">FLOW</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-004-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/07-tee-bauhaus_accent.webp"
+                  alt="STACK — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-004 · Tee</span>
+                <span class="card__title">STACK</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-001-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/08-print-faded-in-studio-54.webp"
+                  alt="FADED IN STUDIO 54 — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-001 · Print</span>
+                <span class="card__title">FADED IN STUDIO 54</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-007-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/09-tee-ollie.webp"
+                  alt="OLLIE — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-007 · Tee</span>
+                <span class="card__title">OLLIE</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-007-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/10-print-kredki-warm.webp"
+                  alt="CRAYONS (WARM) — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-007 · Print</span>
+                <span class="card__title">CRAYONS (WARM)</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#pc-005-tee">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/11-tee-mothership-reflection.webp"
+                  alt="MOTHERSHIP REFLECTION — NIWWTS tee, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">PC-005 · Tee</span>
+                <span class="card__title">MOTHERSHIP REFLECTION</span>
+                <span class="card__price">149 PLN</span>
+              </span>
+            </a>
+          </li>
+          <li class="cell">
+            <a class="card" href="#ar-009-print">
+              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
+                <img
+                  src="../spikes/fixtures/12-print-type_accent.webp"
+                  alt="TYPE — NIWWTS print, edition No.06"
+                  width="1600"
+                  height="1920"
+                  loading="eager"
+                  decoding="async"
+                />
+              </vitrine-shader>
+              <span class="card__meta">
+                <span class="card__code">AR-009 · Print</span>
+                <span class="card__title">TYPE</span>
+                <span class="card__price">89 PLN</span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="colophon">
+      <p>
+        VITRINE · Piotr Filipecki · Works © NIWWTS ·
+        <a href="https://shaders.paper.design">Powered by Paper Shaders</a>
+      </p>
+      <p>Static page, no bundler: the element is imported from <code>packages/element/dist</code>.</p>
+    </footer>
+  </body>
+</html>

@@ -6,24 +6,42 @@
     <title>VITRINE · Paper Shaders for Shopify, demo on NIWWTS No.06</title>
     <meta
       name="description"
-      content="Paper Shaders on a plain product grid: dithered prints and tees that turn into the photo on hover. Static HTML, no bundler."
+      content="Paper Shaders on a plain product grid: a print you can inspect with a loupe, dithered prints and tees that turn into the photo on hover. Static HTML, no bundler."
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..700&display=swap"
+      rel="preload"
+      href="../fonts/archivo/archivo-latin-wdth-wght.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp"
+      imagesrcset="../spikes/fixtures/w640/piece-uptown-saturday-descent.webp 640w, ../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp 1000w, ../spikes/fixtures/piece-uptown-saturday-descent.webp 1120w"
+      imagesizes="(min-width: 901px) 60vw, 100vw"
+      fetchpriority="high"
     />
     <link rel="stylesheet" href="./styles.css" />
     <script type="module">
-      // `?effects=off` keeps the element out of the page (Lighthouse comparison). Everything else is the same markup.
-      const stats = { dclAt: 0, readyCount: 0, msAllCards: null, modes: {}, fallbacks: [], ready: [] };
+      // Same probe as index.html: counts ready events; `?effects=off` keeps the element out (Lighthouse comparison).
+      const stats = {
+        dclAt: 0,
+        readyCount: 0,
+        msAllCards: null,
+        cards: 0,
+        modes: {},
+        fallbacks: [],
+        ready: [],
+      };
       window.__vitrine = stats;
       const t0 = performance.now();
-      document.addEventListener(
-        'DOMContentLoaded',
-        () => (stats.dclAt = +(performance.now() - t0).toFixed(1))
-      );
+      document.addEventListener('DOMContentLoaded', () => {
+        stats.dclAt = +(performance.now() - t0).toFixed(1);
+        stats.cards = document.querySelectorAll('.grid vitrine-shader').length;
+      });
+      let cardsReady = 0;
       document.addEventListener('vitrine:ready', (e) => {
         stats.readyCount += 1;
         stats.modes[e.detail.mode] = (stats.modes[e.detail.mode] ?? 0) + 1;
@@ -32,15 +50,29 @@
           mode: e.detail.mode,
           cached: e.detail.cached,
           ms: e.detail.ms,
+          bake: e.detail.bake ?? null,
           at: +(performance.now() - t0).toFixed(1),
         });
-        if (e.detail.effect === 'dither' && stats.ready.filter((r) => r.effect === 'dither').length === 24) {
+        if (e.target.closest('.grid') && ++cardsReady === stats.cards) {
           stats.msAllCards = +(performance.now() - t0).toFixed(1);
         }
       });
       document.addEventListener('vitrine:fallback', (e) => stats.fallbacks.push(e.detail));
+      // The photo first, the print after: the element is imported once the hero photo has been decoded and painted
+      // (two frames), so the LCP frame never waits for the element's JS. Q0 measurement: with an immediate import the
+      // photo painted one frame after the title and Lighthouse's simulation charged the whole module to LCP (3.7 s
+      // vs 2.8 s without the element). stress.html keeps the immediate import as the worst case.
       if (!new URLSearchParams(location.search).has('effects')) {
-        import('../../packages/element/dist/index.js');
+        const start = () => {
+          const hero = document.querySelector('.proof__print img');
+          const later = () =>
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => import('../../packages/element/dist/index.js'))
+            );
+          (hero ? hero.decode().catch(() => undefined) : Promise.resolve()).then(later);
+        };
+        if (document.readyState === 'complete') start();
+        else addEventListener('load', start, { once: true });
       }
     </script>
   </head>
@@ -59,22 +91,80 @@
     </header>
 
     <main>
-      <section class="hero" aria-labelledby="hero-title">
-        <vitrine-shader
-          id="hero"
-          class="hero__field"
-          effect="mesh"
-          preset="drop-night"
-          aria-hidden="true"
-        ></vitrine-shader>
-        <div class="hero__plate">
-          <h1 id="hero-title" class="hero__title">Print it once.</h1>
-          <p class="hero__lede">
-            A custom element that runs Paper Shaders over the product image your page already renders.
-            Dithered catalogue, mesh hero, paper lookbook. Hover, tap or Tab and the print gives way to the
-            photo.
+      <section class="proof" aria-labelledby="hero-title">
+        <div class="proof__text">
+          <p class="proof__kicker">Proof · dither / newsprint · PC-003</p>
+          <h1 id="hero-title" class="proof__title">Print it once.</h1>
+          <p class="proof__lede">
+            VITRINE runs Paper Shaders over the product image your page already renders and prints it once.
+            The photo stays underneath, as the content.
+          </p>
+          <p class="proof__hint">
+            <span class="proof__hint--pointer"
+              >Move over the print: the loupe shows the photo. Click to lift the whole print.</span
+            >
+            <span class="proof__hint--touch">Tap the print: the loupe moves there.</span>
           </p>
         </div>
+        <figure class="proof__figure">
+          <button
+            type="button"
+            class="proof__frame"
+            aria-pressed="false"
+            aria-label="UPTOWN SATURDAY DESCENT, NIWWTS print: show the photo under the dither"
+          >
+            <vitrine-shader class="proof__print" effect="dither" preset="newsprint" reveal="none">
+              <img
+                src="../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp"
+                srcset="
+                  ../spikes/fixtures/w640/piece-uptown-saturday-descent.webp   640w,
+                  ../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp 1000w,
+                  ../spikes/fixtures/piece-uptown-saturday-descent.webp       1120w
+                "
+                sizes="(min-width: 901px) 60vw, 100vw"
+                alt="UPTOWN SATURDAY DESCENT, an orange and black swirl, NIWWTS print, edition No.06"
+                width="1120"
+                height="1344"
+                fetchpriority="high"
+                decoding="async"
+              />
+            </vitrine-shader>
+            <span class="proof__loupe" aria-hidden="true"></span>
+          </button>
+          <vitrine-shader
+            class="proof__mesh"
+            effect="mesh"
+            preset="drop-night"
+            aria-hidden="true"
+          ></vitrine-shader>
+          <figcaption class="proof__caption">
+            <span>UPTOWN SATURDAY DESCENT · print · 89 PLN</span>
+            <span>colour bar: mesh / drop-night, live</span>
+          </figcaption>
+        </figure>
+        <script type="module">
+          // The loupe: page code, not element API (bind arrives in Q1). Mouse and pen move it, touch places it,
+          // click / Enter / Space lift the whole print (aria-pressed). Reduced motion: no transitions, same loupe.
+          const frame = document.querySelector('.proof__frame');
+          let lastPointer = 'mouse';
+          const place = (e) => {
+            const r = frame.getBoundingClientRect();
+            frame.style.setProperty('--lx', `${Math.round(e.clientX - r.left)}px`);
+            frame.style.setProperty('--ly', `${Math.round(e.clientY - r.top)}px`);
+          };
+          frame.addEventListener('pointermove', (e) => {
+            if (e.pointerType !== 'touch') place(e);
+          });
+          frame.addEventListener('pointerdown', (e) => {
+            lastPointer = e.pointerType;
+            if (e.pointerType === 'touch') place(e);
+          });
+          frame.addEventListener('click', (e) => {
+            // A tap only moves the loupe; mouse clicks and the keyboard (detail 0) toggle the whole print.
+            if (lastPointer === 'touch' && e.detail > 0) return;
+            frame.setAttribute('aria-pressed', String(frame.getAttribute('aria-pressed') !== 'true'));
+          });
+        </script>
       </section>
 
       <section class="stacks" aria-labelledby="stacks-title">
@@ -90,7 +180,7 @@
   image: card_product.featured_media,
   sizes: '(min-width: 990px) 25vw, 50vw' %}
 
-{{ 'vitrine.js' | asset_url }}   ← one module, 44 KB gzip
+{{ 'vitrine.js' | asset_url }}   ← one module, 46 KB gzip
 sections/vitrine-hero.liquid     ← colour pickers + sliders
 sections/vitrine-editorial.liquid</pre>
             <p class="stack__text">
@@ -130,7 +220,8 @@ import { ProductMediaShader }
         <div class="catalogue__head">
           <h2 id="catalogue-title" class="catalogue__title">Catalogue</h2>
           <p class="catalogue__count">
-            24 items · dither / newsprint · printed once, 0 live WebGL contexts · hover for the photo
+            12 items · dither / newsprint · printed once, 0 live WebGL contexts in the grid · hover for the
+            photo
           </p>
         </div>
         <ul class="grid">
@@ -138,7 +229,13 @@ import { ProductMediaShader }
             <a class="card" href="#pc-008-tee">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/01-tee-el-funkador.webp"
+                  src="../spikes/fixtures/w640/01-tee-el-funkador.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/01-tee-el-funkador.webp   640w,
+                    ../spikes/fixtures/w1000/01-tee-el-funkador.webp 1000w,
+                    ../spikes/fixtures/01-tee-el-funkador.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 50vw, 100vw"
                   alt="EL FUNKADOR — NIWWTS tee, edition No.06"
                   width="1600"
                   height="1920"
@@ -157,7 +254,13 @@ import { ProductMediaShader }
             <a class="card" href="#pc-003-print">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/02-print-uptown-saturday-descent.webp"
+                  src="../spikes/fixtures/w640/02-print-uptown-saturday-descent.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/02-print-uptown-saturday-descent.webp   640w,
+                    ../spikes/fixtures/w1000/02-print-uptown-saturday-descent.webp 1000w,
+                    ../spikes/fixtures/02-print-uptown-saturday-descent.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="UPTOWN SATURDAY DESCENT — NIWWTS print, edition No.06"
                   width="1600"
                   height="1920"
@@ -176,7 +279,13 @@ import { ProductMediaShader }
             <a class="card" href="#ar-001-tee">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/03-tee-molnar.webp"
+                  src="../spikes/fixtures/w640/03-tee-molnar.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/03-tee-molnar.webp   640w,
+                    ../spikes/fixtures/w1000/03-tee-molnar.webp 1000w,
+                    ../spikes/fixtures/03-tee-molnar.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="ROTATION — NIWWTS tee, edition No.06"
                   width="1600"
                   height="1920"
@@ -195,7 +304,13 @@ import { ProductMediaShader }
             <a class="card" href="#ar-002-print">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/04-print-opart_accent.webp"
+                  src="../spikes/fixtures/w640/04-print-opart_accent.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/04-print-opart_accent.webp   640w,
+                    ../spikes/fixtures/w1000/04-print-opart_accent.webp 1000w,
+                    ../spikes/fixtures/04-print-opart_accent.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="INTERFERENCE — NIWWTS print, edition No.06"
                   width="1600"
                   height="1920"
@@ -214,7 +329,13 @@ import { ProductMediaShader }
             <a class="card" href="#pc-004-tee">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/05-tee-the-hustle-recursive.webp"
+                  src="../spikes/fixtures/w640/05-tee-the-hustle-recursive.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/05-tee-the-hustle-recursive.webp   640w,
+                    ../spikes/fixtures/w1000/05-tee-the-hustle-recursive.webp 1000w,
+                    ../spikes/fixtures/05-tee-the-hustle-recursive.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="THE HUSTLE (RECURSIVE) — NIWWTS tee, edition No.06"
                   width="1600"
                   height="1920"
@@ -233,7 +354,13 @@ import { ProductMediaShader }
             <a class="card" href="#ar-003-print">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/06-print-flow.webp"
+                  src="../spikes/fixtures/w640/06-print-flow.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/06-print-flow.webp   640w,
+                    ../spikes/fixtures/w1000/06-print-flow.webp 1000w,
+                    ../spikes/fixtures/06-print-flow.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="FLOW — NIWWTS print, edition No.06"
                   width="1600"
                   height="1920"
@@ -252,7 +379,13 @@ import { ProductMediaShader }
             <a class="card" href="#ar-004-tee">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/07-tee-bauhaus_accent.webp"
+                  src="../spikes/fixtures/w640/07-tee-bauhaus_accent.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/07-tee-bauhaus_accent.webp   640w,
+                    ../spikes/fixtures/w1000/07-tee-bauhaus_accent.webp 1000w,
+                    ../spikes/fixtures/07-tee-bauhaus_accent.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="STACK — NIWWTS tee, edition No.06"
                   width="1600"
                   height="1920"
@@ -271,7 +404,13 @@ import { ProductMediaShader }
             <a class="card" href="#pc-001-print">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/08-print-faded-in-studio-54.webp"
+                  src="../spikes/fixtures/w640/08-print-faded-in-studio-54.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/08-print-faded-in-studio-54.webp   640w,
+                    ../spikes/fixtures/w1000/08-print-faded-in-studio-54.webp 1000w,
+                    ../spikes/fixtures/08-print-faded-in-studio-54.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="FADED IN STUDIO 54 — NIWWTS print, edition No.06"
                   width="1600"
                   height="1920"
@@ -290,7 +429,13 @@ import { ProductMediaShader }
             <a class="card" href="#ar-007-tee">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/09-tee-ollie.webp"
+                  src="../spikes/fixtures/w640/09-tee-ollie.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/09-tee-ollie.webp   640w,
+                    ../spikes/fixtures/w1000/09-tee-ollie.webp 1000w,
+                    ../spikes/fixtures/09-tee-ollie.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="OLLIE — NIWWTS tee, edition No.06"
                   width="1600"
                   height="1920"
@@ -309,7 +454,13 @@ import { ProductMediaShader }
             <a class="card" href="#pc-007-print">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/10-print-kredki-warm.webp"
+                  src="../spikes/fixtures/w640/10-print-kredki-warm.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/10-print-kredki-warm.webp   640w,
+                    ../spikes/fixtures/w1000/10-print-kredki-warm.webp 1000w,
+                    ../spikes/fixtures/10-print-kredki-warm.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="CRAYONS (WARM) — NIWWTS print, edition No.06"
                   width="1600"
                   height="1920"
@@ -328,7 +479,13 @@ import { ProductMediaShader }
             <a class="card" href="#pc-005-tee">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/11-tee-mothership-reflection.webp"
+                  src="../spikes/fixtures/w640/11-tee-mothership-reflection.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/11-tee-mothership-reflection.webp   640w,
+                    ../spikes/fixtures/w1000/11-tee-mothership-reflection.webp 1000w,
+                    ../spikes/fixtures/11-tee-mothership-reflection.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="MOTHERSHIP REFLECTION — NIWWTS tee, edition No.06"
                   width="1600"
                   height="1920"
@@ -347,235 +504,13 @@ import { ProductMediaShader }
             <a class="card" href="#ar-009-print">
               <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
                 <img
-                  src="../spikes/fixtures/12-print-type_accent.webp"
-                  alt="TYPE — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-009 · Print</span>
-                <span class="card__title">TYPE</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-008-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/01-tee-el-funkador.webp"
-                  alt="EL FUNKADOR — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-008 · Tee</span>
-                <span class="card__title">EL FUNKADOR</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-003-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/02-print-uptown-saturday-descent.webp"
-                  alt="UPTOWN SATURDAY DESCENT — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-003 · Print</span>
-                <span class="card__title">UPTOWN SATURDAY DESCENT</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-001-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/03-tee-molnar.webp"
-                  alt="ROTATION — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-001 · Tee</span>
-                <span class="card__title">ROTATION</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-002-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/04-print-opart_accent.webp"
-                  alt="INTERFERENCE — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-002 · Print</span>
-                <span class="card__title">INTERFERENCE</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-004-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/05-tee-the-hustle-recursive.webp"
-                  alt="THE HUSTLE (RECURSIVE) — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-004 · Tee</span>
-                <span class="card__title">THE HUSTLE (RECURSIVE)</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-003-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/06-print-flow.webp"
-                  alt="FLOW — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-003 · Print</span>
-                <span class="card__title">FLOW</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-004-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/07-tee-bauhaus_accent.webp"
-                  alt="STACK — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-004 · Tee</span>
-                <span class="card__title">STACK</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-001-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/08-print-faded-in-studio-54.webp"
-                  alt="FADED IN STUDIO 54 — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-001 · Print</span>
-                <span class="card__title">FADED IN STUDIO 54</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-007-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/09-tee-ollie.webp"
-                  alt="OLLIE — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-007 · Tee</span>
-                <span class="card__title">OLLIE</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-007-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/10-print-kredki-warm.webp"
-                  alt="CRAYONS (WARM) — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-007 · Print</span>
-                <span class="card__title">CRAYONS (WARM)</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-005-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/11-tee-mothership-reflection.webp"
-                  alt="MOTHERSHIP REFLECTION — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-005 · Tee</span>
-                <span class="card__title">MOTHERSHIP REFLECTION</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-009-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/12-print-type_accent.webp"
+                  src="../spikes/fixtures/w640/12-print-type_accent.webp"
+                  srcset="
+                    ../spikes/fixtures/w640/12-print-type_accent.webp   640w,
+                    ../spikes/fixtures/w1000/12-print-type_accent.webp 1000w,
+                    ../spikes/fixtures/12-print-type_accent.webp       1600w
+                  "
+                  sizes="(min-width: 901px) 25vw, 50vw"
                   alt="TYPE — NIWWTS print, edition No.06"
                   width="1600"
                   height="1920"
@@ -592,12 +527,12 @@ import { ProductMediaShader }
           </li>
           <li class="cell cell--plate" aria-label="About this grid">
             <p class="plate__text">
-              Twenty-four cards, one shared WebGL context, printed once and cached. The photo underneath is
-              the content; the print is a layer on top of it. Hover, tap or Tab.
+              Twelve cards, printed once through one shared WebGL context, then let go of it. Hover, tap or
+              Tab.
             </p>
             <p class="plate__meta">
-              <span>dither · newsprint · 8×8 Bayer · 2 tones</span>
-              <span>LCP 1 546 ms with · 1 541 ms without · CLS 0.002</span>
+              <span>dither · newsprint · 8×8 Bayer · 3 tones · whitePoint 0.9</span>
+              <a href="./stress.html">24 cards: stress page</a>
             </p>
           </li>
         </ul>
@@ -607,7 +542,13 @@ import { ProductMediaShader }
         <figure class="editorial__figure">
           <vitrine-shader effect="paper" preset="folded-lookbook" reveal="hover">
             <img
-              src="../spikes/fixtures/piece-el-funkador.webp"
+              src="../spikes/fixtures/w640/piece-el-funkador.webp"
+              srcset="
+                ../spikes/fixtures/w640/piece-el-funkador.webp   640w,
+                ../spikes/fixtures/w1000/piece-el-funkador.webp 1000w,
+                ../spikes/fixtures/piece-el-funkador.webp       1100w
+              "
+              sizes="(min-width: 901px) 38vw, 100vw"
               alt="EL FUNKADOR, 2026, halftone collage still"
               width="1100"
               height="720"
@@ -634,15 +575,17 @@ import { ProductMediaShader }
           <h2 id="credit-title" class="credit__title">Made with Paper.</h2>
           <p class="credit__body">
             The four effects are image-dithering, halftone-cmyk, mesh-gradient and paper-texture from
-            <code>@paper-design/shaders</code> 0.0.82, pinned. Presets were tuned on the Paper canvas and read
-            back into <code>presets/*.json</code>, the same files Liquid and React use. Pixel-compatibility
-            tests against shaders-react: 0 different pixels.
+            <code>@paper-design/shaders</code> 0.0.82, pinned. The page layout was designed on the Paper
+            canvas before it was coded; the proof print at the top came later, in code. The presets started as
+            frames in Paper and were picked on renders of the element; they live in
+            <code>presets/*.json</code>, the same files Liquid and React use. Pixel-compatibility tests
+            against shaders-react: 0 different pixels.
           </p>
         </div>
         <dl class="credit__table">
           <div>
             <dt>dither · newsprint</dt>
-            <dd>product cards · baked once · 2.8 KB gzip</dd>
+            <dd>product cards · baked once · 3.3 KB gzip</dd>
           </div>
           <div>
             <dt>halftone · riso</dt>
@@ -650,11 +593,11 @@ import { ProductMediaShader }
           </div>
           <div>
             <dt>mesh · drop-night</dt>
-            <dd>hero · the only live context · 2.1 KB gzip</dd>
+            <dd>hero colour bar · the only live context · 2.3 KB gzip</dd>
           </div>
           <div>
             <dt>paper · folded-lookbook</dt>
-            <dd>editorial image · baked once · 6.3 KB gzip</dd>
+            <dd>editorial image · baked once · 6.4 KB gzip</dd>
           </div>
         </dl>
       </section>
