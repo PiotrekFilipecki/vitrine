@@ -81,6 +81,28 @@ VitrineShader.stats(); // { liveMounts, bakerContexts, bakedCached }
 React prop names and never include `image`. Bundled into the element at build time; the same files feed the Liquid
 section schemas (P2) and the React wrappers (P3).
 
+## React 19 / Next.js (`vitrine-shaders/react`, workspace `@vitrine/react` until the P5 release)
+
+```tsx
+import { ProductMediaShader, CollectionHeroShader, EditorialImageShader } from 'vitrine-shaders/react';
+
+<Link href={`/products/${product.handle}`}>
+  <ProductMediaShader image={product.featuredImage} effect="dither" preset="newsprint" reveal="hover">
+    <Image src={product.featuredImage.url} alt={product.featuredImage.altText ?? ''} width={1600} height={1920} />
+  </ProductMediaShader>
+</Link>
+```
+
+- `image` is the Storefront API shape `{ url, altText, width, height }`. Without `children` the wrapper renders a plain
+  `<img>` from it (`imgProps` adds `loading`, `fetchPriority`, `sizes`…); with `children` it renders what you pass
+  (`next/image`), which must be a direct `<img>` child with `alt`, `width`, `height`.
+- Props mirror the attributes: `preset`, `params` (object, serialised to JSON), `speed`, `reveal`, `debug`, `className`,
+  `style`, `id`. Defaults: `ProductMediaShader` = `dither/newsprint/hover`, `EditorialImageShader` = `paper/folded-lookbook/hover`,
+  `CollectionHeroShader` = `mesh/drop-night`, `aria-hidden`, with a `colors` shortcut.
+- The wrappers are `'use client'`; the server renders only the element tag and the image. The runtime is loaded once in
+  the browser with `import('vitrine-shaders')` after hydration (`registerVitrine()` if you want to call it yourself).
+- JSX types for `<vitrine-shader>` are declared by the package. Example app: `examples/next-headless`.
+
 ## Bundle
 
 ESM with code splitting: `index.js` (element, baker, pool, ShaderMount) plus one chunk per effect loaded on first

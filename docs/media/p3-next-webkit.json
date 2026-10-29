@@ -1,0 +1,14 @@
+{
+  "elements": 26,
+  "states": {
+    "live": 1,
+    "baked": 25
+  },
+  "cardCanvases": 0,
+  "cardBakedImgs": 24,
+  "bakerHosts": 0,
+  "heroState": "live",
+  "heroContextLost": false,
+  "fallbacks": 0,
+  "console": []
+}

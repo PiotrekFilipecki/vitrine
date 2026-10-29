@@ -17,7 +17,7 @@ Open-source bridge between Paper Shaders and Shopify: a `<vitrine-shader>` custo
 - **One branch per phase** (`pN-name`), merge to `main` only after Piotrek passes the gate.
 - **Exact version pins**, no `^` or `~`. `@paper-design/shaders` is pinned to `0.0.82`; upstream ships breaking changes under 0.0.x, so bumps go through the ADR and the pixel-compatibility tests.
 - **`LICENSE` and `NOTICE` of Paper Shaders in `third_party/paper-shaders/` are untouchable** and ship with every redistribution (npm package, `shopify-theme/assets/vitrine.js` header). Keep "Powered by Paper Shaders" in README and demo.
-- **Client stores are off limits, all of them.** Never touch client stores, not even read-only: no requests to friendzstore.pl, friendzdev.myshopify.com, emwuhats.pl or their CDN paths, no downloading their photos, no storefront logins. Tests and theme pushes go to Piotrek's own dev store `niwwts-lab` (he creates it) or use Shopify-owned resources and synthetic fixtures.
+- **Client stores are off limits, all of them.** Never touch client stores, not even read-only: no requests to friendzstore.pl, friendzdev.myshopify.com, emwuhats.pl or their CDN paths, no downloading their photos, no storefront logins. Tests and theme pushes go to Piotrek's own dev store `niwwts` (niwwts.myshopify.com, created 29.10.2026) or use Shopify-owned resources and synthetic fixtures.
 - Numbers only from measurements; write "unmeasured" otherwise. Show full command output in devlogs, not summaries.
 
 ## Commands
