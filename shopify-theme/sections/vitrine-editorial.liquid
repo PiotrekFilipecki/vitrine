@@ -1,0 +1,178 @@
+{%- comment -%}
+  VITRINE · editorial / lookbook image with paper-texture (folds, grain, light angle) and a text column.
+  The image is the content: image_tag with srcset, alt, width, height; the texture is a layer on top of it.
+  Hover, tap or focus (the figure is the surface) shows the untouched still.
+{%- endcomment -%}
+
+{%- liquid
+  assign image = section.settings.image
+  assign blending = section.settings.blending | divided_by: 100.0
+  assign folds = section.settings.folds | divided_by: 100.0
+  assign crumples = section.settings.crumples | divided_by: 100.0
+  assign roughness = section.settings.roughness | divided_by: 100.0
+  assign fiber = section.settings.fiber | divided_by: 100.0
+  assign reveal = 'hover'
+  if section.settings.reveal == false
+    assign reveal = 'none'
+  endif
+-%}
+
+<section
+  class="vitrine-editorial vitrine-editorial--text-{{ section.settings.text_position }} vitrine-editorial--{{ section.settings.width }}"
+  id="vitrine-editorial-{{ section.id }}"
+  style="--vitrine-editorial-accent: {{ section.settings.accent_color }}; --vitrine-editorial-pt: {{ section.settings.padding_top }}px; --vitrine-editorial-pb: {{ section.settings.padding_bottom }}px;"
+>
+  <figure class="vitrine-editorial__figure" data-vitrine-card>
+    {%- if image != blank -%}
+      <vitrine-shader
+        effect="paper"
+        preset="{{ section.settings.preset }}"
+        params='{"blending":{{ blending }},"folds":{{ folds }},"crumples":{{ crumples }},"roughness":{{ roughness }},"fiber":{{ fiber }},"angle":{{ section.settings.angle }},"seed":{{ section.settings.seed }},"colorBack":"{{ section.settings.paper_color }}"}'
+        reveal="{{ reveal }}"
+      >
+        {{-
+          image
+          | image_url: width: 2200
+          | image_tag: widths: '480, 720, 960, 1200, 1600, 2200', sizes: '(max-width: 900px) 100vw, 50vw', loading: 'lazy', alt: image.alt, class: 'vitrine-editorial__img'
+        -}}
+      </vitrine-shader>
+    {%- else -%}
+      <div class="vitrine-editorial__placeholder" aria-hidden="true">{{ 'image' | placeholder_svg_tag }}</div>
+    {%- endif -%}
+    {%- if section.settings.caption != blank -%}
+      <figcaption class="vitrine-editorial__caption">{{ section.settings.caption | escape }}</figcaption>
+    {%- endif -%}
+  </figure>
+
+  <div class="vitrine-editorial__text">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'kicker' -%}
+          <p class="vitrine-editorial__kicker" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+        {%- when 'heading' -%}
+          <{{ block.settings.tag }} class="vitrine-editorial__title" {{ block.shopify_attributes }}>
+            {{- block.settings.text | escape -}}
+          </{{ block.settings.tag }}>
+        {%- when 'text' -%}
+          <div class="vitrine-editorial__body" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+        {%- when 'button' -%}
+          {%- if block.settings.label != blank -%}
+            <a class="vitrine-editorial__button" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+              {{- block.settings.label | escape -}}
+            </a>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{{ 'vitrine-theme.css' | asset_url | stylesheet_tag }}
+{%- if image != blank -%}
+  {%- render 'vitrine-script' -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "VITRINE editorial (paper)",
+  "tag": "div",
+  "class": "vitrine-section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "caption", "label": "Caption", "default": "paper / folded-lookbook · hover for the still" },
+    { "type": "checkbox", "id": "reveal", "label": "Reveal the still on hover / tap / focus", "default": true },
+    { "type": "header", "content": "Paper" },
+    {
+      "type": "select",
+      "id": "preset",
+      "label": "Preset",
+      "options": [
+        { "value": "folded-lookbook", "label": "Folded lookbook" },
+        { "value": "default", "label": "Paper Shaders default" }
+      ],
+      "default": "folded-lookbook"
+    },
+    { "type": "range", "id": "blending", "label": "Texture strength", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 90 },
+    { "type": "range", "id": "folds", "label": "Folds", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 60 },
+    { "type": "range", "id": "crumples", "label": "Crumples", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 60 },
+    { "type": "range", "id": "roughness", "label": "Grain", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 35 },
+    { "type": "range", "id": "fiber", "label": "Fibre", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 30 },
+    { "type": "range", "id": "angle", "label": "Light angle", "min": 0, "max": 360, "step": 10, "unit": "°", "default": 60 },
+    { "type": "range", "id": "seed", "label": "Seed", "info": "Same seed = same folds, every visit.", "min": 0, "max": 99, "step": 1, "default": 49 },
+    { "type": "color", "id": "paper_color", "label": "Paper colour (behind the image)", "default": "#f1ece2" },
+    { "type": "header", "content": "Text column" },
+    {
+      "type": "select",
+      "id": "text_position",
+      "label": "Text position (desktop)",
+      "options": [
+        { "value": "end", "label": "Right" },
+        { "value": "start", "label": "Left" }
+      ],
+      "default": "end"
+    },
+    { "type": "color", "id": "accent_color", "label": "Kicker colour", "default": "#3a4df0" },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "options": [
+        { "value": "page-width", "label": "Page" },
+        { "value": "full-width", "label": "Full" }
+      ],
+      "default": "page-width"
+    },
+    { "type": "range", "id": "padding_top", "label": "Top padding", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 },
+    { "type": "range", "id": "padding_bottom", "label": "Bottom padding", "min": 0, "max": 120, "step": 4, "unit": "px", "default": 48 }
+  ],
+  "blocks": [
+    {
+      "type": "kicker",
+      "name": "Kicker",
+      "limit": 1,
+      "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "PC-008 · Halftone Collage · 2026" }]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "EL FUNKADOR" },
+        {
+          "type": "select",
+          "id": "tag",
+          "label": "HTML tag",
+          "options": [
+            { "value": "h2", "label": "h2" },
+            { "value": "h3", "label": "h3" },
+            { "value": "p", "label": "p" }
+          ],
+          "default": "h2"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [{ "type": "richtext", "id": "text", "label": "Text", "default": "<p>One still, one fold, one light. The photo underneath is the content; the paper is a layer on top of it.</p>" }]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "See the piece" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VITRINE editorial (paper)",
+      "blocks": [{ "type": "kicker" }, { "type": "heading" }, { "type": "text" }]
+    }
+  ],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

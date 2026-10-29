@@ -1,0 +1,58 @@
+{
+  "name": "VITRINE",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Product card effect by VITRINE (Paper Shaders). The photo stays the content; the print is a layer that lifts on hover, tap or focus."
+    },
+    {
+      "type": "checkbox",
+      "id": "vitrine_cards_enabled",
+      "label": "Effect on product cards",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "vitrine_card_effect",
+      "label": "Effect",
+      "options": [
+        {
+          "value": "dither",
+          "label": "Dither (newsprint)"
+        },
+        {
+          "value": "halftone",
+          "label": "Halftone (CMYK / riso)"
+        }
+      ],
+      "default": "dither"
+    },
+    {
+      "type": "select",
+      "id": "vitrine_card_preset",
+      "label": "Preset",
+      "info": "dither: newsprint · default; halftone: riso · default",
+      "options": [
+        {
+          "value": "newsprint",
+          "label": "Newsprint (dither)"
+        },
+        {
+          "value": "riso",
+          "label": "Riso 2-tone (halftone)"
+        },
+        {
+          "value": "default",
+          "label": "Paper Shaders default"
+        }
+      ],
+      "default": "newsprint"
+    },
+    {
+      "type": "checkbox",
+      "id": "vitrine_card_reveal",
+      "label": "Reveal the photo on hover / tap / focus",
+      "default": true
+    }
+  ]
+}

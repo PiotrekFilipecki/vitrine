@@ -1,0 +1,4 @@
+# shopify-theme/ is a folder to copy into a theme, not a whole theme: no layout, locales or templates here.
+root: .
+ignore:
+  - node_modules/**

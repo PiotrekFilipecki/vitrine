@@ -1,0 +1,51 @@
+{%- doc -%}
+  VITRINE · product card media: wraps the card image in <vitrine-shader> (dither or halftone), photo revealed on
+  hover, tap or focus of the nearest link. The <img> stays the content (LCP, alt, fallback without WebGL2).
+
+  Theme settings (paste the fragment from shopify-theme/README.md into config/settings_schema.json):
+  settings.vitrine_cards_enabled (checkbox), settings.vitrine_card_effect (dither | halftone),
+  settings.vitrine_card_preset (newsprint | riso | default), settings.vitrine_card_reveal (checkbox).
+  Without the fragment: dither / newsprint / reveal on.
+
+  @param {object} image - Image object (product.featured_image, media.preview_image, card_product.featured_media…)
+  @param {string} [widths] - image_tag widths, default '240, 352, 640, 832, 1200, 1600'
+  @param {string} [sizes] - image_tag sizes
+  @param {string} [loading] - 'lazy' (default) or 'eager'
+  @param {string} [fetchpriority] - 'auto' (default) or 'high' for the first row
+  @param {string} [class] - extra class(es) for the <img> (keep the theme's own image class here)
+  @param {string} [style] - inline style for the <img> (Horizon passes --focal-point)
+  @param {string} [alt] - alt override; defaults to image.alt
+
+  @example
+  {% render 'vitrine-card-media', image: card_product.featured_media, sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign widths = widths | default: '240, 352, 640, 832, 1200, 1600'
+  assign loading = loading | default: 'lazy'
+  assign fetchpriority = fetchpriority | default: 'auto'
+  assign alt = alt | default: image.alt | default: ''
+  assign effect = settings.vitrine_card_effect | default: 'dither'
+  assign preset = settings.vitrine_card_preset | default: 'newsprint'
+  assign reveal = 'hover'
+  if settings.vitrine_card_reveal == false
+    assign reveal = 'none'
+  endif
+-%}
+
+{%- if image == blank or settings.vitrine_cards_enabled == false -%}
+  {{-
+    image
+    | image_url: width: 1600
+    | image_tag: widths: widths, sizes: sizes, loading: loading, fetchpriority: fetchpriority, alt: alt, class: class, style: style
+  -}}
+{%- else -%}
+  <vitrine-shader effect="{{ effect }}" preset="{{ preset }}" reveal="{{ reveal }}" class="vitrine-card-media">
+    {{-
+      image
+      | image_url: width: 1600
+      | image_tag: widths: widths, sizes: sizes, loading: loading, fetchpriority: fetchpriority, alt: alt, class: class, style: style
+    -}}
+  </vitrine-shader>
+  {%- render 'vitrine-script' -%}
+{%- endif -%}

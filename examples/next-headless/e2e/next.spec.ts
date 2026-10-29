@@ -16,7 +16,12 @@ function collect(page: Page) {
     all.push(`[${m.type()}] ${m.text()}`);
     if (m.type() === 'error') errors.push(m.text());
   });
-  page.on('pageerror', (e) => errors.push(`[pageerror] ${String(e)}`));
+  page.on('pageerror', (e) => {
+    all.push(`[pageerror] ${String(e)}`);
+    // WebKit raises the benign "ResizeObserver loop completed with undelivered notifications" as a window error
+    // when a ResizeObserver callback (ShaderMount's) changes layout; it is a notice, not a failure (P2 devlog).
+    if (!/ResizeObserver loop/.test(String(e))) errors.push(`[pageerror] ${String(e)}`);
+  });
   return { errors, all };
 }
 
@@ -90,7 +95,7 @@ test.describe('P3 · next-headless (production build)', () => {
     mkdirSync(MEDIA, { recursive: true });
     writeFileSync(
       `${MEDIA}/p3-next-${testInfo.project.name}.json`,
-      JSON.stringify({ ...r, console: con.all }, null, 2)
+      JSON.stringify({ ...r, errors: con.errors, console: con.all }, null, 2)
     );
     expect(r.elements).toBe(26);
     expect(r.states['baked']).toBe(25);
@@ -108,9 +113,14 @@ test.describe('P3 · next-headless (production build)', () => {
   test('keyboard: Tab onto a card reveals the photo, Tab away hides it', async ({ page }, testInfo) => {
     const tab = testInfo.project.name === 'webkit' ? 'Alt+Tab' : 'Tab';
     await page.goto(`${NEXT}/`, { waitUntil: 'load' });
-    await waitBaked(page, 4);
     const first = page.locator('.card').first();
     const second = page.locator('.card').nth(1);
+    await expect(first.locator('vitrine-shader')).toHaveAttribute('data-vitrine-state', 'baked', {
+      timeout: 60_000,
+    });
+    await expect(second.locator('vitrine-shader')).toHaveAttribute('data-vitrine-state', 'baked', {
+      timeout: 60_000,
+    });
     await first.focus();
     await expect(first.locator('vitrine-shader')).toHaveAttribute('data-vitrine-revealed', '');
     await page.keyboard.press(tab);

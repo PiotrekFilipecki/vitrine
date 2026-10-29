@@ -1,0 +1,7 @@
+{%- comment -%}
+  VITRINE · loads assets/vitrine.js (the <vitrine-shader> element) as an ES module.
+  Rendered by every VITRINE section and by the card snippet, so the script only ever appears where an effect is
+  used. Duplicates are free: the browser evaluates one module URL once, however many tags point at it
+  (asset_url gives the same URL everywhere in a theme version).
+{%- endcomment -%}
+<script type="module" src="{{ 'vitrine.js' | asset_url }}"></script>

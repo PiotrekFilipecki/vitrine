@@ -14,6 +14,8 @@ export default defineConfig([
       'examples/spikes/fixtures/**',
       'packages/element/e2e/ref/ref.bundle.js',
       '**/.next/**',
+      'examples/theme-test/**',
+      'shopify-theme/assets/vitrine.js',
       'examples/next-headless/next-env.d.ts',
       'examples/next-headless/public/fixtures/**',
     ],

@@ -1,0 +1,170 @@
+{%- comment -%}
+  VITRINE · hero with an animated mesh-gradient surface (Paper Shaders mesh-gradient) and an ink plate for the
+  copy. Colours, motion and scale come from the section settings; blocks: heading, text, button.
+  The shader element is aria-hidden; the text lives next to it. Reduced motion = static (baked once).
+{%- endcomment -%}
+
+{%- liquid
+  assign colors = ''
+  if section.settings.color_1 != blank
+    assign colors = colors | append: '"' | append: section.settings.color_1 | append: '",'
+  endif
+  if section.settings.color_2 != blank
+    assign colors = colors | append: '"' | append: section.settings.color_2 | append: '",'
+  endif
+  if section.settings.color_3 != blank
+    assign colors = colors | append: '"' | append: section.settings.color_3 | append: '",'
+  endif
+  if section.settings.color_4 != blank
+    assign colors = colors | append: '"' | append: section.settings.color_4 | append: '",'
+  endif
+  assign colors = colors | remove_last: ','
+  assign speed = section.settings.speed | divided_by: 100.0
+  assign distortion = section.settings.distortion | divided_by: 100.0
+  assign swirl = section.settings.swirl | divided_by: 100.0
+  assign grain = section.settings.grain | divided_by: 100.0
+  assign scale = section.settings.scale | divided_by: 100.0
+-%}
+
+<section
+  class="vitrine-hero"
+  id="vitrine-hero-{{ section.id }}"
+  style="--vitrine-hero-min-height: {{ section.settings.min_height }}vh; --vitrine-hero-plate: {{ section.settings.plate_color }}; --vitrine-hero-text: {{ section.settings.text_color }}; --vitrine-hero-plate-width: {{ section.settings.plate_width }}%;"
+  {% if section.settings.heading_id != blank %}aria-labelledby="{{ section.settings.heading_id }}"{% endif %}
+>
+  <vitrine-shader
+    class="vitrine-hero__field"
+    effect="mesh"
+    preset="{{ section.settings.preset }}"
+    params='{"colors":[{{ colors }}],"speed":{{ speed }},"distortion":{{ distortion }},"swirl":{{ swirl }},"grainOverlay":{{ grain }},"scale":{{ scale }}}'
+    aria-hidden="true"
+  ></vitrine-shader>
+
+  {%- if section.blocks.size > 0 -%}
+    <div class="vitrine-hero__plate">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'heading' -%}
+            <{{ block.settings.tag }} class="vitrine-hero__title" {{ block.shopify_attributes }}>
+              {{- block.settings.text | escape -}}
+            </{{ block.settings.tag }}>
+          {%- when 'text' -%}
+            <div class="vitrine-hero__lede" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+          {%- when 'button' -%}
+            {%- if block.settings.label != blank -%}
+              <a class="vitrine-hero__button" href="{{ block.settings.link | default: '#' }}" {{ block.shopify_attributes }}>
+                {{- block.settings.label | escape -}}
+              </a>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+
+{{ 'vitrine-theme.css' | asset_url | stylesheet_tag }}
+{%- render 'vitrine-script' -%}
+
+{% schema %}
+{
+  "name": "VITRINE hero (mesh)",
+  "tag": "div",
+  "class": "vitrine-section",
+  "settings": [
+    { "type": "header", "content": "Gradient" },
+    {
+      "type": "select",
+      "id": "preset",
+      "label": "Preset",
+      "info": "Starting point from presets/mesh.json; the settings below override it.",
+      "options": [
+        { "value": "drop-night", "label": "Drop night (ink, blue, orange, paper)" },
+        { "value": "default", "label": "Paper Shaders default" }
+      ],
+      "default": "drop-night"
+    },
+    { "type": "color", "id": "color_1", "label": "Colour 1", "default": "#151311" },
+    { "type": "color", "id": "color_2", "label": "Colour 2", "default": "#3a4df0" },
+    { "type": "color", "id": "color_3", "label": "Colour 3", "default": "#f2861e" },
+    { "type": "color", "id": "color_4", "label": "Colour 4", "default": "#f1ece2" },
+    { "type": "header", "content": "Motion and shape" },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Speed",
+      "info": "0 = still (rendered once, no live WebGL context). Visitors with reduced motion always get 0.",
+      "min": 0,
+      "max": 200,
+      "step": 10,
+      "unit": "%",
+      "default": 60
+    },
+    { "type": "range", "id": "distortion", "label": "Distortion", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 90 },
+    { "type": "range", "id": "swirl", "label": "Swirl", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 25 },
+    { "type": "range", "id": "grain", "label": "Grain", "min": 0, "max": 100, "step": 1, "unit": "%", "default": 8 },
+    { "type": "range", "id": "scale", "label": "Scale", "min": 50, "max": 300, "step": 10, "unit": "%", "default": 100 },
+    { "type": "header", "content": "Layout" },
+    { "type": "range", "id": "min_height", "label": "Minimum height", "min": 30, "max": 100, "step": 2, "unit": "vh", "default": 62 },
+    { "type": "range", "id": "plate_width", "label": "Plate width (desktop)", "min": 30, "max": 100, "step": 2, "unit": "%", "default": 62 },
+    { "type": "color", "id": "plate_color", "label": "Plate colour", "default": "#151311" },
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#f1ece2" },
+    {
+      "type": "text",
+      "id": "heading_id",
+      "label": "Heading id (accessibility)",
+      "info": "If set, the section is labelled by the heading block with this id.",
+      "default": "vitrine-hero-title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "No.06" },
+        {
+          "type": "select",
+          "id": "tag",
+          "label": "HTML tag",
+          "options": [
+            { "value": "h1", "label": "h1" },
+            { "value": "h2", "label": "h2" },
+            { "value": "p", "label": "p" }
+          ],
+          "default": "h2"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Twenty-four pieces printed in two tones. Hover or tab onto a card and the print gives way to the photo.</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Shop the drop" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "VITRINE hero (mesh)",
+      "blocks": [{ "type": "heading" }, { "type": "text" }]
+    }
+  ],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

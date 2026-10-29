@@ -1,6 +1,7 @@
 // Lighthouse (mobile, performance only), with and without effects, 3 runs each, median.
 // Uses Playwright's Chromium through the remote-debugging port, no extra Chrome needed.
-// Usage: node scripts/lighthouse.mjs static   → examples/static on scripts/serve.mjs :4199, docs/media/p1-lighthouse.json
+// Usage: node scripts/lighthouse.mjs store    → VITRINE_STORE_URL (theme dev proxy), docs/media/p2-lighthouse.json
+//        node scripts/lighthouse.mjs static   → examples/static on scripts/serve.mjs :4199, docs/media/p1-lighthouse.json
 //        node scripts/lighthouse.mjs next     → examples/next-headless production build (next start :4198), docs/media/p3-lighthouse.json
 // Both need `pnpm build` first.
 import { spawn } from 'node:child_process';
@@ -34,6 +35,25 @@ const TARGETS = {
     urls: (p) => ({ effects: `http://localhost:${p}/`, noEffects: `http://localhost:${p}/?vitrine=off` }),
     out: 'p3-lighthouse.json',
   },
+  store: {
+    // The dev store: VITRINE_STORE_URL = the `shopify theme dev` proxy (http://127.0.0.1:9292), or the real
+    // storefront (https://<store>.myshopify.com) with VITRINE_STORE_PASSWORD (password page cookie is fetched
+    // once with Playwright) and VITRINE_PREVIEW_THEME_ID (unpublished theme to preview).
+    // "noEffects" = the same collection page with vitrine.js blocked by Lighthouse (blockedUrlPatterns): same HTML,
+    // the element never upgrades, the plain images stay.
+    port: 0,
+    server: () => ({ kill() {} }),
+    urls: () => {
+      const q = process.env.VITRINE_PREVIEW_THEME_ID
+        ? `?preview_theme_id=${process.env.VITRINE_PREVIEW_THEME_ID}`
+        : '';
+      return {
+        effects: `${process.env.VITRINE_STORE_URL}/collections/all${q}`,
+        noEffects: `${process.env.VITRINE_STORE_URL}/collections/all${q}`,
+      };
+    },
+    out: 'p2-lighthouse.json',
+  },
 };
 const cfg = TARGETS[target];
 if (!cfg) throw new Error(`unknown target "${target}" (static | next)`);
@@ -47,6 +67,21 @@ const median = (xs) => {
   return s[Math.floor(s.length / 2)];
 };
 
+let extraHeaders;
+if (target === 'store' && process.env.VITRINE_STORE_PASSWORD) {
+  // Storefront password → storefront_digest cookie, passed to every Lighthouse request. Never logged.
+  const page = await browser.newPage();
+  await page.goto(`${process.env.VITRINE_STORE_URL}/password`);
+  await page.fill('input[type="password"]', process.env.VITRINE_STORE_PASSWORD);
+  await page.keyboard.press('Enter');
+  await page.waitForLoadState('networkidle');
+  if (page.url().includes('/password')) throw new Error('storefront password not accepted');
+  // The password session lives in Shopify's essential cookie now (no storefront_digest any more): send them all.
+  const cookies = await page.context().cookies();
+  extraHeaders = { Cookie: cookies.map((c) => `${c.name}=${c.value}`).join('; ') };
+  await page.close();
+}
+
 const out = { date: new Date().toISOString(), target, runs: RUNS, results: {} };
 try {
   for (const [key, url] of Object.entries(cfg.urls(cfg.port))) {
@@ -57,6 +92,8 @@ try {
         output: 'json',
         logLevel: 'error',
         onlyCategories: ['performance'],
+        ...(extraHeaders ? { extraHeaders } : {}),
+        ...(target === 'store' && key === 'noEffects' ? { blockedUrlPatterns: ['*vitrine.js*'] } : {}),
       });
       const a = r.lhr.audits;
       runs.push({
