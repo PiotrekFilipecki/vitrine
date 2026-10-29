@@ -6,13 +6,15 @@
   "description": "VITRINE: Paper Shaders for Shopify themes and headless storefronts (monorepo root)",
   "license": "Apache-2.0",
   "scripts": {
-    "build": "pnpm -r --filter \"./packages/*\" run build",
-    "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r --filter \"./packages/*\" run typecheck",
+    "build": "pnpm -r --filter \"./packages/*\" run build && pnpm --filter next-headless run build",
+    "typecheck": "tsc -p tsconfig.json --noEmit && pnpm -r --filter \"./packages/*\" run typecheck && pnpm --filter next-headless run typecheck",
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "serve": "node scripts/serve.mjs 4173"
+    "serve": "node scripts/serve.mjs 4173",
+    "lighthouse": "node scripts/lighthouse.mjs static",
+    "lighthouse:next": "node scripts/lighthouse.mjs next"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -20,6 +22,8 @@
     "@paper-design/shaders-react": "0.0.82",
     "@playwright/test": "1.64.1",
     "@types/node": "26.6.6",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
     "esbuild": "0.28.2",
     "eslint": "10.13.0",
     "globals": "17.13.0",

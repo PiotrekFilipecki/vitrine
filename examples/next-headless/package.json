@@ -1,0 +1,28 @@
+{
+  "name": "next-headless",
+  "version": "0.0.0",
+  "private": true,
+  "description": "VITRINE headless demo: Next.js 16 App Router + Storefront API (or repo fixtures) with <vitrine-shader> via vitrine-shaders/react",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "predev": "node scripts/sync-fixtures.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/sync-fixtures.mjs",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "node scripts/sync-fixtures.mjs && next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@vitrine/react": "workspace:*",
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "vitrine-shaders": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "typescript": "6.0.3"
+  }
+}

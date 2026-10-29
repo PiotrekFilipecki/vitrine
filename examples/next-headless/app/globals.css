@@ -1,0 +1,451 @@
+/* NIWWTS No.06 · VITRINE headless demo. Same tokens and classes as examples/static (and the Liquid sections):
+   paper + ink + one accent, radius 0, no shadows, typographic contrast on the width axis of Archivo (62–125). */
+:root {
+  --paper: #f1ece2;
+  --ink: #151311;
+  --orange: #f2861e; /* No.06 accent: only ever a surface under ink, never text on paper */
+  --blue-rice: #3a4df0; /* the one accent allowed as text on paper (5.1:1) */
+  --rule: 2px;
+  --hair: 1px;
+  --margin: max(14px, 3.5vmin);
+  --vitrine-reveal-duration: 320ms;
+  --vitrine-reveal-ease: cubic-bezier(0.2, 0, 0, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-archivo), 'Arial Narrow', Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: var(--margin);
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+}
+
+code {
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+}
+
+.skip {
+  position: absolute;
+  left: var(--margin);
+  top: -100px;
+  padding: 8px 12px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+}
+.skip:focus-visible {
+  top: var(--margin);
+  outline: 2px solid var(--paper);
+  outline-offset: -4px;
+  z-index: 10;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* masthead: double rule lockup, columns that do not align on purpose */
+.masthead {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'brand note'
+    'issue issue';
+  align-items: end;
+  gap: 0 24px;
+  border-top: var(--rule) solid var(--ink);
+  padding-top: 6px;
+  position: relative;
+}
+.masthead::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--rule) + 2px);
+  border-top: var(--rule) solid var(--ink);
+}
+.masthead p {
+  margin: 0;
+}
+.masthead__brand {
+  grid-area: brand;
+  font-weight: 700;
+  font-stretch: 125%;
+  font-size: 26px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding-top: 10px;
+  text-decoration: none;
+}
+.masthead__issue {
+  grid-area: issue;
+  font-size: 12px;
+  font-weight: 500;
+  font-stretch: 100%;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 10px 0 8px;
+  border-bottom: var(--hair) solid var(--ink);
+}
+.masthead__note {
+  grid-area: note;
+  font-size: 12px;
+  text-align: right;
+  padding-top: 10px;
+}
+
+/* hero: the mesh is a surface, the title sits on an ink plate that overlaps it (frame within a frame) */
+.hero {
+  position: relative;
+  margin: 24px calc(-1 * var(--margin)) 0;
+  min-height: 62vh;
+  display: grid;
+  align-items: end;
+}
+.hero__field {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+}
+.hero__plate {
+  position: relative;
+  margin: 0 0 -1px var(--margin);
+  max-width: 62%;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 20px 24px 22px;
+}
+.hero__title {
+  margin: 0;
+  font-weight: 700;
+  font-stretch: 62%;
+  font-size: clamp(96px, 18vw, 288px);
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+.hero__lede {
+  margin: 14px 0 0;
+  max-width: 34ch;
+  font-size: 16px;
+  font-stretch: 100%;
+}
+
+/* catalogue: hairline grid like a contact sheet; first cell is the lead (2 columns) */
+.catalogue {
+  margin-top: 42px;
+}
+.catalogue__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: var(--rule) solid var(--ink);
+  padding: 8px 0 16px;
+}
+.catalogue__title {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 700;
+  font-stretch: 62%;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+.catalogue__count {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--hair);
+  background: var(--ink);
+  border: var(--hair) solid var(--ink);
+}
+.cell {
+  background: var(--paper);
+  min-width: 0;
+}
+.cell--lead {
+  grid-column: span 2;
+}
+.card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  height: 100%;
+}
+.card:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: -3px;
+}
+.card vitrine-shader,
+.card .card__media {
+  display: block;
+  background: var(--paper);
+}
+.card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.card__meta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    'code price'
+    'title title';
+  gap: 2px 12px;
+  padding: 10px 12px 12px;
+  border-top: var(--hair) solid var(--ink);
+}
+.card__code {
+  grid-area: code;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+.card__price {
+  grid-area: price;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.card__title {
+  grid-area: title;
+  font-size: 15px;
+  font-weight: 700;
+  font-stretch: 125%;
+  text-transform: uppercase;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+/* closing plate: ink cell that completes the sheet (4 columns: 24 cards + lead = 25 units, plate = 3) */
+.cell--plate {
+  grid-column: span 3;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 26px;
+}
+.plate__text {
+  margin: 0;
+  max-width: 44ch;
+  font-size: clamp(18px, 2vw, 26px);
+  font-weight: 500;
+  font-stretch: 100%;
+  line-height: 1.25;
+}
+.plate__meta {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* editorial: 38 / 62 split, text column pushed to the far edge */
+.editorial {
+  margin-top: 68px;
+  display: grid;
+  grid-template-columns: 38fr 62fr;
+  gap: 42px;
+  border-top: var(--rule) solid var(--ink);
+  padding-top: 26px;
+}
+.editorial__figure {
+  margin: 0;
+}
+.editorial__figure vitrine-shader,
+.editorial__figure .editorial__media {
+  display: block;
+}
+.editorial__figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.editorial__caption {
+  margin-top: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.editorial__text {
+  align-self: end;
+  max-width: 54ch;
+  justify-self: end;
+}
+.editorial__code {
+  margin: 0 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue-rice);
+}
+.editorial__title {
+  margin: 0 0 20px;
+  font-size: clamp(42px, 6vw, 110px);
+  font-weight: 700;
+  font-stretch: 62%;
+  line-height: 0.88;
+}
+.editorial__body {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* product page: 62 / 38, media left, text on the far right edge; the code is the only colour on the page */
+.product {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 62fr 38fr;
+  gap: 42px;
+  border-top: var(--rule) solid var(--ink);
+  padding-top: 26px;
+}
+.product__media {
+  margin: 0;
+}
+.product__media vitrine-shader,
+.product__media .product__plain {
+  display: block;
+  background: var(--paper);
+  border: var(--hair) solid var(--ink);
+}
+.product__media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.product__caption {
+  margin-top: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.product__text {
+  align-self: start;
+  position: sticky;
+  top: var(--margin);
+}
+.product__code {
+  margin: 0 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue-rice);
+}
+.product__title {
+  margin: 0 0 16px;
+  font-size: clamp(42px, 6vw, 110px);
+  font-weight: 700;
+  font-stretch: 62%;
+  line-height: 0.88;
+  overflow-wrap: anywhere;
+}
+.product__price {
+  margin: 0 0 20px;
+  font-size: 22px;
+  font-variant-numeric: tabular-nums;
+}
+.product__body {
+  margin: 0 0 28px;
+  font-size: 16px;
+  max-width: 44ch;
+}
+.product__back {
+  display: inline-block;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  text-decoration: none;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.product__back:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.colophon {
+  margin-top: 68px;
+  border-top: var(--rule) solid var(--ink);
+  padding-top: 10px;
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.colophon p {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cell--plate {
+    grid-column: span 1; /* 2 columns: 25 units + 1 = 13 full rows */
+  }
+  .hero__plate {
+    max-width: 88%;
+  }
+  .editorial,
+  .product {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .editorial__text {
+    justify-self: start;
+  }
+  .product__text {
+    position: static;
+  }
+  .masthead {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'brand'
+      'note'
+      'issue';
+  }
+  .masthead__note {
+    text-align: left;
+    padding-top: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}

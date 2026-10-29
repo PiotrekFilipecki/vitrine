@@ -1,6 +1,8 @@
-// Lighthouse (mobile, performance only) on examples/static with and without effects, 3 runs each, median.
+// Lighthouse (mobile, performance only), with and without effects, 3 runs each, median.
 // Uses Playwright's Chromium through the remote-debugging port, no extra Chrome needed.
-// Usage: node scripts/lighthouse.mjs   (needs `pnpm build` first; starts its own static server on :4199)
+// Usage: node scripts/lighthouse.mjs static   → examples/static on scripts/serve.mjs :4199, docs/media/p1-lighthouse.json
+//        node scripts/lighthouse.mjs next     → examples/next-headless production build (next start :4198), docs/media/p3-lighthouse.json
+// Both need `pnpm build` first.
 import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -8,16 +10,36 @@ import lighthouse from 'lighthouse';
 import { chromium } from '@playwright/test';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const PORT = 4199;
 const DEBUG_PORT = 9333;
 const RUNS = 3;
-const URLS = {
-  effects: `http://localhost:${PORT}/examples/static/`,
-  noEffects: `http://localhost:${PORT}/examples/static/?effects=off`,
-};
+const target = process.argv[2] ?? 'static';
 
-const server = spawn('node', [`${root}scripts/serve.mjs`, String(PORT)], { stdio: 'ignore' });
-await new Promise((r) => setTimeout(r, 800));
+const TARGETS = {
+  static: {
+    port: 4199,
+    server: () => spawn('node', [`${root}scripts/serve.mjs`, '4199'], { stdio: 'ignore' }),
+    urls: (p) => ({
+      effects: `http://localhost:${p}/examples/static/`,
+      noEffects: `http://localhost:${p}/examples/static/?effects=off`,
+    }),
+    out: 'p1-lighthouse.json',
+  },
+  next: {
+    port: 4198,
+    server: () =>
+      spawn('pnpm', ['--filter', 'next-headless', 'exec', 'next', 'start', '-p', '4198'], {
+        cwd: root,
+        stdio: 'ignore',
+      }),
+    urls: (p) => ({ effects: `http://localhost:${p}/`, noEffects: `http://localhost:${p}/?vitrine=off` }),
+    out: 'p3-lighthouse.json',
+  },
+};
+const cfg = TARGETS[target];
+if (!cfg) throw new Error(`unknown target "${target}" (static | next)`);
+
+const server = cfg.server();
+await new Promise((r) => setTimeout(r, target === 'next' ? 2500 : 800));
 const browser = await chromium.launch({ args: [`--remote-debugging-port=${DEBUG_PORT}`] });
 
 const median = (xs) => {
@@ -25,9 +47,9 @@ const median = (xs) => {
   return s[Math.floor(s.length / 2)];
 };
 
-const out = { date: new Date().toISOString(), runs: RUNS, results: {} };
+const out = { date: new Date().toISOString(), target, runs: RUNS, results: {} };
 try {
-  for (const [key, url] of Object.entries(URLS)) {
+  for (const [key, url] of Object.entries(cfg.urls(cfg.port))) {
     const runs = [];
     for (let i = 0; i < RUNS; i++) {
       const r = await lighthouse(url, {
@@ -61,7 +83,7 @@ try {
   }
   out.deltaLcpMs = out.results.effects.median.lcpMs - out.results.noEffects.median.lcpMs;
   mkdirSync(`${root}docs/media`, { recursive: true });
-  writeFileSync(`${root}docs/media/p1-lighthouse.json`, JSON.stringify(out, null, 2));
+  writeFileSync(`${root}docs/media/${cfg.out}`, JSON.stringify(out, null, 2));
   console.log(
     JSON.stringify(
       {

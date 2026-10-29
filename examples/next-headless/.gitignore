@@ -1,0 +1,6 @@
+.next/
+out/
+public/fixtures/
+.env*.local
+.vercel
+*.tsbuildinfo

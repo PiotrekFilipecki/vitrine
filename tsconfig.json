@@ -9,6 +9,7 @@
     "vitest.config.ts",
     "eslint.config.js",
     "examples/spikes/**/*.ts",
-    "packages/*/e2e/**/*.ts"
+    "packages/*/e2e/**/*.ts",
+    "examples/next-headless/e2e/**/*.ts"
   ]
 }

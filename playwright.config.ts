@@ -8,7 +8,11 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   globalSetup: './scripts/e2e-setup.mjs',
   testDir: '.',
-  testMatch: ['examples/spikes/**/*.spec.ts', 'packages/*/e2e/**/*.spec.ts'],
+  testMatch: [
+    'examples/spikes/**/*.spec.ts',
+    'packages/*/e2e/**/*.spec.ts',
+    'examples/next-headless/e2e/**/*.spec.ts',
+  ],
   testIgnore: ['**/node_modules/**', '**/dist/**'],
   outputDir: 'test-results',
   fullyParallel: false,
@@ -33,6 +37,13 @@ export default defineConfig({
       url: 'http://localhost:4174/examples/spikes/',
       reuseExistingServer: true,
       timeout: 15_000,
+    },
+    {
+      // P3: the headless example on its production build (`pnpm build` first; e2e-setup checks).
+      command: 'pnpm --filter next-headless exec next start -p 4175',
+      url: 'http://localhost:4175/',
+      reuseExistingServer: true,
+      timeout: 30_000,
     },
   ],
   projects: [

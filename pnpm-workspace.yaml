@@ -1,5 +1,6 @@
 packages:
   - 'packages/*'
+  - 'examples/next-headless'
 
 allowBuilds:
   esbuild: true

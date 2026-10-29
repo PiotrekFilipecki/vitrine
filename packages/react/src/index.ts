@@ -1,5 +1,18 @@
+'use client';
 /**
- * @vitrine/react: typed React 19 wrappers over <vitrine-shader> (P3 implements them).
- * P0 ships only the package skeleton; it re-exports the tag name to prove the workspace link.
+ * vitrine-shaders/react: typed React 19 wrappers over <vitrine-shader> for headless storefronts (Next.js App Router).
+ * Server render sends a plain <img>; the element loads after hydration. Powered by Paper Shaders (Apache-2.0).
  */
-export { VITRINE_TAG } from 'vitrine-shaders';
+import './jsx.js';
+
+export { ProductMediaShader, CollectionHeroShader, EditorialImageShader } from './shaders.js';
+export { registerVitrine } from './register.js';
+export type {
+  StorefrontImage,
+  ImageShaderProps,
+  HeroShaderProps,
+  ShaderElementProps,
+  ImgPassthrough,
+  VitrineShaderIntrinsicProps,
+} from './types.js';
+export type { VitrineEffect, VitrineParams, VitrineReveal } from 'vitrine-shaders';
