@@ -9,3 +9,4 @@ examples/spikes/fixtures
 third_party
 LICENSE
 NOTICE
+packages/element/e2e/ref/ref.bundle.js

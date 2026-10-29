@@ -4,5 +4,11 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": ["playwright.config.ts", "vitest.config.ts", "eslint.config.js", "examples/spikes/**/*.ts"]
+  "include": [
+    "playwright.config.ts",
+    "vitest.config.ts",
+    "eslint.config.js",
+    "examples/spikes/**/*.ts",
+    "packages/*/e2e/**/*.ts"
+  ]
 }

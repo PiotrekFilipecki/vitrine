@@ -8,3 +8,6 @@ playwright-report/
 examples/theme-test/*
 !examples/theme-test/README.md
 .DS_Store
+packages/element/e2e/ref/ref.bundle.js
+packages/element/e2e/ref/ref.bundle.js.map
+.lighthouse/

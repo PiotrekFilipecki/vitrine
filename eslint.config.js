@@ -12,6 +12,7 @@ export default defineConfig([
       'playwright-report/**',
       'docs/**',
       'examples/spikes/fixtures/**',
+      'packages/element/e2e/ref/ref.bundle.js',
     ],
   },
   js.configs.recommended,

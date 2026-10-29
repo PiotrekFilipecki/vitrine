@@ -1,5 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "noEmit": true, "rootDir": "src" },
-  "include": ["src/**/*.ts"]
+  "compilerOptions": {
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "paths": { "#paper/*": ["./node_modules/@paper-design/shaders/dist/*"] }
+  },
+  "include": ["src/**/*.ts", "../../presets/*.json"]
 }
