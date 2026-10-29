@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NIWWTS No.06 · VITRINE demo</title>
+    <title>VITRINE · Paper Shaders for Shopify, demo on NIWWTS No.06</title>
     <meta
       name="description"
       content="Paper Shaders on a plain product grid: dithered prints and tees that turn into the photo on hover. Static HTML, no bundler."
@@ -47,9 +47,15 @@
   <body>
     <a class="skip" href="#catalogue">Skip to catalogue</a>
     <header class="masthead">
-      <p class="masthead__brand">NIWWTS</p>
-      <p class="masthead__issue">Edition No.06 — Prints &amp; Tees</p>
-      <p class="masthead__note">VITRINE demo · <code>&lt;vitrine-shader&gt;</code> on plain HTML</p>
+      <p class="masthead__brand">VITRINE</p>
+      <p class="masthead__issue">
+        <span>Demo · NIWWTS edition No.06 — prints &amp; tees</span>
+        <span class="masthead__stacks">Liquid · React · HTML</span>
+      </p>
+      <p class="masthead__note">
+        Paper Shaders for Shopify themes and headless storefronts · Apache-2.0 ·
+        <a href="https://github.com/PiotrekFilipecki/vitrine">GitHub</a>
+      </p>
     </header>
 
     <main>
@@ -62,18 +68,70 @@
           aria-hidden="true"
         ></vitrine-shader>
         <div class="hero__plate">
-          <h1 id="hero-title" class="hero__title">No.06</h1>
+          <h1 id="hero-title" class="hero__title">Print it once.</h1>
           <p class="hero__lede">
-            Twenty-four pieces printed in two tones. Hover or tab onto a card and the print gives way to the
+            A custom element that runs Paper Shaders over the product image your page already renders.
+            Dithered catalogue, mesh hero, paper lookbook. Hover, tap or Tab and the print gives way to the
             photo.
           </p>
+        </div>
+      </section>
+
+      <section class="stacks" aria-labelledby="stacks-title">
+        <div class="stacks__head">
+          <h2 id="stacks-title" class="stacks__title">Three lines, three stacks</h2>
+          <p class="stacks__note">the <code>&lt;img&gt;</code> stays the content · the print is a layer</p>
+        </div>
+        <div class="stacks__columns">
+          <div class="stack stack--liquid">
+            <p class="stack__kicker">01 · Liquid (Online Store 2.0)</p>
+            <pre class="stack__code">
+{% render 'vitrine-card-media',
+  image: card_product.featured_media,
+  sizes: '(min-width: 990px) 25vw, 50vw' %}
+
+{{ 'vitrine.js' | asset_url }}   ← one module, 44 KB gzip
+sections/vitrine-hero.liquid     ← colour pickers + sliders
+sections/vitrine-editorial.liquid</pre>
+            <p class="stack__text">
+              Copy the folder, paste one settings group, wrap the card image. Merchants tune everything in the
+              theme editor.
+            </p>
+          </div>
+          <div class="stack stack--react">
+            <p class="stack__kicker">02 · React 19 / Next.js</p>
+            <pre class="stack__code">
+import { ProductMediaShader }
+  from 'vitrine-shaders/react';
+
+&lt;ProductMediaShader image={product.featuredImage}&gt;
+  &lt;Image … /&gt;
+&lt;/ProductMediaShader&gt;</pre>
+            <p class="stack__text">
+              Server HTML is a plain image. The element arrives after hydration, 860 B of wrapper.
+            </p>
+          </div>
+          <div class="stack stack--html">
+            <p class="stack__kicker">03 · Plain HTML</p>
+            <pre class="stack__code">
+&lt;script type="module"
+  src="vitrine.js"&gt;&lt;/script&gt;
+
+&lt;vitrine-shader effect="dither"
+  preset="newsprint" reveal="hover"&gt;
+  &lt;img src alt width height&gt;
+&lt;/vitrine-shader&gt;</pre>
+            <p class="stack__text">No bundler. No WebGL2, no CORS? The photo stays and nothing is logged.</p>
+          </div>
         </div>
       </section>
 
       <section id="catalogue" class="catalogue" aria-labelledby="catalogue-title">
         <div class="catalogue__head">
           <h2 id="catalogue-title" class="catalogue__title">Catalogue</h2>
-          <p class="catalogue__count">24 items · dither / newsprint · baked once, zero live WebGL contexts</p>
+          <p class="catalogue__count">
+            24 items · dither / newsprint · printed once, 0 live WebGL contexts · hover for the photo
+          </p>
         </div>
         <ul class="grid">
           <li class="cell cell--lead">
@@ -537,7 +595,10 @@
               Twenty-four cards, one shared WebGL context, printed once and cached. The photo underneath is
               the content; the print is a layer on top of it. Hover, tap or Tab.
             </p>
-            <p class="plate__meta">dither · newsprint · 8×8 Bayer · 2 tones</p>
+            <p class="plate__meta">
+              <span>dither · newsprint · 8×8 Bayer · 2 tones</span>
+              <span>LCP 1 546 ms with · 1 541 ms without · CLS 0.002</span>
+            </p>
           </li>
         </ul>
       </section>
@@ -567,14 +628,44 @@
           </p>
         </div>
       </section>
+      <section class="credit" aria-labelledby="credit-title">
+        <div class="credit__lead">
+          <p class="credit__kicker">Built on Paper Shaders · Apache-2.0</p>
+          <h2 id="credit-title" class="credit__title">Made with Paper.</h2>
+          <p class="credit__body">
+            The four effects are image-dithering, halftone-cmyk, mesh-gradient and paper-texture from
+            <code>@paper-design/shaders</code> 0.0.82, pinned. Presets were tuned on the Paper canvas and read
+            back into <code>presets/*.json</code>, the same files Liquid and React use. Pixel-compatibility
+            tests against shaders-react: 0 different pixels.
+          </p>
+        </div>
+        <dl class="credit__table">
+          <div>
+            <dt>dither · newsprint</dt>
+            <dd>product cards · baked once · 2.8 KB gzip</dd>
+          </div>
+          <div>
+            <dt>halftone · riso</dt>
+            <dd>product page · baked once · 4.1 KB gzip</dd>
+          </div>
+          <div>
+            <dt>mesh · drop-night</dt>
+            <dd>hero · the only live context · 2.1 KB gzip</dd>
+          </div>
+          <div>
+            <dt>paper · folded-lookbook</dt>
+            <dd>editorial image · baked once · 6.3 KB gzip</dd>
+          </div>
+        </dl>
+      </section>
     </main>
 
     <footer class="colophon">
-      <p>VITRINE · Apache-2.0 · <a href="https://shaders.paper.design">Powered by Paper Shaders</a></p>
       <p>
-        Works © Piotr Filipecki / NIWWTS. Static page, no bundler: the element is imported from
-        <code>packages/element/dist</code>.
+        VITRINE · Piotr Filipecki · Works © NIWWTS ·
+        <a href="https://shaders.paper.design">Powered by Paper Shaders</a>
       </p>
+      <p>Static page, no bundler: the element is imported from <code>packages/element/dist</code>.</p>
     </footer>
   </body>
 </html>

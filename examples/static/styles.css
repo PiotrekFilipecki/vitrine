@@ -111,6 +111,123 @@ code {
   text-align: right;
   padding-top: 10px;
 }
+.masthead__issue {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.masthead__stacks {
+  color: var(--blue-rice);
+}
+
+/* three stacks: three code columns of different widths (38 / 29 / 27), ink blocks on paper */
+.stacks {
+  margin-top: 40px;
+}
+.stacks__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-top: var(--rule) solid var(--ink);
+  padding: 8px 0 18px;
+}
+.stacks__title {
+  margin: 0;
+  font-size: 42px;
+  font-weight: 700;
+  font-stretch: 62%;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+.stacks__note {
+  margin: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.stacks__columns {
+  display: grid;
+  grid-template-columns: 38fr 29fr 27fr;
+  gap: 24px;
+  align-items: start;
+}
+.stack__kicker {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue-rice);
+}
+.stack__code {
+  margin: 0 0 10px;
+  padding: 18px 20px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: auto;
+  white-space: pre;
+}
+.stack__text {
+  margin: 0;
+  font-size: 14px;
+  max-width: 44ch;
+}
+
+/* credit: 38 / 62, the effect table as hairline rows */
+.credit {
+  margin-top: 68px;
+  display: grid;
+  grid-template-columns: 38fr 62fr;
+  gap: 42px;
+  align-items: end;
+}
+.credit__lead,
+.credit__table {
+  border-top: var(--rule) solid var(--ink);
+  padding-top: 12px;
+}
+.credit__kicker {
+  margin: 0 0 14px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--blue-rice);
+}
+.credit__title {
+  margin: 0 0 14px;
+  font-size: clamp(56px, 7vw, 96px);
+  font-weight: 700;
+  font-stretch: 62%;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
+}
+.credit__body {
+  margin: 0;
+  font-size: 16px;
+}
+.credit__table {
+  margin: 0;
+}
+.credit__table div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 0;
+  border-bottom: var(--hair) solid var(--ink);
+  font-size: 14px;
+}
+.credit__table dt {
+  font-weight: 700;
+}
+.credit__table dd {
+  margin: 0;
+  text-align: right;
+}
 
 /* hero: the mesh is a surface, the title sits on an ink plate that overlaps it (frame within a frame) */
 .hero {
@@ -137,7 +254,7 @@ code {
   margin: 0;
   font-weight: 700;
   font-stretch: 62%;
-  font-size: clamp(96px, 18vw, 288px);
+  font-size: clamp(64px, 10.4vw, 150px);
   line-height: 0.88;
   letter-spacing: -0.02em;
 }
@@ -268,6 +385,10 @@ code {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 /* editorial: 38 / 62 split, text column pushed to the far edge */
@@ -344,9 +465,21 @@ code {
   .hero__plate {
     max-width: 88%;
   }
-  .editorial {
+  .editorial,
+  .credit,
+  .stacks__columns {
     grid-template-columns: 1fr;
     gap: 26px;
+  }
+  .credit__table dd {
+    text-align: left;
+  }
+  .credit__table div {
+    flex-direction: column;
+    gap: 2px;
+  }
+  .hero__title {
+    font-size: clamp(64px, 24vw, 120px);
   }
   .editorial__text {
     justify-self: start;
