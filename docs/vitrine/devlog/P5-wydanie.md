@@ -1,6 +1,6 @@
 # P5 · Przegląd, wydanie 0.1.0, zgłoszenie
 
-Data: 29.10.2026. Gałąź `p5-wydanie` (od `p4-paper`). Nic nie opublikowane, nic nie wypchnięte, nic nie wysłane.
+Data: 29.10.2026. Gałąź `p5-wydanie` (od `p4-paper`), zmergowana do `main`. Repo wypchnięte na GitHub (publiczne) na polecenie Piotrka; npm, Vercel i zgłoszenia nie wysłane (wymagają jego kont).
 
 ## Skille
 
@@ -36,7 +36,7 @@ $ pnpm exec playwright test --project=chromium --project=webkit   (po poprawkach
 67 passed, 11 skipped (2.0m)
 ```
 
-Tag `v0.1.0` lokalnie: TAG_PENDING (po merge gałęzi i presetach z P4; tag na commicie wydania).
+Tag `v0.1.0` na `main` po merge wszystkich gałęzi (fast-forward) i po presetach z P4; repo utworzone jako publiczne `PiotrekFilipecki/vitrine` i wypchnięte z tagiem na polecenie Piotrka („zrob to wszystko za mnie”).
 
 ## W4 · ROADMAP.md
 

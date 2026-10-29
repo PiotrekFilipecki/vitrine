@@ -1,6 +1,6 @@
 # Submission texts (P5, EN)
 
-Links marked TODO are filled in after the repo is public and the demo is deployed (STATUS checklist).
+`TODO_DEMO_URL` is filled in after the Vercel deploy (STATUS checklist).
 
 ## (a) Codrops contact form (≤ 120 words)
 
@@ -10,19 +10,19 @@ gradient, paper texture) and gives the photo back on hover, tap or focus. It wor
 React 19 / Next.js from one runtime. The part that took real work: a 24-card grid ends with zero live WebGL contexts
 (effects are baked through one shared context), LCP is unchanged, keyboard and reduced motion are covered. Presets
 were tuned on the Paper canvas. Shopify is missing from the "Built with Paper Shaders" list; this could fill it.
-Repo: TODO_REPO_URL · demo: TODO_DEMO_URL · GIF: TODO_GIF_URL
+Repo: https://github.com/PiotrekFilipecki/vitrine · demo: TODO_DEMO_URL · GIF: https://raw.githubusercontent.com/PiotrekFilipecki/vitrine/main/docs/media/vitrine-card-reveal.gif
 
 ## (b) Reply under the Codrops guide post (≤ 280 characters)
 
 Built the Shopify entry for "Built with Paper Shaders": VITRINE, a `<vitrine-shader>` element for Liquid themes,
 headless Next.js and plain HTML. Dithered catalogue, zero live WebGL contexts on a 24-card grid, presets tuned in
-Paper. TODO_REPO_URL
+Paper. https://github.com/PiotrekFilipecki/vitrine
 
 ## (c) Post on X
 
 Paper Shaders in a Shopify theme, without an app: VITRINE prints your product grid in dithering and hands the photo
 back on hover. One `<vitrine-shader>` element for Liquid, Next.js and HTML. 24 cards, 0 live WebGL contexts, LCP
-unchanged. Open source, Apache-2.0. Made with @paper, thank you @uuuuuulala for the shaders. TODO_REPO_URL
+unchanged. Open source, Apache-2.0. Made with @paper, thank you @uuuuuulala for the shaders. https://github.com/PiotrekFilipecki/vitrine
 
 ## (d) Paper Discord / r/paperdesign
 
@@ -32,7 +32,7 @@ the photo stays the content (LCP, alt, fallback) and comes back on hover or focu
 colour pickers and sliders, React wrappers for headless stores, and a static demo. The presets were tuned on the
 Paper canvas and read back into JSON through the MCP. Numbers that might interest you: 0 different pixels against
 shaders-react, 0 live contexts after baking a 24-card grid, LCP delta within noise on three stacks. Repo and process
-notes: TODO_REPO_URL. Happy to take feedback on the presets, they are drafts by a developer, not a designer.
+notes: https://github.com/PiotrekFilipecki/vitrine. Happy to take feedback on the presets, they are drafts by a developer, not a designer.
 
 ## (e) Article pitch for Codrops (outline)
 
