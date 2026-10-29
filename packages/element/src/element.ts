@@ -93,6 +93,7 @@ export class VitrineShader extends BaseElement {
 
   // live mode
   #module: EffectModule | null = null;
+  #fragmentShader = '';
   #uniforms: ReturnType<EffectModule['toUniforms']> | null = null;
   #liveSpeed = 0;
   #liveFrame = 0;
@@ -330,6 +331,7 @@ export class VitrineShader extends BaseElement {
     if (speed === 0) {
       await this.#setupBaked(run, module, resolved.presetId, params, uniforms, frame, src);
     } else {
+      this.#fragmentShader = module.variant?.(params)?.fragmentShader ?? module.fragmentShader;
       this.#setupLive(module, resolved.presetId, uniforms, speed, frame);
     }
   }
@@ -383,14 +385,20 @@ export class VitrineShader extends BaseElement {
     const cached = urlPromise !== undefined;
     let bakeInfo: VitrineReadyDetail['bake'];
     if (!urlPromise) {
-      urlPromise = Baker.for(module)
-        .bake({ uniforms, frame, cssWidth: cssW, cssHeight: cssH })
+      urlPromise = Baker.for(module, module.variant?.(params) ?? null)
+        .bake({ uniforms, frame, cssWidth: cssW, cssHeight: cssH, el: this })
         .then((r) => {
           bakeInfo = {
             total: Math.round(r.ms),
             wait: Math.round(r.msWait),
             render: Math.round(r.msRender),
             blob: Math.round(r.msBlob),
+            main: Math.round(r.msMain),
+            upload: Math.round(r.msUpload),
+            read: Math.round(r.msRead),
+            gpu: Math.round(r.msGpu),
+            readback: r.readback,
+            encode: r.encode,
             pixels: `${r.pixelWidth}x${r.pixelHeight}`,
           };
           return URL.createObjectURL(r.blob);
@@ -478,7 +486,7 @@ export class VitrineShader extends BaseElement {
     try {
       mount = new ShaderMount(
         layer,
-        this.#module.fragmentShader,
+        this.#fragmentShader,
         this.#uniforms,
         undefined,
         this.#liveSpeed,

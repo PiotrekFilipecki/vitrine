@@ -1,7 +1,10 @@
 import { ShaderMount, type ShaderMountUniforms } from '#paper/shader-mount.js';
+import { acquireBakeSlot } from './bake-queue.js';
 import { getConfig } from './config.js';
-import type { EffectModule } from './effects/types.js';
+import type { EffectModule, EffectVariant } from './effects/types.js';
+import { encodePng, type EncodePath } from './encode.js';
 import { LruMap } from './lru-map.js';
+import { finishRead, startRead, type PendingRead } from './readback.js';
 import { twoFrames } from './texture.js';
 
 export interface BakeRequest {
@@ -10,6 +13,8 @@ export interface BakeRequest {
   /** CSS pixels of the target box; the baker renders at the same device-pixel size ShaderMount would use there. */
   cssWidth: number;
   cssHeight: number;
+  /** The element asking: the bake queue (Q0) serves elements near the viewport first. */
+  el?: Element | null;
 }
 
 export interface BakeResult {
@@ -17,10 +22,19 @@ export interface BakeResult {
   pixelWidth: number;
   pixelHeight: number;
   ms: number;
-  /** Breakdown for the devlog: waiting for the host/first frame, GL upload + render + readPixels, PNG encode. */
+  /** Breakdown for the devlog: waiting (queue slot, host, first frame), GL upload + render + readPixels, PNG encode. */
   msWait: number;
   msRender: number;
   msBlob: number;
+  /** Main-thread part only (render + readback, plus the encode when it ran on the main thread). */
+  msMain: number;
+  encode: EncodePath;
+  /** Split of msRender: texture upload + draw (setUniforms), then the readback. */
+  msUpload: number;
+  msRead: number;
+  /** Waiting for the fence off the main thread (async readback only). */
+  msGpu: number;
+  readback: 'async' | 'sync';
 }
 
 /**
@@ -31,11 +45,13 @@ export interface BakeResult {
 export class Baker {
   static #bakers = new Map<string, Baker>();
 
-  static for(module: EffectModule): Baker {
-    let b = Baker.#bakers.get(module.effect);
+  /** One baker (one off-screen context at most) per effect, or per VITRINE shader variant of an effect. */
+  static for(module: EffectModule, variant: EffectVariant | null = null): Baker {
+    const key = variant?.key ?? module.effect;
+    let b = Baker.#bakers.get(key);
     if (!b) {
-      b = new Baker(module);
-      Baker.#bakers.set(module.effect, b);
+      b = new Baker(module, variant?.fragmentShader ?? module.fragmentShader, key);
+      Baker.#bakers.set(key, b);
     }
     return b;
   }
@@ -51,6 +67,8 @@ export class Baker {
   }
 
   #module: EffectModule;
+  #fragmentShader: string;
+  #key: string;
   #host: HTMLDivElement | null = null;
   #mount: ShaderMount | null = null;
   #lost = false;
@@ -65,8 +83,10 @@ export class Baker {
     return this.#scratchCanvas;
   }
 
-  private constructor(module: EffectModule) {
+  private constructor(module: EffectModule, fragmentShader: string, key: string) {
     this.#module = module;
+    this.#fragmentShader = fragmentShader;
+    this.#key = key;
   }
 
   bake(req: BakeRequest): Promise<BakeResult> {
@@ -93,53 +113,63 @@ export class Baker {
       this.#setHostSize(w, h);
       await twoFrames();
     }
-    if (this.#lost || mount !== this.#mount) {
-      throw new Error('baker context lost during bake');
-    }
+    // Q0: wait for a slot in the global queue, so every bake's synchronous part runs in its own task.
+    const release = await acquireBakeSlot(req.el ?? null);
+    let raw: Uint8ClampedArray;
+    let tUpload: number;
+    let pending: PendingRead | null;
+    let pw: number;
+    let ph: number;
     const t1 = performance.now();
-    mount.setUniforms(req.uniforms); // uploads textures and renders synchronously (speed 0)
-    mount.setFrame(req.frame);
-    const canvas = mount.canvasElement;
-    // Synchronous readback right after the render, then PNG-encode from a CPU 2D canvas. `canvas.toBlob` on the
-    // WebGL canvas took ~1.1 s per card whenever another WebGL canvas was animating on the page (P1 measurement:
-    // 7 ms without a live hero, 1070 ms with one); readPixels + putImageData stays at a few ms either way.
-    const gl = canvas.getContext('webgl2');
-    if (!gl) throw new Error('baker lost its WebGL2 context');
-    const pw = canvas.width;
-    const ph = canvas.height;
-    const row = pw * 4;
-    const raw = new Uint8ClampedArray(row * ph);
-    gl.readPixels(0, 0, pw, ph, gl.RGBA, gl.UNSIGNED_BYTE, raw);
-    const flipped = new Uint8ClampedArray(row * ph);
-    for (let y = 0; y < ph; y++) flipped.set(raw.subarray(y * row, (y + 1) * row), (ph - 1 - y) * row);
-    const scratch = this.#scratch();
-    if (scratch.width !== pw || scratch.height !== ph) {
-      scratch.width = pw;
-      scratch.height = ph;
+    try {
+      if (this.#lost || mount !== this.#mount) {
+        throw new Error('baker context lost during bake');
+      }
+      mount.setUniforms(req.uniforms); // uploads textures and renders synchronously (speed 0)
+      mount.setFrame(req.frame);
+      tUpload = performance.now();
+      const canvas = mount.canvasElement;
+      // Readback right after the render (P1: `canvas.toBlob` took ~1.1 s per card while another WebGL canvas was
+      // animating). Q0: asynchronous through a pixel-pack buffer + fence (readback.ts); synchronous readPixels only
+      // if that path is unavailable.
+      const gl = canvas.getContext('webgl2');
+      if (!gl) throw new Error('baker lost its WebGL2 context');
+      pw = canvas.width;
+      ph = canvas.height;
+      raw = new Uint8ClampedArray(pw * 4 * ph);
+      pending = startRead(gl, pw, ph);
+      if (!pending) gl.readPixels(0, 0, pw, ph, gl.RGBA, gl.UNSIGNED_BYTE, raw);
+    } finally {
+      release();
     }
-    const ctx = scratch.getContext('2d', { willReadFrequently: true });
-    if (!ctx) throw new Error('2D canvas unavailable');
-    ctx.putImageData(new ImageData(flipped, pw, ph), 0, 0);
+    const tIssued = performance.now();
+    if (pending) await finishRead(pending, raw);
     const t2 = performance.now();
-    // Synchronous encode: `toBlob` (WebGL or 2D canvas alike) resolved ~1 s late while another WebGL canvas was
-    // animating (P1 measurement); `toDataURL` + base64 → Blob takes single-digit ms for a 400×480 card.
-    const blob = dataUrlToBlob(scratch.toDataURL('image/png'));
+    // Q0: flip + PNG encode in a worker (OffscreenCanvas), main-thread fallback inside encodePng.
+    const { blob, path } = await encodePng(raw, pw, ph, () => this.#scratch());
     const t3 = performance.now();
     this.#scheduleIdleDispose();
     return {
       blob,
-      pixelWidth: canvas.width,
-      pixelHeight: canvas.height,
+      pixelWidth: pw,
+      pixelHeight: ph,
       ms: t3 - t0,
       msWait: t1 - t0,
       msRender: t2 - t1,
       msBlob: t3 - t2,
+      // Main thread: upload + draw + issuing the read (+ the synchronous read or the final copy) + main-thread encode.
+      msMain: tIssued - t1 + (path === 'main' ? t3 - t2 : 0),
+      msUpload: tUpload - t1,
+      msRead: tIssued - tUpload,
+      msGpu: t2 - tIssued,
+      readback: pending ? 'async' : 'sync',
+      encode: path,
     };
   }
 
   #createMount(req: BakeRequest, w: number, h: number): ShaderMount {
     const host = document.createElement('div');
-    host.setAttribute('data-vitrine-baker', this.#module.effect);
+    host.setAttribute('data-vitrine-baker', this.#key);
     host.setAttribute('aria-hidden', 'true');
     host.style.cssText =
       'position:fixed;left:-10000px;top:0;pointer-events:none;visibility:hidden;contain:strict;';
@@ -149,7 +179,7 @@ export class Baker {
     const cfg = getConfig();
     const mount = new ShaderMount(
       host,
-      this.#module.fragmentShader,
+      this.#fragmentShader,
       req.uniforms,
       undefined,
       0,
@@ -202,14 +232,6 @@ export class Baker {
     this.#hostH = 0;
     this.#lost = false;
   }
-}
-
-function dataUrlToBlob(dataUrl: string): Blob {
-  const comma = dataUrl.indexOf(',');
-  const binary = atob(dataUrl.slice(comma + 1));
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return new Blob([bytes], { type: 'image/png' });
 }
 
 /** Baked results by (effect + params hash + src + device size): object URLs, revoked on eviction. */

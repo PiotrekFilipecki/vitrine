@@ -34,7 +34,23 @@ export interface VitrineReadyDetail {
   /** Milliseconds from connectedCallback to ready. */
   ms: number;
   /** Baked only: baker breakdown (ms) of the bake this element waited for, undefined on a cache hit. */
-  bake?: { total: number; wait: number; render: number; blob: number; pixels: string };
+  bake?: {
+    total: number;
+    wait: number;
+    render: number;
+    blob: number;
+    /** Main-thread milliseconds of this bake (Q0): render + readback, plus the encode if it ran there. */
+    main: number;
+    /** Split of `render`: texture upload + draw, then the readback (Q0). */
+    upload: number;
+    read: number;
+    /** Waiting for the GPU fence off the main thread, and which readback path ran (Q0). */
+    gpu: number;
+    readback: 'async' | 'sync';
+    /** Where the PNG was encoded (Q0): off-thread worker or the main-thread fallback. */
+    encode: 'worker' | 'main';
+    pixels: string;
+  };
 }
 
 export interface VitrineFallbackDetail {

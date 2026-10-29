@@ -11,7 +11,7 @@ Tested on **Horizon 4.3.0** (Shopify's current first-party theme, 29.10.2026). D
 
 | File                                 | What it does                                                                                                                                                   |
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `assets/vitrine.js`                  | the `<vitrine-shader>` element, one ES module (101.8 KB, 44.0 KB gzip), all four effects inside; licence + Paper NOTICE in the header                          |
+| `assets/vitrine.js`                  | the `<vitrine-shader>` element, one ES module (105.0 KB, 46.1 KB gzip), all four effects inside; licence + Paper NOTICE in the header                          |
 | `assets/vitrine-theme.css`           | styles for the two sections and the card wrapper (radius 0, no shadows; typography inherits from the theme)                                                    |
 | `sections/vitrine-hero.liquid`       | mesh gradient surface + ink plate; colour pickers ×4, speed / distortion / swirl / grain / scale sliders, height, plate colours; blocks: heading, text, button |
 | `sections/vitrine-editorial.liquid`  | paper texture on an `image_picker` image + text column; folds / crumples / grain / fibre / light angle / seed sliders; blocks: kicker, heading, text, button   |
