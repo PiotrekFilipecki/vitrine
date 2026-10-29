@@ -14,6 +14,7 @@ export default defineConfig([
       'docs/**',
       'examples/spikes/fixtures/**',
       'packages/element/e2e/ref/ref.bundle.js',
+      'examples/r0/r0.bundle.js',
       '**/.next/**',
       'examples/theme-test/**',
       'shopify-theme/assets/vitrine.js',

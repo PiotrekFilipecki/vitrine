@@ -10,6 +10,7 @@ third_party
 LICENSE
 NOTICE
 packages/element/e2e/ref/ref.bundle.js
+examples/r0/r0.bundle.js
 .next
 examples/next-headless/public/fixtures
 examples/next-headless/next-env.d.ts

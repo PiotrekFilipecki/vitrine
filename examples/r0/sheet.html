@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>R0 proof sheet</title>
+    <link rel="stylesheet" href="./r0.css" />
+    <style>
+      body {
+        padding: 56px 48px 48px;
+        width: max-content;
+      }
+      header {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: end;
+        gap: 48px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--ink);
+        margin-bottom: 20px;
+      }
+      h1 {
+        margin: 0;
+        font-stretch: 62%;
+        font-weight: 700;
+        font-size: 72px;
+        line-height: 0.9;
+        letter-spacing: -0.01em;
+        text-transform: uppercase;
+      }
+      .role {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.4;
+        max-width: 46ch;
+        justify-self: end;
+        color: var(--ink-2);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(var(--cols, 4), var(--cw));
+        column-gap: 16px;
+        row-gap: 14px;
+      }
+      .col {
+        font-size: 12px;
+        line-height: 1.35;
+        color: var(--ink-2);
+        min-height: 3.2em;
+      }
+      .col b {
+        display: block;
+        font-weight: 700;
+        font-stretch: 125%;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--ink);
+        margin-bottom: 2px;
+      }
+      .col.raw b {
+        color: var(--ink-2);
+      }
+      footer {
+        margin-top: 18px;
+        padding-top: 10px;
+        border-top: 1px solid var(--rule);
+        display: flex;
+        justify-content: space-between;
+        font-size: 11px;
+        color: var(--ink-2);
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 id="title">…</h1>
+      <p class="role" id="role"></p>
+    </header>
+    <div class="grid" id="grid"></div>
+    <footer>
+      <span id="foot"></span>
+      <span>Rendered with @paper-design/shaders-react 0.0.82 · Chromium · VITRINE R0</span>
+    </footer>
+    <script type="module">
+      import { byId } from './effects.js';
+      import { buildCell } from './cell.js';
+
+      const q = new URLSearchParams(location.search);
+      const effect = { ...byId(q.get('effect')) };
+      // tuning runs pass candidate presets (and optionally photos) in the URL instead of editing effects.js
+      if (q.get('presets')) effect.presets = JSON.parse(q.get('presets'));
+      if (q.get('photos')) effect.photos = q.get('photos').split(',');
+      if (q.get('cols')) document.documentElement.style.setProperty('--cols', q.get('cols'));
+      const W = Number(q.get('w') ?? 300);
+      const H = Math.round(W * 1.25);
+      document.documentElement.style.setProperty('--cw', `${W}px`);
+      document.title = `R0 · ${effect.title}`;
+      document.getElementById('title').textContent = effect.title;
+      document.getElementById('role').textContent = effect.role;
+
+      const fmt = (v) => (Array.isArray(v) ? v.join(' ') : typeof v === 'number' ? +v.toFixed(3) : v);
+      const summary = (props) =>
+        Object.entries(props)
+          .filter(([k]) => !k.startsWith('color') || k === 'colorTint')
+          .map(([k, v]) => `${k} ${fmt(v)}`)
+          .join(' · ');
+
+      const grid = document.getElementById('grid');
+      const head = (cls, name, text) => {
+        const d = document.createElement('div');
+        d.className = `col ${cls}`;
+        d.innerHTML = `<b></b><span></span>`;
+        d.querySelector('b').textContent = name;
+        d.querySelector('span').textContent = text;
+        grid.append(d);
+      };
+      head('raw', 'No effect', 'the photograph as it ships');
+      effect.presets.forEach((p, i) =>
+        head('', `${String.fromCharCode(65 + i)} · ${p.name}`, summary(p.props))
+      );
+
+      window.__sheet = { done: false };
+      const jobs = [];
+      for (const photo of effect.photos) {
+        for (const preset of [null, ...effect.presets]) {
+          const cell = buildCell(effect, preset, photo, { w: W, h: H, photoW: effect.photoW ?? 1000 });
+          grid.append(cell.node);
+          jobs.push(cell.ready);
+        }
+      }
+      document.getElementById('foot').textContent =
+        `Photos: ${effect.photos.join(', ')} (examples/fixtures, Unsplash License, see CREDITS.md)`;
+      Promise.all([...jobs, document.fonts.ready])
+        .then(() => new Promise((r) => setTimeout(r, 400)))
+        .then(() => {
+          window.__sheet = { done: true, resolved: effect.presets.map((p) => p.resolved ?? null) };
+        })
+        .catch((e) => (window.__sheet = { done: true, error: String(e) }));
+    </script>
+  </body>
+</html>

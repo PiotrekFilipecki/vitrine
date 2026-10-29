@@ -15,3 +15,10 @@ release/
 
 # GitHub Pages build (scripts/pages-site.mjs)
 _site/
+
+# R0 proof-sheet bundle (examples/r0/build.mjs)
+examples/r0/r0.bundle.js
+
+# R0 proof media: full-size PNG and GIF stay local; git keeps .webp (≤ 400 KB), .json and .mp4 (bramka R0)
+docs/media/r0-*.png
+docs/media/r0-*.gif

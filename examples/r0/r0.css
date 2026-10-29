@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 700;
+  font-stretch: 62% 125%;
+  font-display: block;
+  src: url('../fonts/archivo/archivo-latin-wdth-wght.woff2') format('woff2');
+}
+:root {
+  --paper: #efebe4;
+  --ink: #141312;
+  --ink-2: #57524c;
+  --rule: rgba(20, 19, 18, 0.16);
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Archivo', serif;
+  font-stretch: 100%;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}

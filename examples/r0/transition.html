@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>R0 transition</title>
+    <link rel="stylesheet" href="./r0.css" />
+    <style>
+      body {
+        padding: 0;
+        width: max-content;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="cell"></div>
+    <script type="module">
+      import { byId } from './effects.js';
+      import { buildCell } from './cell.js';
+
+      const q = new URLSearchParams(location.search);
+      const effect = byId(q.get('effect'));
+      const tr = effect.transition;
+      const preset = effect.presets[tr.preset];
+      const W = Number(q.get('w') ?? 480);
+      const H = Math.round(W * 1.25);
+      const cell = buildCell(effect, preset, tr.photo, { w: W, h: H, photoW: effect.photoW ?? 1000 });
+      document.getElementById('cell').append(cell.node);
+      const props = { ...effect.base, ...preset.props };
+      const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+      /** Render the transition at t (0–1), with optional extra props (loupe position). */
+      window.__at = async (t, extra = {}) => {
+        const p = tr.at(t, props);
+        cell.update(effect.mode === 'loupe' ? { grow: p.grow, ...extra } : { ...p, ...extra });
+        await frame();
+      };
+      /** Render the video timeline at `sec`. */
+      window.__video = async (sec) => {
+        const v = tr.video(sec, { w: W, h: H });
+        const { t, ...extra } = v;
+        await window.__at(t, extra);
+      };
+      cell.ready
+        .then(() => document.fonts.ready)
+        .then(() => (window.__ready = true))
+        .catch((e) => (window.__ready = String(e)));
+    </script>
+  </body>
+</html>

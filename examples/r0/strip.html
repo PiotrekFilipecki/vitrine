@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>R0 transition strip</title>
+    <link rel="stylesheet" href="./r0.css" />
+    <style>
+      body {
+        padding: 40px 40px 32px;
+        width: max-content;
+      }
+      h1 {
+        margin: 0 0 4px;
+        font-stretch: 62%;
+        font-weight: 700;
+        font-size: 44px;
+        line-height: 0.95;
+        text-transform: uppercase;
+      }
+      p {
+        margin: 0 0 18px;
+        font-size: 14px;
+        color: var(--ink-2);
+      }
+      .row {
+        display: flex;
+        gap: 12px;
+      }
+      figure {
+        margin: 0;
+      }
+      figcaption {
+        margin-top: 8px;
+        font-size: 11px;
+        font-weight: 700;
+        font-stretch: 125%;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      figcaption span {
+        font-weight: 400;
+        letter-spacing: 0;
+        text-transform: none;
+        font-stretch: 100%;
+        color: var(--ink-2);
+        margin-left: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title"></h1>
+    <p id="sub"></p>
+    <div class="row" id="row"></div>
+    <script type="module">
+      import { byId } from './effects.js';
+      import { buildCell } from './cell.js';
+
+      const effect = byId(new URLSearchParams(location.search).get('effect'));
+      const tr = effect.transition;
+      const preset = effect.presets[tr.preset];
+      const props = { ...effect.base, ...preset.props };
+      document.getElementById('title').textContent = `${effect.title} · transition`;
+      document.getElementById('sub').textContent =
+        `Preset ${String.fromCharCode(65 + tr.preset)} · ${preset.name}, photo ${tr.photo}. Five frames of the eased transition, t = 0 → 1.`;
+      const W = 240;
+      const H = 300;
+      const ts = [0, 0.25, 0.5, 0.75, 1];
+      const jobs = ts.map(async (t) => {
+        const cell = buildCell(effect, preset, tr.photo, { w: W, h: H, photoW: effect.photoW ?? 1000 });
+        const fig = document.createElement('figure');
+        const cap = document.createElement('figcaption');
+        const p = tr.at(t, props);
+        const key = Object.entries(p).find(([k]) => k !== 'frame' && k !== 'scale');
+        cap.innerHTML = `t ${t.toFixed(2)}<span></span>`;
+        cap.querySelector('span').textContent = key ? `${key[0]} ${(+key[1]).toFixed(2)}` : '';
+        fig.append(cell.node, cap);
+        document.getElementById('row').append(fig);
+        await cell.ready;
+        cell.update(effect.mode === 'loupe' ? { grow: p.grow } : p);
+      });
+      Promise.all(jobs)
+        .then(() => document.fonts.ready)
+        .then(() => new Promise((r) => setTimeout(r, 400)))
+        .then(() => (window.__ready = true))
+        .catch((e) => (window.__ready = String(e)));
+    </script>
+  </body>
+</html>
