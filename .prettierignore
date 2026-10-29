@@ -15,3 +15,4 @@ examples/next-headless/public/fixtures
 examples/next-headless/next-env.d.ts
 examples/theme-test
 shopify-theme/assets/vitrine.js
+_site

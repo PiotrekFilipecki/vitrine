@@ -9,6 +9,7 @@ export default defineConfig([
       '**/node_modules/**',
       '**/dist/**',
       'test-results/**',
+      '_site/**',
       'playwright-report/**',
       'docs/**',
       'examples/spikes/fixtures/**',

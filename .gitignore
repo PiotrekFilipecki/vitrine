@@ -12,3 +12,6 @@ packages/element/e2e/ref/ref.bundle.js
 packages/element/e2e/ref/ref.bundle.js.map
 .lighthouse/
 release/
+
+# GitHub Pages build (scripts/pages-site.mjs)
+_site/
