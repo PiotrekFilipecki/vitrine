@@ -11,7 +11,7 @@ Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p
 | P2 Liquid + demo statyczne | **zrobione** | `theme check` 0 błędów w plikach VITRINE; `theme-markup.html` 9/9 (Chromium + WebKit); na sklepie (proxy `theme dev`) 8/8: 12/12 kart w `<vitrine-shader>`, 0 canvasów, 1 żądanie `vitrine.js`; Spike C na własnym sklepie: ACAO `*` oba warianty; Lighthouse mobile na CDN: 100 vs 99, LCP 1 808 vs 1 938 ms (Δ −130), CLS 0; edytor: zmiana koloru, add/remove/drag sekcji, grupa ustawień. **Bramka (Piotrek, telefon + edytor): kolory hero i karty bez kodu.** |
 | P3 headless Next | **zrobione** (przed P2) | SSR = zwykły `<img>`; 7 testów SSR + 7 e2e na buildzie produkcyjnym (Chromium + WebKit): 25 wypalonych, 1 żywy hero, 0 kontekstów po bake, 0 błędów hydracji; Lighthouse mobile ΔLCP **−2 ms** (755 vs 757), CLS 0, TBT +134 ms; wrappery 860 B gz. **Bramka (Piotrek, telefon): ta sama karta co w `examples/static`.** Tryb Storefront API niewykonany na sklepie (brak tokena). |
 | P4 Paper: presety, demo, README | **w toku** na `p4-paper` (od p2): plik Paper „VITRINE — presets” (4 ramki × 3 warianty) i „Demo page” (1440/390) zbudowane przez MCP; strona demo przeniesiona do kodu; README z 2 GIF-ami; process.md. **Czeka na X1: strojenie presetów przez Piotrka w Paperze (40 min)**, potem odczyt do `presets/*.json` i testy zgodności. | README jak obcy developer: 30 s; strona demo nie wygląda jak szablon |
-| P5 przegląd, wydanie, zgłoszenie | nie zaczęte | — |
+| P5 przegląd, wydanie, zgłoszenie | **w toku** na `p5-wydanie` (od p4): wersje 0.1.0, subpath `vitrine-shaders/react` składany do paczki, `npm publish --dry-run` 26 plików / 135,8 kB, zip motywu, CHANGELOG, ROADMAP, submission.md; skan sekretów grepem po drzewie i historii: czysty (gitleaks nie zainstalowany). Czeka na: review (W1), presety z P4. | checklista niżej |
 
 ## Nazwy (29.10.2026)
 
@@ -44,3 +44,16 @@ Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p
 ## Gdzie co jest
 
 - Plan: `docs/vitrine/PLAN.md` · prompty: `docs/vitrine/PROMPTY.md` · ADR: `docs/adr/0001-architektura.md` · API: `docs/vitrine/API.md` · devlogi: `docs/vitrine/devlog/P0-spiki.md`, `P1-element.md`, `P2-liquid.md`, `P3-headless.md` · dowody: `docs/media/p0-*`, `p1-*`, `p2-*`, `p3-*` · motyw: `shopify-theme/` (build `pnpm --filter vitrine-shaders exec tsup --config tsup.theme.config.ts`) · CSV: `examples/niwwts-products.csv` · test motywu: `examples/theme-test/README.md` · spiki: `examples/spikes/` · element: `packages/element/` · wrappery React: `packages/react/` · demo: `examples/static/` · headless: `examples/next-headless/` · Lighthouse: `node scripts/lighthouse.mjs static|next`.
+
+## Przed upublicznieniem (P5 · W6, Piotrek)
+
+- [ ] P4 X1: presety zestrojone w Paperze, `presets/*.json` odczytane, `pnpm test:e2e` zielone na nowych wartościach.
+- [ ] Merge gałęzi w kolejności `p1-element` → `p3-headless` → `p2-liquid` → `p4-paper` → `p5-wydanie` do `main` (fast-forward).
+- [ ] `brew install gitleaks && gitleaks detect --source . --log-opts=--all` (skan grepem jest czysty, ale to nie to samo).
+- [ ] Repo publiczne na GitHubie (`PiotrekFilipecki/vitrine`); GIF-y w README działają z `raw.githubusercontent.com` (≤ 4 MB: 2,5 MB i 1,9 MB).
+- [ ] Demo na Vercelu: import repo, Root Directory `examples/next-headless`; URL wpisany do README (sekcja "Repo") i do `docs/vitrine/submission.md` (`TODO_DEMO_URL`); `TODO_REPO_URL`, `TODO_GIF_URL` podmienione.
+- [ ] `examples/niwwts-products.csv`: URL-e obrazów wskazują na assety motywu testowego w sklepie; po upublicznieniu repo można podmienić na `raw.githubusercontent.com/…/examples/spikes/fixtures/`.
+- [ ] `npm login`, `cd packages/element && npm publish` (dry-run pokazał 26 plików: LICENSE, NOTICE, README, dist z `dist/react`, bez testów i fixtures).
+- [ ] `git tag v0.1.0` na commicie wydania i push tagu; zip z `pnpm pack:theme` jako asset release na GitHubie.
+- [ ] Zgłoszenia z `docs/vitrine/submission.md` w kolejności: formularz Codrops → komentarz pod przewodnikiem → X → Discord Papera / r/paperdesign.
+- [ ] Motyw testowy „VITRINE test (p2)” w `niwwts.myshopify.com` zostaje nieopublikowany albo usuń go sam.
