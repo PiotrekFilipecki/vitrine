@@ -10,7 +10,7 @@ Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p
 | P1 element | **zrobione** | zgodność pikseli z React: 0 różnych px, 8/8 przypadków, Chromium + WebKit; 24 karty + hero: 0 `webglcontextlost`, 0 kontekstów po bake; klawiatura, reduced motion, fallback CORS: testy zielone; LCP +5 ms vs bez efektów (Lighthouse mobile, mediana z 3). **Bramka wizualna (Piotrek, telefon): „druk czy filtr?”** — uwaga na raster na kremowym tle (parametr presetu, P4). |
 | P2 Liquid + demo statyczne | **zrobione** | `theme check` 0 błędów w plikach VITRINE; `theme-markup.html` 9/9 (Chromium + WebKit); na sklepie (proxy `theme dev`) 8/8: 12/12 kart w `<vitrine-shader>`, 0 canvasów, 1 żądanie `vitrine.js`; Spike C na własnym sklepie: ACAO `*` oba warianty; Lighthouse mobile na CDN: 100 vs 99, LCP 1 808 vs 1 938 ms (Δ −130), CLS 0; edytor: zmiana koloru, add/remove/drag sekcji, grupa ustawień. **Bramka (Piotrek, telefon + edytor): kolory hero i karty bez kodu.** |
 | P3 headless Next | **zrobione** (przed P2) | SSR = zwykły `<img>`; 7 testów SSR + 7 e2e na buildzie produkcyjnym (Chromium + WebKit): 25 wypalonych, 1 żywy hero, 0 kontekstów po bake, 0 błędów hydracji; Lighthouse mobile ΔLCP **−2 ms** (755 vs 757), CLS 0, TBT +134 ms; wrappery 860 B gz. **Bramka (Piotrek, telefon): ta sama karta co w `examples/static`.** Tryb Storefront API niewykonany na sklepie (brak tokena). |
-| P4 Paper: presety, demo, README | nie zaczęte | — |
+| P4 Paper: presety, demo, README | **w toku** na `p4-paper` (od p2): plik Paper „VITRINE — presets” (4 ramki × 3 warianty) i „Demo page” (1440/390) zbudowane przez MCP; strona demo przeniesiona do kodu; README z 2 GIF-ami; process.md. **Czeka na X1: strojenie presetów przez Piotrka w Paperze (40 min)**, potem odczyt do `presets/*.json` i testy zgodności. | README jak obcy developer: 30 s; strona demo nie wygląda jak szablon |
 | P5 przegląd, wydanie, zgłoszenie | nie zaczęte | — |
 
 ## Nazwy (29.10.2026)
@@ -38,7 +38,8 @@ Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p
 6. **Bramka P3:** `pnpm build && pnpm --filter next-headless start`, telefon → `http://<ip-maca>:3000/`. Po bramce merge `p3-headless` → `main` (po p1).
 7. **Tryb sklepu w P3:** kanał Headless w `niwwts.myshopify.com` → publiczny token Storefront API → `examples/next-headless/.env.local` (wzór `.env.example`). Vercel: import z Root Directory `examples/next-headless` (nie wdrażam sam).
 8. **Logowanie CLI:** `shopify auth login` w zwykłym Terminal.app (prefiks `!` w Claude Code jest nieinteraktywny i CLI żąda `--alias`). Zrobione 29.10.2026.
-9. **Bramka P2:** podgląd `https://niwwts.myshopify.com?preview_theme_id=193335820605` na telefonie + edytor motywu (kolory hero, Theme settings → VITRINE). Motyw testowy usuń sam, gdy zbędny.
+9. **P4 · X1 (Piotrek, 40 min):** w Paperze (plik „VITRINE — presets”, https://app.paper.design/file/01M64ER5PDV2TPY8N2M73DBSZP) nałóż warstwy shaderów na sloty A/B/C w czterech ramkach i zestrój; napisz „gotowe”. Plan B: eksport React warstw do `docs/vitrine/paper-export/`.
+10. **Bramka P2:** podgląd `https://niwwts.myshopify.com?preview_theme_id=193335820605` na telefonie + edytor motywu (kolory hero, Theme settings → VITRINE). Motyw testowy usuń sam, gdy zbędny.
 
 ## Gdzie co jest
 
