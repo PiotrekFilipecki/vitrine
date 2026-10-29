@@ -297,7 +297,7 @@ export class VitrineShader extends BaseElement {
       }
       src = img.currentSrc || img.src;
       try {
-        textures.image = await loadTexture(src, true);
+        textures.image = await loadTexture(src);
       } catch (err) {
         if (!alive()) return;
         const kind = err instanceof TextureError ? err.kind : 'error';

@@ -10,7 +10,6 @@ export default defineConfig({
   resolve: {
     alias: [{ find: /^#paper\/(.*)$/, replacement: `${paperDist}$1` }],
   },
-  esbuild: { jsx: 'automatic' },
   test: {
     include: ['packages/*/src/**/*.test.{ts,tsx}'],
     environment: 'node',

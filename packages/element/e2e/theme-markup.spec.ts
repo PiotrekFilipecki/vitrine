@@ -62,6 +62,13 @@ test.describe('P2 · theme markup (shopify-theme/ rendered)', () => {
       { ...r, vitrineRequests: vitrineRequests.length, console: con.all },
       'p2'
     );
+    // The hero section's aria-labelledby must resolve (review H1: the Liquid heading carries the id).
+    expect(
+      await page.evaluate(() => {
+        const sec = document.querySelector('.vitrine-hero');
+        return Boolean(document.getElementById(sec?.getAttribute('aria-labelledby') ?? ''));
+      })
+    ).toBe(true);
     expect(r.scriptTags).toBe(26);
     expect(vitrineRequests).toHaveLength(1);
     expect(r.fallbacks).toEqual([]);

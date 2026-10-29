@@ -8,10 +8,17 @@ export function loadNoiseTexture(): Promise<HTMLImageElement> {
   if (!promise) {
     const img = getShaderNoiseTexture();
     if (!img) return Promise.reject(new Error('noise texture needs a window'));
-    promise = img.decode().then(() => {
-      setMinImageSize(img);
-      return img;
-    });
+    promise = img
+      .decode()
+      .then(() => {
+        setMinImageSize(img);
+        return img;
+      })
+      .catch((err: unknown) => {
+        // A transient decode failure must not poison every halftone/paper on the page until reload.
+        promise = null;
+        throw err;
+      });
   }
   return promise;
 }

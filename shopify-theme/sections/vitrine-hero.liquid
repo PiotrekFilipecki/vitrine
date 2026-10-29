@@ -30,7 +30,7 @@
   class="vitrine-hero"
   id="vitrine-hero-{{ section.id }}"
   style="--vitrine-hero-min-height: {{ section.settings.min_height }}vh; --vitrine-hero-plate: {{ section.settings.plate_color }}; --vitrine-hero-text: {{ section.settings.text_color }}; --vitrine-hero-plate-width: {{ section.settings.plate_width }}%;"
-  {% if section.settings.heading_id != blank %}aria-labelledby="{{ section.settings.heading_id }}"{% endif %}
+  {% if section.blocks.size > 0 %}aria-labelledby="vitrine-hero-title-{{ section.id }}"{% endif %}
 >
   <vitrine-shader
     class="vitrine-hero__field"
@@ -45,7 +45,7 @@
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when 'heading' -%}
-            <{{ block.settings.tag }} class="vitrine-hero__title" {{ block.shopify_attributes }}>
+            <{{ block.settings.tag }} id="vitrine-hero-title-{{ section.id }}" class="vitrine-hero__title" {{ block.shopify_attributes }}>
               {{- block.settings.text | escape -}}
             </{{ block.settings.tag }}>
           {%- when 'text' -%}
@@ -107,14 +107,7 @@
     { "type": "range", "id": "min_height", "label": "Minimum height", "min": 30, "max": 100, "step": 2, "unit": "vh", "default": 62 },
     { "type": "range", "id": "plate_width", "label": "Plate width (desktop)", "min": 30, "max": 100, "step": 2, "unit": "%", "default": 62 },
     { "type": "color", "id": "plate_color", "label": "Plate colour", "default": "#151311" },
-    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#f1ece2" },
-    {
-      "type": "text",
-      "id": "heading_id",
-      "label": "Heading id (accessibility)",
-      "info": "If set, the section is labelled by the heading block with this id.",
-      "default": "vitrine-hero-title"
-    }
+    { "type": "color", "id": "text_color", "label": "Text colour", "default": "#f1ece2" }
   ],
   "blocks": [
     {

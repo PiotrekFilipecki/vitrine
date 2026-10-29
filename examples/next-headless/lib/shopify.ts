@@ -75,5 +75,6 @@ export async function storefrontProduct(handle: string): Promise<Product | null>
     `query VitrineProduct($handle: String!) { product(handle: $handle) { ${PRODUCT} } }`,
     { handle }
   );
-  return data.product ? toProduct(data.product) : null;
+  // A product without a featured image has nothing to print; the catalogue filters these out too.
+  return data.product?.featuredImage ? toProduct(data.product) : null;
 }

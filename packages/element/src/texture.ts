@@ -33,10 +33,11 @@ function isCrossOrigin(url: string): boolean {
  * Texture copy of the content image. Always a separate `Image()` so the content `<img>` is never mutated;
  * `crossOrigin="anonymous"` is set before `src` (PLAN D5). If the content image itself carries
  * `crossorigin="anonymous"`, this hits the memory cache instead of refetching.
+ * Callers wait for the content image to load first (`whenContentImageLoaded`), so a failing anonymous copy of a
+ * cross-origin URL means missing CORS headers, not a broken image.
  */
-export function loadTexture(src: string, contentLoadedOk: boolean): Promise<HTMLImageElement> {
-  const key = src;
-  let p = cache.get(key);
+export function loadTexture(src: string): Promise<HTMLImageElement> {
+  let p = cache.get(src);
   if (!p) {
     p = new Promise<HTMLImageElement>((resolve, reject) => {
       const img = new Image();
@@ -51,18 +52,17 @@ export function loadTexture(src: string, contentLoadedOk: boolean): Promise<HTML
           });
       };
       img.onerror = () => {
-        cache.delete(key);
-        // The plain <img> loaded but the anonymous copy did not → the CDN did not send CORS headers.
+        cache.delete(src);
         reject(
           new TextureError(
-            contentLoadedOk && isCrossOrigin(src) ? 'cors' : 'error',
+            isCrossOrigin(src) ? 'cors' : 'error',
             `texture failed to load: ${src.slice(0, 200)}`
           )
         );
       };
       img.src = src;
     });
-    cache.set(key, p);
+    cache.set(src, p);
   }
   return p;
 }
@@ -70,7 +70,7 @@ export function loadTexture(src: string, contentLoadedOk: boolean): Promise<HTML
 let emptyPromise: Promise<HTMLImageElement> | null = null;
 /** Transparent pixel used when an optional image is absent (what shaders-react does for `image=''`). */
 export function loadEmptyPixel(): Promise<HTMLImageElement> {
-  if (!emptyPromise) emptyPromise = loadTexture(emptyPixel, true);
+  if (!emptyPromise) emptyPromise = loadTexture(emptyPixel);
   return emptyPromise;
 }
 

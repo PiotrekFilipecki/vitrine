@@ -6,7 +6,7 @@ Data: 29.10.2026. Gałąź `p5-wydanie` (od `p4-paper`). Nic nie opublikowane, n
 
 | Skill | Po co | Co zmienił w wyniku |
 | --- | --- | --- |
-| code-reviewer | W1, przegląd całego repo | REVIEW_PENDING |
+| code-reviewer | W1, przegląd całego repo (osobny agent, read-only) | werdykt COMMENT 7/10, 0 blokerów, 2 HIGH, 11 MEDIUM, 6 NIT; zrobione przed tagiem: H1 (id nagłówka hero + `aria-labelledby`), M5, M6, M9 (`config.test.ts`, +6 testów → 38), M10b, N6; reszta w `docs/vitrine/review.md` jako follow-up |
 | security-perf-auditor | W2, sekrety i konfiguracja | skan grepem drzewa roboczego i całej historii git (`shpat_`, `shpss_`, `AKIA`, `sk_live_`, `ghp_`, klucze PEM, `STOREFRONT_PUBLIC_TOKEN=`): 0 trafień poza komentarzem z placeholderem `--store-password …`; `.env*` w `.gitignore` z wyjątkiem `.env.example` (bez wartości); hasło sklepu przechodziło tylko przez schowek → flaga CLI / env; `npx secretlint` zablokowany przez klasyfikator uprawnień, `gitleaks` niezainstalowany → krok ręczny |
 | web-copy | W5, teksty zgłoszeń | `docs/vitrine/submission.md`: formularz Codrops 118 słów, komentarz 276 znaków, post na X, Discord, konspekt artykułu; liczby tylko z devlogów; linki `TODO_*` do podmiany po upublicznieniu |
 
@@ -31,7 +31,9 @@ $ pnpm check:theme
 
 $ pnpm lint → All matched files use Prettier code style!
 $ pnpm typecheck → 0 błędów
-$ pnpm test → Tests 32 passed (32)
+$ pnpm test → Tests 38 passed (38)   (po poprawkach z review: +6 w config.test.ts)
+$ pnpm exec playwright test --project=chromium --project=webkit   (po poprawkach z review i przebudowie)
+67 passed, 11 skipped (2.0m)
 ```
 
 Tag `v0.1.0` lokalnie: TAG_PENDING (po merge gałęzi i presetach z P4; tag na commicie wydania).
