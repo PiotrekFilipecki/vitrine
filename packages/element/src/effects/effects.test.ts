@@ -3,7 +3,7 @@
  * Expected values are written by hand from the React sources, not derived from our own code.
  */
 import { describe, expect, it } from 'vitest';
-import dither from './dither.js';
+import dither, { patchWhitePoint, whitePointOf } from './dither.js';
 import halftone from './halftone.js';
 import mesh from './mesh.js';
 import paper from './paper.js';
@@ -124,5 +124,64 @@ describe('paper (paper-texture)', () => {
     const u = paper.toUniforms(params, { noise: fakeNoise });
     expect(u['u_isImage']).toBe(false);
     expect(u['u_image']).toBeUndefined();
+  });
+});
+
+describe('dither · whitePoint (VITRINE-only, Q0)', () => {
+  it('should keep the upstream shader and the React uniforms when whitePoint is absent or off', () => {
+    // Arrange
+    const cases: Array<Record<string, number>> = [
+      {},
+      { whitePoint: 1 },
+      { whitePoint: 0 },
+      { whitePoint: 1.4 },
+    ];
+    for (const override of cases) {
+      const { params } = resolveParams(dither.presets, 'default', override, null);
+      // Act
+      const variant = dither.variant?.(params) ?? null;
+      const u = dither.toUniforms(params, { image: fakeImage });
+      // Assert
+      expect(variant).toBeNull();
+      expect(u).not.toHaveProperty('u_vitrineWhitePoint');
+    }
+  });
+
+  it('should switch to the patched shader and pass the uniform when whitePoint is in (0, 1)', () => {
+    // Arrange
+    const { params } = resolveParams(dither.presets, 'newsprint', {}, null);
+    // Act
+    const variant = dither.variant?.(params);
+    const u = dither.toUniforms(params, { image: fakeImage });
+    // Assert
+    expect(params['whitePoint']).toBe(0.9);
+    expect(variant?.key).toBe('dither+whitePoint');
+    expect(u['u_vitrineWhitePoint']).toBe(0.9);
+    expect(variant?.fragmentShader).not.toBe(dither.fragmentShader);
+  });
+
+  it('should add exactly one uniform and one levels line to the upstream source', () => {
+    // Act
+    const patched = patchWhitePoint(dither.fragmentShader);
+    // Assert: the only difference is the two inserted lines.
+    const added = patched.split('\n').filter((l) => !dither.fragmentShader.split('\n').includes(l));
+    expect(added.map((l) => l.trim())).toEqual([
+      'uniform float u_vitrineWhitePoint;',
+      'lum = min(lum / u_vitrineWhitePoint, 1.);',
+    ]);
+    expect(patched.indexOf('lum = min(lum / u_vitrineWhitePoint')).toBeLessThan(
+      patched.indexOf('u_inverted ?')
+    );
+  });
+
+  it('should throw when upstream changes the anchor lines, so a version bump cannot drop the option silently', () => {
+    expect(() => patchWhitePoint('void main() {}')).toThrow(/anchors not found/);
+  });
+
+  it('should accept whitePoint only as a finite number in (0, 1)', () => {
+    expect(whitePointOf({ whitePoint: 0.9 })).toBe(0.9);
+    expect(whitePointOf({ whitePoint: '0.9' })).toBeNull();
+    expect(whitePointOf({ whitePoint: 1 })).toBeNull();
+    expect(whitePointOf({})).toBeNull();
   });
 });

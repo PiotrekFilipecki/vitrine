@@ -1,0 +1,1047 @@
+{
+  "rows": [
+    {
+      "label": "v0.1 newsprint",
+      "note": "8×8, size 2, 3 steps",
+      "params": {
+        "whitePoint": 1
+      },
+      "meanDirtyPct": 23.64,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 23.52,
+          "inkPixelsOnProduct": 4019,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 23.88,
+          "inkPixelsOnProduct": 4996,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 23.52,
+          "inkPixelsOnProduct": 4047,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 23.88,
+          "inkPixelsOnProduct": 3928,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 23.52,
+          "inkPixelsOnProduct": 4047,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 23.88,
+          "inkPixelsOnProduct": 4576,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 23.52,
+          "inkPixelsOnProduct": 3955,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 23.88,
+          "inkPixelsOnProduct": 4280,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 23.51,
+          "inkPixelsOnProduct": 4067,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 23.13,
+          "inkPixelsOnProduct": 1482,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 23.52,
+          "inkPixelsOnProduct": 4051,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 23.88,
+          "inkPixelsOnProduct": 4868,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "colorSteps 2",
+      "note": "newsprint, 2 steps",
+      "params": {
+        "whitePoint": 1,
+        "colorSteps": 2
+      },
+      "meanDirtyPct": 15.64,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3743,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 4480,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3903,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3608,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3819,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 4184,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3843,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3092,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3955,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 15.25,
+          "inkPixelsOnProduct": 1044,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 3815,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 15.68,
+          "inkPixelsOnProduct": 4572,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "colorSteps 1",
+      "note": "newsprint, 1 step",
+      "params": {
+        "whitePoint": 1,
+        "colorSteps": 1
+      },
+      "meanDirtyPct": 8.06,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 7.93,
+          "inkPixelsOnProduct": 2968,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 8.2,
+          "inkPixelsOnProduct": 2888,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 7.93,
+          "inkPixelsOnProduct": 3404,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 8.2,
+          "inkPixelsOnProduct": 3052,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 7.93,
+          "inkPixelsOnProduct": 3068,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 8.2,
+          "inkPixelsOnProduct": 3576,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 7.93,
+          "inkPixelsOnProduct": 3440,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 8.2,
+          "inkPixelsOnProduct": 1516,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 7.93,
+          "inkPixelsOnProduct": 3548,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 8.16,
+          "inkPixelsOnProduct": 464,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 7.93,
+          "inkPixelsOnProduct": 3000,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 8.2,
+          "inkPixelsOnProduct": 4092,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "colorSteps 7",
+      "note": "newsprint, 7 steps",
+      "params": {
+        "whitePoint": 1,
+        "colorSteps": 7
+      },
+      "meanDirtyPct": 51.48,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 51.56,
+          "inkPixelsOnProduct": 4331,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 51.43,
+          "inkPixelsOnProduct": 5851,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 51.57,
+          "inkPixelsOnProduct": 4329,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 51.43,
+          "inkPixelsOnProduct": 4695,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 51.56,
+          "inkPixelsOnProduct": 4335,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 51.43,
+          "inkPixelsOnProduct": 5423,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 51.57,
+          "inkPixelsOnProduct": 4273,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 51.43,
+          "inkPixelsOnProduct": 5723,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 51.57,
+          "inkPixelsOnProduct": 4320,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 51.18,
+          "inkPixelsOnProduct": 2572,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 51.57,
+          "inkPixelsOnProduct": 4333,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 51.43,
+          "inkPixelsOnProduct": 5627,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "4×4, size 3",
+      "note": "newsprint, 3 steps",
+      "params": {
+        "whitePoint": 1,
+        "type": "4x4",
+        "size": 3
+      },
+      "meanDirtyPct": 24.96,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 24.85,
+          "inkPixelsOnProduct": 4114,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 25.09,
+          "inkPixelsOnProduct": 5278,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 24.85,
+          "inkPixelsOnProduct": 4123,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 25.09,
+          "inkPixelsOnProduct": 4387,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 24.85,
+          "inkPixelsOnProduct": 4123,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 25.09,
+          "inkPixelsOnProduct": 4837,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 24.85,
+          "inkPixelsOnProduct": 4042,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 25.09,
+          "inkPixelsOnProduct": 4450,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 24.85,
+          "inkPixelsOnProduct": 4123,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 24.94,
+          "inkPixelsOnProduct": 1639,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 24.85,
+          "inkPixelsOnProduct": 4141,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 25.09,
+          "inkPixelsOnProduct": 5017,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "random",
+      "note": "newsprint, 3 steps",
+      "params": {
+        "whitePoint": 1,
+        "type": "random"
+      },
+      "meanDirtyPct": 8.29,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 8.13,
+          "inkPixelsOnProduct": 3560,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 8.57,
+          "inkPixelsOnProduct": 4166,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 8.13,
+          "inkPixelsOnProduct": 3800,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 8.57,
+          "inkPixelsOnProduct": 3290,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 8.13,
+          "inkPixelsOnProduct": 3752,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 8.57,
+          "inkPixelsOnProduct": 3850,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 8.13,
+          "inkPixelsOnProduct": 3711,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 8.57,
+          "inkPixelsOnProduct": 2394,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 8.12,
+          "inkPixelsOnProduct": 3844,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 7.84,
+          "inkPixelsOnProduct": 598,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 8.13,
+          "inkPixelsOnProduct": 3768,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 8.57,
+          "inkPixelsOnProduct": 4262,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "size 1",
+      "note": "newsprint, finer grid",
+      "params": {
+        "whitePoint": 1,
+        "size": 1
+      },
+      "meanDirtyPct": 23.25,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 23.46,
+          "inkPixelsOnProduct": 4016,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 23.11,
+          "inkPixelsOnProduct": 4921,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 23.46,
+          "inkPixelsOnProduct": 4030,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 23.11,
+          "inkPixelsOnProduct": 4019,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 23.46,
+          "inkPixelsOnProduct": 4039,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 23.11,
+          "inkPixelsOnProduct": 4523,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 23.46,
+          "inkPixelsOnProduct": 3941,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 23.11,
+          "inkPixelsOnProduct": 4178,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 23.46,
+          "inkPixelsOnProduct": 4030,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 22.68,
+          "inkPixelsOnProduct": 1385,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 23.46,
+          "inkPixelsOnProduct": 4052,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 23.11,
+          "inkPixelsOnProduct": 4752,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "highlight #fff",
+      "note": "colorHighlight white",
+      "params": {
+        "whitePoint": 1,
+        "colorHighlight": "#ffffff"
+      },
+      "meanDirtyPct": 62.98,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 62.61,
+          "inkPixelsOnProduct": 4423,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 63.43,
+          "inkPixelsOnProduct": 6533,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 62.6,
+          "inkPixelsOnProduct": 4451,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 63.43,
+          "inkPixelsOnProduct": 6181,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 62.61,
+          "inkPixelsOnProduct": 4451,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 63.43,
+          "inkPixelsOnProduct": 6373,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 62.6,
+          "inkPixelsOnProduct": 4407,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 63.43,
+          "inkPixelsOnProduct": 5953,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 62.6,
+          "inkPixelsOnProduct": 4471,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 62.99,
+          "inkPixelsOnProduct": 3458,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 62.6,
+          "inkPixelsOnProduct": 4451,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 63.43,
+          "inkPixelsOnProduct": 6525,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "whitePoint 0.92",
+      "note": "newsprint + whitePoint",
+      "params": {
+        "whitePoint": 0.92
+      },
+      "meanDirtyPct": 0,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3668,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 4160,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3760,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3228,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3764,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3824,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3668,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 2980,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3800,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 456,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3784,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 4212,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "whitePoint 0.9",
+      "note": "newsprint + whitePoint",
+      "params": {
+        "whitePoint": 0.9
+      },
+      "meanDirtyPct": 0,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3644,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 4096,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3748,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3196,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3748,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3760,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3656,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 2740,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3796,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 412,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3760,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 4184,
+          "baked": "120x144"
+        }
+      ]
+    },
+    {
+      "label": "whitePoint 0.85",
+      "note": "newsprint + whitePoint",
+      "params": {
+        "whitePoint": 0.85
+      },
+      "meanDirtyPct": 0,
+      "cards": [
+        {
+          "file": "01-tee-el-funkador",
+          "bgPixels": 12453,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3560,
+          "baked": "120x144"
+        },
+        {
+          "file": "02-print-uptown-saturday-descent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3920,
+          "baked": "120x144"
+        },
+        {
+          "file": "03-tee-molnar",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3732,
+          "baked": "120x144"
+        },
+        {
+          "file": "04-print-opart_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3060,
+          "baked": "120x144"
+        },
+        {
+          "file": "05-tee-the-hustle-recursive",
+          "bgPixels": 12453,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3692,
+          "baked": "120x144"
+        },
+        {
+          "file": "06-print-flow",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3624,
+          "baked": "120x144"
+        },
+        {
+          "file": "07-tee-bauhaus_accent",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3648,
+          "baked": "120x144"
+        },
+        {
+          "file": "08-print-faded-in-studio-54",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 2204,
+          "baked": "120x144"
+        },
+        {
+          "file": "09-tee-ollie",
+          "bgPixels": 12456,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3792,
+          "baked": "120x144"
+        },
+        {
+          "file": "10-print-kredki-warm",
+          "bgPixels": 12012,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 276,
+          "baked": "120x144"
+        },
+        {
+          "file": "11-tee-mothership-reflection",
+          "bgPixels": 12455,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 3712,
+          "baked": "120x144"
+        },
+        {
+          "file": "12-print-type_accent",
+          "bgPixels": 9312,
+          "dirtyPct": 0,
+          "inkPixelsOnProduct": 4044,
+          "baked": "120x144"
+        }
+      ]
+    }
+  ],
+  "done": true
+}

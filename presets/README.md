@@ -19,4 +19,5 @@ Format:
 - `params` use the parameter names of `@paper-design/shaders-react` (not uniform names) and never include `image`.
 - `default` is the upstream "Default" preset copied 1:1 and is the base every other preset and every `params`
   attribute is merged onto.
-- Presets marked "VITRINE P1 draft" are placeholders until P4 tunes them in Paper.
+- VITRINE presets were picked by eye on renders of the element (P4 variant sheets, `docs/media/p4-tuning-*.png`);
+  the Paper frames "VITRINE — presets" are where they started. Their `source` field says which is which.

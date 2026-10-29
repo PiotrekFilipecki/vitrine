@@ -1,0 +1,154 @@
+{
+  "date": "2026-10-29",
+  "note": "Q0 run of packages/element/e2e/compat.spec.ts (Chromium + WebKit) on the Q0 element: async readback + worker encode. Historical P1 files (p1-compat-*) are left as they were.",
+  "cases": [
+    {
+      "case": "dither-default-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "dither-default-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "dither-newsprint-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {
+        "whitePoint": 1
+      }
+    },
+    {
+      "case": "dither-newsprint-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {
+        "whitePoint": 1
+      }
+    },
+    {
+      "case": "halftone-default-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "halftone-default-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "halftone-riso-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "halftone-riso-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "mesh-default-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "mesh-default-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "mesh-drop-night-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "mesh-drop-night-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "paper-default-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "paper-default-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "paper-folded-lookbook-chromium",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    },
+    {
+      "case": "paper-folded-lookbook-webkit",
+      "differentPixels": 0,
+      "pct": 0,
+      "canvas": "600x800",
+      "readback": "async",
+      "encode": "worker",
+      "vitrineOnlyOff": {}
+    }
+  ]
+}

@@ -69,6 +69,9 @@
       const effect = q.get('effect') ?? 'dither';
       const preset = q.get('preset') ?? 'default';
       const image = q.get('img') ?? '/examples/spikes/fixtures/01-tee-el-funkador.webp';
+      // Q0: VITRINE-only options (not React props) are stripped from the reference and switched off on the element,
+      // so the comparison stays upstream shader vs upstream shader. They have their own tests (whitepoint.spec.ts).
+      const VITRINE_ONLY = { whitePoint: 1 };
       const useImage = effect !== 'mesh';
       document.getElementById('title').textContent = `compat · ${effect} / ${preset}`;
       const result = {
@@ -85,12 +88,21 @@
       try {
         const file = await (await fetch(`/presets/${effect}.json`)).json();
         const params = { ...file.presets.default.params, ...file.presets[preset].params };
+        const vitrineOnly = {};
+        for (const [k, off] of Object.entries(VITRINE_ONLY)) {
+          if (k in params) {
+            delete params[k];
+            vitrineOnly[k] = off;
+          }
+        }
+        result.vitrineOnlyOff = vitrineOnly;
 
         // Vitrine side: static (speed 0) → baked <img>.
         const vit = document.createElement('vitrine-shader');
         vit.setAttribute('effect', effect);
         vit.setAttribute('preset', preset);
         vit.setAttribute('speed', '0');
+        if (Object.keys(vitrineOnly).length) vit.setAttribute('params', JSON.stringify(vitrineOnly));
         vit.style.width = '300px';
         vit.style.height = '400px';
         if (useImage) {

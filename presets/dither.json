@@ -30,7 +30,7 @@
     },
     "newsprint": {
       "name": "Newsprint",
-      "source": "VITRINE P4: tuned by eye on NIWWTS No.06 renders of the element (sheets in docs/media/p4-tuning-*.png), niwwts-aesthetic as arbiter; 3 steps keep the artwork on the tee legible, 2 flattened it",
+      "source": "VITRINE P4: tuned by eye on NIWWTS No.06 renders of the element (sheets in docs/media/p4-tuning-*.png), niwwts-aesthetic as arbiter; 3 steps keep the artwork on the tee legible, 2 flattened it. Q0: whitePoint 0.9 (VITRINE-only option) prints the cream mockup ground (luminance 0.927) as clean paper: background raster 23.05 % → 0.22 % on the 12 mockups (docs/media/q0-dither-variants.png)",
       "params": {
         "fit": "cover",
         "scale": 1,
@@ -50,7 +50,8 @@
         "size": 2,
         "colorSteps": 3,
         "originalColors": false,
-        "inverted": false
+        "inverted": false,
+        "whitePoint": 0.9
       }
     }
   }
