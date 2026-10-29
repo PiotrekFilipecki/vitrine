@@ -1,0 +1,58 @@
+{
+  "page": "compat",
+  "effect": "mesh",
+  "preset": "default",
+  "image": null,
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "ref": {
+    "canvas": "600x800",
+    "ms": 196.2,
+    "stats": {
+      "minLuma": 72.3,
+      "maxLuma": 218.2,
+      "meanLuma": 147.7,
+      "opaquePct": 100
+    }
+  },
+  "vitrine": {
+    "ready": {
+      "effect": "mesh",
+      "preset": "default",
+      "mode": "baked",
+      "cached": false,
+      "ms": 201,
+      "bake": {
+        "total": 156,
+        "wait": 60,
+        "render": 88,
+        "blob": 7,
+        "pixels": "600x800"
+      }
+    },
+    "baked": "600x800",
+    "stats": {
+      "minLuma": 72.3,
+      "maxLuma": 218.2,
+      "meanLuma": 147.7,
+      "opaquePct": 100
+    },
+    "canvasesInElement": 0
+  },
+  "diff": {
+    "differentPixels": 0,
+    "pct": 0,
+    "meanDelta": 0,
+    "threshold": 8
+  },
+  "stats": {
+    "liveMounts": 0,
+    "bakerContexts": 1,
+    "bakedCached": 1
+  },
+  "console": []
+}

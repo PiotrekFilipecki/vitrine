@@ -10,11 +10,11 @@
   "done": true,
   "bake": {
     "cards": 24,
-    "msAll": 760,
-    "msPerCardMedian": 30,
-    "msPerCardMax": 51,
+    "msAll": 717,
+    "msPerCardMedian": 28,
+    "msPerCardMax": 42,
     "liveContextsAfterBake": 0,
-    "contextsAlreadyCollected": 23,
+    "contextsAlreadyCollected": 21,
     "imagesInDom": 24,
     "canvasesInDom": 0
   },
@@ -25,6 +25,10 @@
     "aliveAfterProbe": 16
   },
   "consoleErrors": [
+    "[error] There are too many active WebGL contexts on this page, the oldest context will be lost.",
+    "[error] WebGL: INVALID_OPERATION: loseContext: context already lost",
+    "[error] There are too many active WebGL contexts on this page, the oldest context will be lost.",
+    "[error] WebGL: INVALID_OPERATION: loseContext: context already lost",
     "[error] There are too many active WebGL contexts on this page, the oldest context will be lost.",
     "[error] WebGL: INVALID_OPERATION: loseContext: context already lost"
   ]

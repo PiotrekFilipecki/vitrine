@@ -1,0 +1,205 @@
+{
+  "dclAt": 0.3,
+  "readyCount": 26,
+  "msAllCards": 1248.7,
+  "modes": {
+    "live": 1,
+    "baked": 25
+  },
+  "fallbacks": [],
+  "ready": [
+    {
+      "effect": "mesh",
+      "mode": "live",
+      "cached": false,
+      "ms": 248,
+      "at": 265.9
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 379,
+      "at": 396.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1227,
+      "at": 1245.4
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1228,
+      "at": 1246.2
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1228,
+      "at": 1246.3
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1228,
+      "at": 1246.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1228,
+      "at": 1246.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1228,
+      "at": 1246.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1228,
+      "at": 1246.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1228,
+      "at": 1246.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1228,
+      "at": 1246.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1228,
+      "at": 1246.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1228,
+      "at": 1246.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1230,
+      "at": 1247.9
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1230,
+      "at": 1247.9
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1230,
+      "at": 1248.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1230,
+      "at": 1248.6
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1230,
+      "at": 1248.7
+    },
+    {
+      "effect": "paper",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1284,
+      "at": 1302.1
+    }
+  ],
+  "after": {
+    "canvases": 1,
+    "heroCanvas": 1,
+    "bakerHosts": 0
+  },
+  "console": [
+    "[warning] [.WebGL-0x13c0043ae00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x13c0043ba00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x13c0043ae00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x13c0043ae00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ]
+}

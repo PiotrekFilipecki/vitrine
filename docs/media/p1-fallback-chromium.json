@@ -1,0 +1,30 @@
+{
+  "page": "fallback",
+  "events": [
+    {
+      "id": "bad-effect",
+      "reason": "error",
+      "message": "unknown effect \"liquid-metal\" (dither | halftone | mesh | paper)"
+    },
+    {
+      "id": "cors",
+      "reason": "cors",
+      "message": "no CORS headers for http://localhost:4174/examples/spikes/fixtures/02-print-uptown-saturday-descent.webp"
+    }
+  ],
+  "done": true,
+  "img": {
+    "naturalWidth": 1600,
+    "visible": true
+  },
+  "states": {
+    "cors": "fallback",
+    "corsLayerChildren": 0,
+    "corsCanvases": 0
+  },
+  "console": [
+    "[warning] [vitrine-shader] fallback (error): unknown effect \"liquid-metal\" (dither | halftone | mesh | paper) JSHandle@node",
+    "[error] Access to image at 'http://localhost:4174/examples/spikes/fixtures/02-print-uptown-saturday-descent.webp' from origin 'http://localhost:4173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "[error] Failed to load resource: net::ERR_FAILED"
+  ]
+}

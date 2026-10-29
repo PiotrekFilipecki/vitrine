@@ -1,0 +1,96 @@
+{
+  "page": "grid",
+  "n": 4,
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "ready": [
+    {
+      "id": "hero",
+      "effect": "mesh",
+      "preset": "drop-night",
+      "mode": "baked",
+      "cached": false,
+      "ms": 363,
+      "bake": {
+        "total": 214,
+        "wait": 30,
+        "render": 142,
+        "blob": 42,
+        "pixels": "2496x480"
+      },
+      "at": 370.7
+    },
+    {
+      "id": "0",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 364,
+      "bake": {
+        "total": 284,
+        "wait": 203,
+        "render": 80,
+        "blob": 1,
+        "pixels": "400x480"
+      },
+      "at": 371.2
+    },
+    {
+      "id": "1",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 364,
+      "bake": {
+        "total": 18,
+        "wait": 0,
+        "render": 18,
+        "blob": 1,
+        "pixels": "400x480"
+      },
+      "at": 371.2
+    },
+    {
+      "id": "2",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 364,
+      "bake": {
+        "total": 17,
+        "wait": 0,
+        "render": 16,
+        "blob": 1,
+        "pixels": "400x480"
+      },
+      "at": 371.4
+    },
+    {
+      "id": "3",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 364,
+      "bake": {
+        "total": 17,
+        "wait": 0,
+        "render": 16,
+        "blob": 1,
+        "pixels": "400x480"
+      },
+      "at": 371.5
+    }
+  ],
+  "fallbacks": [],
+  "lostEvents": 0,
+  "done": true,
+  "dclAt": 71.4,
+  "msAllCards": 371.5
+}

@@ -1,0 +1,203 @@
+{
+  "dclAt": 0,
+  "readyCount": 26,
+  "msAllCards": 399,
+  "modes": {
+    "live": 1,
+    "baked": 25
+  },
+  "fallbacks": [],
+  "ready": [
+    {
+      "effect": "mesh",
+      "mode": "live",
+      "cached": false,
+      "ms": 140,
+      "at": 174
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": false,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "dither",
+      "mode": "baked",
+      "cached": true,
+      "ms": 365,
+      "at": 399
+    },
+    {
+      "effect": "paper",
+      "mode": "baked",
+      "cached": false,
+      "ms": 376,
+      "at": 410
+    }
+  ],
+  "after": {
+    "canvases": 1,
+    "heroCanvas": 1,
+    "bakerHosts": 0
+  },
+  "console": [
+    "[info] Successfully preconnected to https://fonts.gstatic.com/",
+    "[info] Successfully preconnected to https://fonts.googleapis.com/"
+  ]
+}

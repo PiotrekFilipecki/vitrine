@@ -1,0 +1,58 @@
+{
+  "page": "compat",
+  "effect": "halftone",
+  "preset": "riso",
+  "image": "/examples/spikes/fixtures/01-tee-el-funkador.webp",
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "ref": {
+    "canvas": "600x800",
+    "ms": 618.8,
+    "stats": {
+      "minLuma": 3.2,
+      "maxLuma": 238.8,
+      "meanLuma": 182.7,
+      "opaquePct": 100
+    }
+  },
+  "vitrine": {
+    "ready": {
+      "effect": "halftone",
+      "preset": "riso",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1122,
+      "bake": {
+        "total": 804,
+        "wait": 314,
+        "render": 469,
+        "blob": 21,
+        "pixels": "600x800"
+      }
+    },
+    "baked": "600x800",
+    "stats": {
+      "minLuma": 3.2,
+      "maxLuma": 238.8,
+      "meanLuma": 182.7,
+      "opaquePct": 100
+    },
+    "canvasesInElement": 0
+  },
+  "diff": {
+    "differentPixels": 0,
+    "pct": 0,
+    "meanDelta": 0,
+    "threshold": 8
+  },
+  "stats": {
+    "liveMounts": 0,
+    "bakerContexts": 1,
+    "bakedCached": 1
+  },
+  "console": []
+}

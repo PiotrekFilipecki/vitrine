@@ -10,7 +10,7 @@
   "done": true,
   "live": {
     "mounts": 24,
-    "msMountAll": 4499.1,
+    "msMountAll": 2017.5,
     "contextLostEvents": 8,
     "liveContextsAfterSettle": 16
   },

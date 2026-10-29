@@ -1,6 +1,6 @@
 {
   "page": "bake",
-  "fixture": "fixtures/fixture-01.jpg",
+  "fixture": "fixtures/01-tee-el-funkador.webp",
   "env": {
     "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
     "dpr": 1,
@@ -12,25 +12,25 @@
     "stats": {
       "minLuma": 13.4,
       "maxLuma": 236.5,
-      "meanLuma": 122.4,
+      "meanLuma": 171.4,
       "opaquePct": 100
     },
     "contextLost": false
   },
   "bake": {
     "canvas": "600x800",
-    "blobBytes": 49531,
+    "blobBytes": 56839,
     "ms": {
-      "toFirstFrame": 187.2,
-      "toBlob": 36.9,
-      "toImg": 1.4,
-      "dispose": 2.9,
-      "total": 228.4
+      "toFirstFrame": 95.2,
+      "toBlob": 9.3,
+      "toImg": 0.7,
+      "dispose": 1.8,
+      "total": 107
     },
     "stats": {
       "minLuma": 13.4,
       "maxLuma": 236.5,
-      "meanLuma": 122.4,
+      "meanLuma": 171.4,
       "opaquePct": 100
     },
     "contextLostAfterDispose": true,
@@ -54,9 +54,9 @@
   },
   "liveStillAliveAfterProbe": true,
   "consoleErrors": [
-    "[warning] [.WebGL-0x11c00441400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
-    "[warning] [.WebGL-0x11c00441400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
-    "[warning] [.WebGL-0x11c00441400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
-    "[warning] [.WebGL-0x11c00437e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+    "[warning] [.WebGL-0x12c00444400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x12c00444400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x12c00444400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x12c00437800]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
   ]
 }

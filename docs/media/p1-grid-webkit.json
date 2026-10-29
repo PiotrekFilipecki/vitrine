@@ -1,0 +1,347 @@
+{
+  "page": "grid",
+  "n": 24,
+  "env": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+    "dpr": 2,
+    "hwc": 8
+  },
+  "ready": [
+    {
+      "id": "hero",
+      "effect": "mesh",
+      "preset": "drop-night",
+      "mode": "live",
+      "cached": false,
+      "ms": 112,
+      "at": 208
+    },
+    {
+      "id": "12",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 337,
+      "at": 432
+    },
+    {
+      "id": "0",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 337,
+      "bake": {
+        "total": 68,
+        "wait": 63,
+        "render": 2,
+        "blob": 3,
+        "pixels": "400x480"
+      },
+      "at": 432
+    },
+    {
+      "id": "1",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 337,
+      "bake": {
+        "total": 21,
+        "wait": 0,
+        "render": 19,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 432
+    },
+    {
+      "id": "13",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 337,
+      "at": 432
+    },
+    {
+      "id": "2",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 337,
+      "bake": {
+        "total": 20,
+        "wait": 0,
+        "render": 19,
+        "blob": 1,
+        "pixels": "400x480"
+      },
+      "at": 432
+    },
+    {
+      "id": "14",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 337,
+      "at": 432
+    },
+    {
+      "id": "15",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 337,
+      "at": 432
+    },
+    {
+      "id": "3",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 337,
+      "bake": {
+        "total": 18,
+        "wait": 0,
+        "render": 16,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 432
+    },
+    {
+      "id": "16",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 337,
+      "at": 432
+    },
+    {
+      "id": "4",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 337,
+      "bake": {
+        "total": 18,
+        "wait": 0,
+        "render": 16,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 432
+    },
+    {
+      "id": "5",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 337,
+      "bake": {
+        "total": 20,
+        "wait": 0,
+        "render": 19,
+        "blob": 1,
+        "pixels": "400x480"
+      },
+      "at": 432
+    },
+    {
+      "id": "17",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 337,
+      "at": 432
+    },
+    {
+      "id": "18",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 337,
+      "at": 432
+    },
+    {
+      "id": "6",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 337,
+      "bake": {
+        "total": 17,
+        "wait": 0,
+        "render": 15,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 432
+    },
+    {
+      "id": "7",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 347,
+      "bake": {
+        "total": 18,
+        "wait": 0,
+        "render": 16,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 442
+    },
+    {
+      "id": "19",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 346,
+      "at": 442
+    },
+    {
+      "id": "22",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 346,
+      "at": 442
+    },
+    {
+      "id": "10",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 347,
+      "bake": {
+        "total": 17,
+        "wait": 0,
+        "render": 15,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 442
+    },
+    {
+      "id": "9",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 347,
+      "bake": {
+        "total": 18,
+        "wait": 0,
+        "render": 17,
+        "blob": 1,
+        "pixels": "400x480"
+      },
+      "at": 442
+    },
+    {
+      "id": "21",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 346,
+      "at": 442
+    },
+    {
+      "id": "11",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 347,
+      "bake": {
+        "total": 19,
+        "wait": 0,
+        "render": 17,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 442
+    },
+    {
+      "id": "23",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 346,
+      "at": 442
+    },
+    {
+      "id": "8",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": false,
+      "ms": 348,
+      "bake": {
+        "total": 17,
+        "wait": 0,
+        "render": 15,
+        "blob": 2,
+        "pixels": "400x480"
+      },
+      "at": 443
+    },
+    {
+      "id": "20",
+      "effect": "dither",
+      "preset": "newsprint",
+      "mode": "baked",
+      "cached": true,
+      "ms": 347,
+      "at": 443
+    }
+  ],
+  "fallbacks": [],
+  "lostEvents": 0,
+  "done": true,
+  "dclAt": 64,
+  "msAllCards": 443,
+  "after": {
+    "stats": {
+      "liveMounts": 1,
+      "bakerContexts": 0,
+      "bakedCached": 12
+    },
+    "cardCanvases": 0,
+    "cardBakedImgs": 24,
+    "bakerHosts": 0,
+    "heroState": "live",
+    "heroHasCanvas": true,
+    "heroContextLost": false,
+    "probe": {
+      "requested": 14,
+      "nullContexts": 0,
+      "lostEventsDuringProbe": 0,
+      "aliveAfterProbe": 14
+    }
+  },
+  "fixtureRequests": 12,
+  "uniqueFixtures": 12,
+  "console": []
+}

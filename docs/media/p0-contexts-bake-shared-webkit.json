@@ -12,9 +12,9 @@
     "cards": 24,
     "contextsCreated": 1,
     "bakerCanvas": "400x520",
-    "msAll": 213,
-    "msPerCardMedian": 7,
-    "msPerCardMax": 15,
+    "msAll": 572,
+    "msPerCardMedian": 20,
+    "msPerCardMax": 55,
     "lostEventsOnBaker": 0,
     "imagesInDom": 24,
     "canvasesInDom": 0

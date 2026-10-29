@@ -10,9 +10,9 @@
   "done": true,
   "bake": {
     "cards": 24,
-    "msAll": 5946,
-    "msPerCardMedian": 234.1,
-    "msPerCardMax": 569.1,
+    "msAll": 2482.8,
+    "msPerCardMedian": 99.6,
+    "msPerCardMax": 136.8,
     "liveContextsAfterBake": 0,
     "contextsAlreadyCollected": 0,
     "imagesInDom": 24,

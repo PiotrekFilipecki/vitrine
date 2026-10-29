@@ -1,6 +1,6 @@
 {
   "page": "bake",
-  "fixture": "fixtures/fixture-01.jpg",
+  "fixture": "fixtures/01-tee-el-funkador.webp",
   "env": {
     "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
     "dpr": 2,
@@ -12,25 +12,25 @@
     "stats": {
       "minLuma": 13.4,
       "maxLuma": 236.5,
-      "meanLuma": 122.2,
+      "meanLuma": 171.3,
       "opaquePct": 100
     },
     "contextLost": false
   },
   "bake": {
     "canvas": "600x800",
-    "blobBytes": 21734,
+    "blobBytes": 22070,
     "ms": {
-      "toFirstFrame": 19,
-      "toBlob": 24,
-      "toImg": 6,
+      "toFirstFrame": 32,
+      "toBlob": 7,
+      "toImg": 1,
       "dispose": 0,
-      "total": 49
+      "total": 40
     },
     "stats": {
       "minLuma": 13.4,
       "maxLuma": 236.5,
-      "meanLuma": 122.2,
+      "meanLuma": 171.3,
       "opaquePct": 100
     },
     "contextLostAfterDispose": true,
