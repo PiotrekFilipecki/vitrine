@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P1 · pixel compatibility vs shaders-react</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        font:
+          14px/1.4 ui-monospace,
+          monospace;
+        background: #f1ece2;
+        color: #151311;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+      }
+      .box {
+        width: 300px;
+        height: 400px;
+        background: #ddd;
+      }
+      .box img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">compat</h1>
+    <div class="row">
+      <figure>
+        <div class="box" id="ref"></div>
+        <figcaption>@paper-design/shaders-react</figcaption>
+      </figure>
+      <figure>
+        <div class="box" id="vit"></div>
+        <figcaption>&lt;vitrine-shader&gt;</figcaption>
+      </figure>
+      <figure>
+        <div class="box"><canvas id="diff" style="display: block; width: 100%; height: 100%"></canvas></div>
+        <figcaption>diff (red = |Δ| &gt; 8)</figcaption>
+      </figure>
+    </div>
+    <pre id="result">running…</pre>
+    <script type="module">
+      import { mountRef } from '../ref/ref.bundle.js';
+      import { VitrineShader } from '/packages/element/dist/index.js';
+      import {
+        readPixelsFlipped,
+        imageToPixels,
+        diffPixels,
+        pixelsToCanvas,
+        pixelStats,
+        uaInfo,
+      } from '/examples/spikes/spike-lib.js';
+
+      const q = new URLSearchParams(location.search);
+      const effect = q.get('effect') ?? 'dither';
+      const preset = q.get('preset') ?? 'default';
+      const image = q.get('img') ?? '/examples/spikes/fixtures/01-tee-el-funkador.webp';
+      const useImage = effect !== 'mesh';
+      document.getElementById('title').textContent = `compat · ${effect} / ${preset}`;
+      const result = {
+        page: 'compat',
+        effect,
+        preset,
+        image: useImage ? image : null,
+        env: uaInfo(),
+        done: false,
+      };
+      window.__spike = result;
+      const out = document.getElementById('result');
+
+      try {
+        const file = await (await fetch(`/presets/${effect}.json`)).json();
+        const params = { ...file.presets.default.params, ...file.presets[preset].params };
+
+        // Vitrine side: static (speed 0) → baked <img>.
+        const vit = document.createElement('vitrine-shader');
+        vit.setAttribute('effect', effect);
+        vit.setAttribute('preset', preset);
+        vit.setAttribute('speed', '0');
+        vit.style.width = '300px';
+        vit.style.height = '400px';
+        if (useImage) {
+          const img = document.createElement('img');
+          img.src = image;
+          img.alt = '';
+          img.width = 1600;
+          img.height = 1920;
+          img.style.cssText = 'width:100%;height:100%;object-fit:cover';
+          vit.appendChild(img);
+        }
+        const ready = new Promise((resolve, reject) => {
+          vit.addEventListener('vitrine:ready', (e) => resolve(e.detail), { once: true });
+          vit.addEventListener(
+            'vitrine:fallback',
+            (e) => reject(new Error(`fallback: ${e.detail.reason} ${e.detail.message}`)),
+            { once: true }
+          );
+        });
+        document.getElementById('vit').appendChild(vit);
+
+        // Reference side.
+        const t0 = performance.now();
+        const { mount } = await mountRef(
+          document.getElementById('ref'),
+          effect,
+          params,
+          useImage ? image : undefined
+        );
+        await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+        mount.setFrame(0);
+        const refCanvas = mount.canvasElement;
+        const gl = refCanvas.getContext('webgl2');
+        const w = refCanvas.width;
+        const h = refCanvas.height;
+        const refPx = readPixelsFlipped(gl, refCanvas);
+        result.ref = {
+          canvas: `${w}x${h}`,
+          ms: +(performance.now() - t0).toFixed(1),
+          stats: pixelStats(refPx),
+        };
+
+        const detail = await ready;
+        const baked = vit.querySelector('.vitrine-layer > img');
+        const vitPx = imageToPixels(baked, w, h);
+        result.vitrine = {
+          ready: detail,
+          baked: `${baked.naturalWidth}x${baked.naturalHeight}`,
+          stats: pixelStats(vitPx),
+          canvasesInElement: vit.querySelectorAll('canvas').length,
+        };
+        const d = diffPixels(refPx, vitPx, w, h, 8);
+        pixelsToCanvas(d.diff, w, h, document.getElementById('diff'));
+        result.diff = { differentPixels: d.different, pct: d.pct, meanDelta: d.meanDelta, threshold: 8 };
+        result.stats = VitrineShader.stats();
+      } catch (err) {
+        result.error = String(err && err.stack ? err.stack : err);
+      }
+      result.done = true;
+      out.textContent = JSON.stringify(result, null, 2);
+    </script>
+  </body>
+</html>

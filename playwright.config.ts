@@ -6,6 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
  * Workers = 1 on purpose: WebGL context budgets are per browser process and tests count them.
  */
 export default defineConfig({
+  globalSetup: './scripts/e2e-setup.mjs',
   testDir: '.',
   testMatch: ['examples/spikes/**/*.spec.ts', 'packages/*/e2e/**/*.spec.ts'],
   testIgnore: ['**/node_modules/**', '**/dist/**'],

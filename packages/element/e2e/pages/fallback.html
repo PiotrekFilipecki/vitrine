@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>P1 · fallbacks</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        background: #f1ece2;
+        font:
+          14px/1.4 ui-monospace,
+          monospace;
+      }
+      vitrine-shader {
+        width: 300px;
+      }
+      vitrine-shader img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>fallbacks</h1>
+    <vitrine-shader id="cors" effect="dither" preset="newsprint">
+      <img id="cors-img" src="" alt="image on an origin without CORS headers" width="1600" height="1920" />
+    </vitrine-shader>
+    <vitrine-shader id="bad-effect" effect="liquid-metal" debug>
+      <img
+        src="/examples/spikes/fixtures/03-tee-molnar.webp"
+        alt="unknown effect"
+        width="1600"
+        height="1920"
+      />
+    </vitrine-shader>
+    <vitrine-shader id="no-img" effect="dither"></vitrine-shader>
+    <script type="module">
+      const q = new URLSearchParams(location.search);
+      const result = { page: 'fallback', events: [], done: false };
+      window.__spike = result;
+      document.addEventListener('vitrine:fallback', (e) =>
+        result.events.push({ id: e.target.id, ...e.detail })
+      );
+      document.addEventListener('vitrine:ready', (e) =>
+        result.events.push({ id: e.target.id, ready: true, ...e.detail })
+      );
+      document.getElementById('cors-img').src =
+        q.get('src') ??
+        'http://localhost:4174/examples/spikes/fixtures/02-print-uptown-saturday-descent.webp';
+      await import('/packages/element/dist/index.js');
+      result.done = true;
+    </script>
+  </body>
+</html>

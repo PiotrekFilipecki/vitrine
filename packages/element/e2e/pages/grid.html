@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>P1 · grid of 24 + live hero</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        font:
+          14px/1.4 ui-monospace,
+          monospace;
+        background: #f1ece2;
+        color: #151311;
+      }
+      #hero {
+        height: 240px;
+        margin-bottom: 16px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 200px);
+        gap: 12px;
+      }
+      .card {
+        display: block;
+        width: 200px;
+        color: inherit;
+        text-decoration: none;
+      }
+      .card:focus-visible {
+        outline: 2px solid #151311;
+        outline-offset: 2px;
+      }
+      .card img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>grid · 24 dithered cards + 1 live mesh hero</h1>
+    <vitrine-shader id="hero" effect="mesh" preset="drop-night" data-vitrine-card></vitrine-shader>
+    <div class="grid" id="grid"></div>
+    <pre id="result">running…</pre>
+    <script type="module">
+      import { FIXTURES, probeContextSlots, uaInfo } from '/examples/spikes/spike-lib.js';
+
+      const q = new URLSearchParams(location.search);
+      const N = Number(q.get('n') ?? 24);
+      const preset = q.get('preset') ?? 'newsprint';
+      const hero = document.getElementById('hero');
+      if (q.get('hero') === 'off') hero.remove();
+      const result = {
+        page: 'grid',
+        n: N,
+        env: uaInfo(),
+        ready: [],
+        fallbacks: [],
+        lostEvents: 0,
+        done: false,
+      };
+      window.__spike = result;
+      const dclAt = performance.now();
+      result.dclAt = +dclAt.toFixed(1);
+
+      document.addEventListener('webglcontextlost', () => (result.lostEvents += 1), true);
+      document.addEventListener('vitrine:ready', (e) => {
+        result.ready.push({
+          id: e.target.id || e.target.dataset.i,
+          ...e.detail,
+          at: +(performance.now() - dclAt).toFixed(1),
+        });
+        if (result.ready.filter((r) => r.id !== 'hero').length === N)
+          result.msAllCards = +(performance.now() - dclAt).toFixed(1);
+      });
+      document.addEventListener('vitrine:fallback', (e) =>
+        result.fallbacks.push({ id: e.target.id || e.target.dataset.i, ...e.detail })
+      );
+
+      const grid = document.getElementById('grid');
+      for (let i = 0; i < N; i++) {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = `#card-${i}`;
+        const el = document.createElement('vitrine-shader');
+        el.setAttribute('effect', 'dither');
+        el.setAttribute('preset', preset);
+        el.setAttribute('reveal', 'hover');
+        el.dataset.i = String(i);
+        const img = document.createElement('img');
+        img.src = `/examples/spikes/fixtures/${FIXTURES[i % FIXTURES.length]}.webp`;
+        img.width = 1600;
+        img.height = 1920;
+        img.alt = `fixture ${i}`;
+        el.appendChild(img);
+        a.appendChild(el);
+        grid.appendChild(a);
+      }
+      // The element registers itself on import; imported after the DOM exists on purpose (upgrade path).
+      const mod = await import('/packages/element/dist/index.js');
+      window.VitrineShader = mod.VitrineShader;
+      window.__probe = () => probeContextSlots(14);
+      result.done = true;
+      document.getElementById('result').textContent = 'ready events are collected on window.__spike';
+    </script>
+  </body>
+</html>
