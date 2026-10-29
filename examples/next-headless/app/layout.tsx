@@ -1,15 +1,19 @@
 import type { Metadata } from 'next';
-import { Archivo } from 'next/font/google';
+import localFont from 'next/font/local';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { catalogSource } from '@/lib/catalog';
 import './globals.css';
 
-const archivo = Archivo({
-  subsets: ['latin', 'latin-ext'],
-  axes: ['wdth'],
+// Archivo from the repo (OFL, examples/fonts/archivo): the build needs no network, CI included.
+const archivo = localFont({
+  src: '../../fonts/archivo/archivo-latin-wdth-wght.woff2',
+  weight: '400 700',
+  style: 'normal',
   display: 'swap',
   variable: '--font-archivo',
+  declarations: [{ prop: 'font-stretch', value: '62% 125%' }],
+  adjustFontFallback: 'Arial',
 });
 
 export const metadata: Metadata = {
