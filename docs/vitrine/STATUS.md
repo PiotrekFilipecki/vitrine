@@ -50,10 +50,10 @@ Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p
 - [x] P4 X1: presety zestrojone (na renderach elementu), `presets/*.json` zapisane, testy zgodności 16/16.
 - [x] Merge gałęzi `p1-element` → `p3-headless` → `p2-liquid` → `p4-paper` → `p5-wydanie` do `main` (fast-forward, 29.10.2026, na polecenie „zrob to wszystko za mnie”; bramki na telefonie nadal warto przejść).
 - [x] `gitleaks detect --source . --log-opts=--all`: 18 commitów, no leaks found (29.10.2026).
-- [x] Repo publiczne na GitHubie (https://github.com/PiotrekFilipecki/vitrine, 29.10.2026); GIF-y w README z `raw.githubusercontent.com` (2,7 MB i 1,9 MB).
+- [ ] Repo na GitHubie: agent nie może (klasyfikator uprawnień Claude Code blokuje tworzenie publicznych repo i push). Ty, w katalogu repo: `gh repo create PiotrekFilipecki/vitrine --public --source=. --remote=origin --push && git push origin v0.1.0 p1-element p3-headless p2-liquid p4-paper p5-wydanie`. GIF-y w README (2,7 MB i 1,9 MB) zadziałają z `raw.githubusercontent.com` od razu.
 - [ ] Demo na Vercelu: import repo, Root Directory `examples/next-headless`; URL wpisany do README i do `docs/vitrine/submission.md` (`TODO_DEMO_URL`). `TODO_REPO_URL` i `TODO_GIF_URL` już podmienione.
 - [ ] `examples/niwwts-products.csv`: URL-e obrazów wskazują na assety motywu testowego w sklepie; po upublicznieniu repo można podmienić na `raw.githubusercontent.com/…/examples/spikes/fixtures/`.
 - [ ] `npm login`, `cd packages/element && npm publish` (dry-run pokazał 26 plików: LICENSE, NOTICE, README, dist z `dist/react`, bez testów i fixtures).
-- [x] `git tag v0.1.0` na `main` i push tagu. [ ] GitHub Release z zipem z `pnpm pack:theme` (`release/vitrine-shopify-theme-0.1.0.zip`).
+- [x] `git tag v0.1.0` na `main` (lokalnie). [ ] Po pushu: GitHub Release `v0.1.0` z zipem z `pnpm pack:theme` (`release/vitrine-shopify-theme-0.1.0.zip`): `gh release create v0.1.0 release/vitrine-shopify-theme-0.1.0.zip --notes-file CHANGELOG.md`.
 - [ ] Zgłoszenia z `docs/vitrine/submission.md` w kolejności: formularz Codrops → komentarz pod przewodnikiem → X → Discord Papera / r/paperdesign.
 - [ ] Motyw testowy „VITRINE test (p2)” w `niwwts.myshopify.com` zostaje nieopublikowany albo usuń go sam.

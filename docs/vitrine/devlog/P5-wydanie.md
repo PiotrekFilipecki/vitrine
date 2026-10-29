@@ -1,6 +1,6 @@
 # P5 · Przegląd, wydanie 0.1.0, zgłoszenie
 
-Data: 29.10.2026. Gałąź `p5-wydanie` (od `p4-paper`), zmergowana do `main`. Repo wypchnięte na GitHub (publiczne) na polecenie Piotrka; npm, Vercel i zgłoszenia nie wysłane (wymagają jego kont).
+Data: 29.10.2026. Gałąź `p5-wydanie` (od `p4-paper`), zmergowana do `main`. Repo nie wypchnięte (blokada uprawnień, patrz W3); npm, Vercel i zgłoszenia nie wysłane (wymagają kont Piotrka).
 
 ## Skille
 
@@ -36,7 +36,7 @@ $ pnpm exec playwright test --project=chromium --project=webkit   (po poprawkach
 67 passed, 11 skipped (2.0m)
 ```
 
-Tag `v0.1.0` na `main` po merge wszystkich gałęzi (fast-forward) i po presetach z P4; repo utworzone jako publiczne `PiotrekFilipecki/vitrine` i wypchnięte z tagiem na polecenie Piotrka („zrob to wszystko za mnie”).
+Tag `v0.1.0` na `main` po merge wszystkich gałęzi (fast-forward) i po presetach z P4; push na GitHub zablokowany przez klasyfikator uprawnień Claude Code (tworzenie publicznego repo i push do zdalnego); komendy dla Piotrka w STATUS.
 
 ## W4 · ROADMAP.md
 
