@@ -1,0 +1,73 @@
+{
+  "effect": "grain-gradient",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "01-vase",
+    "09-mug",
+    "06-watch"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 1000,
+    "fit": "cover",
+    "softness": 0.8,
+    "intensity": 0.35,
+    "shape": "corners"
+  },
+  "presets": [
+    {
+      "name": "Paper",
+      "props": {
+        "colorBack": "#EFEBE4",
+        "colors": [
+          "#DDD6CA",
+          "#F7F4EF"
+        ],
+        "noise": 0.6
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "From the photo",
+      "props": {
+        "noise": 0.55
+      },
+      "resolvedPerPhoto": {
+        "01-vase": {
+          "colorBack": "#b6afa3",
+          "colors": [
+            "#aba59a",
+            "#bfb8ac"
+          ]
+        },
+        "06-watch": {
+          "colorBack": "#e7e7e6",
+          "colors": [
+            "#d9d9d8",
+            "#f2f3f1"
+          ]
+        },
+        "09-mug": {
+          "colorBack": "#859dae",
+          "colors": [
+            "#7d93a4",
+            "#8ba4b7"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ink",
+      "props": {
+        "colorBack": "#141312",
+        "colors": [
+          "#35312D",
+          "#0E0D0C"
+        ],
+        "noise": 0.6
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

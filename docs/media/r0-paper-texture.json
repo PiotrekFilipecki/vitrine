@@ -1,0 +1,80 @@
+{
+  "effect": "paper-texture",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "11-candle",
+    "12-plant",
+    "07-bag"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 0,
+    "fit": "cover",
+    "scale": 1,
+    "colorBack": "#00000000",
+    "blending": 1,
+    "angle": 236,
+    "seed": 613,
+    "roughnessRows": 0,
+    "foldOffsetX": 0,
+    "foldOffsetY": 0,
+    "drops": 0
+  },
+  "presets": [
+    {
+      "name": "Fold",
+      "props": {
+        "colorPaper": "#ffffff30",
+        "colorShadow": "#bdb8b0",
+        "distortion": -0.1,
+        "roughness": 0.1,
+        "roughnessSize": 0.25,
+        "fiber": 0.2,
+        "fiberSize": 0.5,
+        "folds": 0.5,
+        "foldSizeX": 0.5,
+        "foldSizeY": 0.9,
+        "wrinkles": 0,
+        "crumples": 0
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Crumple",
+      "props": {
+        "colorPaper": "#ffffff30",
+        "colorShadow": "#b0aba4",
+        "distortion": 0.15,
+        "roughness": 0.1,
+        "roughnessSize": 0.4,
+        "fiber": 0.15,
+        "fiberSize": 0.5,
+        "folds": 0.1,
+        "foldSizeX": 1,
+        "foldSizeY": 1,
+        "wrinkles": 0.2,
+        "wrinkleSize": 0.5,
+        "crumples": 0.3,
+        "crumpleCount": 5
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Board",
+      "props": {
+        "colorPaper": "#ffffff20",
+        "colorShadow": "#c4bfb8",
+        "distortion": 0,
+        "roughness": 0.3,
+        "roughnessSize": 0.5,
+        "fiber": 0.4,
+        "fiberSize": 0.4,
+        "folds": 0,
+        "wrinkles": 0,
+        "crumples": 0
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

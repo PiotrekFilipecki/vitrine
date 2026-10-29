@@ -1,0 +1,54 @@
+{
+  "effect": "lens-distortion",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "06-watch",
+    "07-bag",
+    "03-sneaker"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 0,
+    "spread": 0,
+    "count": 12,
+    "lensBulge": 0,
+    "lensCircle": 0
+  },
+  "presets": [
+    {
+      "name": "Loupe",
+      "props": {
+        "lensBulge": 0.35,
+        "lensCircle": 0.6
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Glass",
+      "props": {
+        "lensBulge": 0.55,
+        "lensCircle": 1,
+        "spread": 0.15,
+        "dispersion": 0.3,
+        "perspective": 1,
+        "focusCenter": 0.85,
+        "focusEdges": 0
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Fisheye",
+      "props": {
+        "lensBulge": 0.8,
+        "lensCircle": 1,
+        "spread": 0.12,
+        "dispersion": 0.5,
+        "perspective": 1,
+        "focusCenter": 0.8,
+        "focusEdges": 0
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

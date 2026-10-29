@@ -1,0 +1,59 @@
+{
+  "effect": "fluted-glass",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "04-chair",
+    "01-vase",
+    "08-headphones"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 0,
+    "fit": "cover",
+    "scale": 1.06,
+    "colorBack": "#00000000",
+    "colorShadow": "#141312",
+    "colorHighlight": "#ffffff",
+    "shape": "lines",
+    "angle": 0,
+    "edges": 0
+  },
+  "presets": [
+    {
+      "name": "Window",
+      "props": {
+        "size": 0.95,
+        "distortionShape": "contour",
+        "distortion": 0.3,
+        "highlights": 0.18,
+        "shadows": 0.2
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Door",
+      "props": {
+        "size": 0.965,
+        "distortionShape": "lens",
+        "distortion": 0.22,
+        "highlights": 0.2,
+        "shadows": 0.22
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Frost",
+      "props": {
+        "size": 0.95,
+        "distortionShape": "contour",
+        "distortion": 0.3,
+        "blur": 0.12,
+        "highlights": 0.15,
+        "shadows": 0.2,
+        "grainOverlay": 0.03
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

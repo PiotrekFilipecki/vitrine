@@ -1,0 +1,65 @@
+{
+  "effect": "halftone-cmyk",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "03-sneaker",
+    "05-lamp",
+    "09-mug"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 0,
+    "fit": "cover",
+    "colorBack": "#EFEBE4",
+    "colorC": "#00b4ff",
+    "colorM": "#fc519f",
+    "colorY": "#ffd800",
+    "colorK": "#231f20",
+    "type": "ink",
+    "grainMixer": 0,
+    "grainOverlay": 0,
+    "floodC": 0,
+    "floodM": 0,
+    "floodY": 0,
+    "floodK": 0,
+    "gainC": 0,
+    "gainM": 0,
+    "gainY": 0,
+    "gainK": 0
+  },
+  "presets": [
+    {
+      "name": "Fine",
+      "props": {
+        "size": 0.12,
+        "contrast": 1,
+        "softness": 1,
+        "gridNoise": 0.1
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Press",
+      "props": {
+        "size": 0.25,
+        "contrast": 1.1,
+        "softness": 0.4,
+        "gridNoise": 0.3,
+        "grainOverlay": 0.1
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Coarse",
+      "props": {
+        "size": 0.4,
+        "contrast": 1.1,
+        "softness": 0.6,
+        "gridNoise": 0.3,
+        "grainOverlay": 0.08
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

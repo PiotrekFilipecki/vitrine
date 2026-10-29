@@ -1,6 +1,8 @@
 # VITRINE · STATUS
 
-Aktualizacja: 29.10.2026, koniec Q0 (v0.2) na gałęzi `q0-blokery` od `main` (= v0.1.0 + docs). Prompty v0.2: `docs/vitrine/PROMPTY-v02.md`, devlog: `docs/vitrine/devlog/Q0-blokery.md`. Niżej historia P0–P5 bez zmian.
+Aktualizacja: 30.10.2026, R0 po bramce Cowork (reset kierunku) na gałęzi `r0-kierunek` od `main` (`85b9349`, z Q0). Decyzja: `docs/adr/0002-kierunek-v2.md` + `docs/vitrine/KIERUNEK-v2.md` (zastępuje PLAN D13 i domyślny dither). PROMPTY-v02 Q1–Q4 wstrzymane do bramki R0. Devlog: `docs/vitrine/devlog/R0-kierunek.md`.
+
+Wcześniej: 29.10.2026, koniec Q0 (v0.2) na gałęzi `q0-blokery` od `main` (= v0.1.0 + docs). Prompty v0.2: `docs/vitrine/PROMPTY-v02.md`, devlog: `docs/vitrine/devlog/Q0-blokery.md`. Niżej historia P0–P5 bez zmian.
 
 Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-element` → `p3-headless` → `p2-liquid` (każda od poprzedniej; czekają na bramki). Piotrek merguje po bramkach w kolejności p1 → p3 → p2. Dev store: `niwwts.myshopify.com` (12 produktów NIWWTS zaimportowanych z `examples/niwwts-products.csv`; motyw testowy „VITRINE test (p2)” id 193335820605, nieopublikowany).
 
@@ -15,6 +17,7 @@ Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-
 | P4 Paper: presety, demo, README | **w toku** na `p4-paper` (od p2): plik Paper „VITRINE — presets” (4 ramki × 3 warianty) i „Demo page” (1440/390) zbudowane przez MCP; strona demo przeniesiona do kodu; README z 2 GIF-ami; process.md. X1 zrobione przez agenta na renderach elementu (polecenie Piotrka): `newsprint` 3 kroki, `riso` bez C, `folded-lookbook` pełne zagięcie, nowy `acid-night`; zgodność 16/16. | README jak obcy developer: 30 s; strona demo nie wygląda jak szablon |
 | P5 przegląd, wydanie, zgłoszenie | **w toku** na `p5-wydanie` (od p4): wersje 0.1.0, subpath `vitrine-shaders/react` składany do paczki, `npm publish --dry-run` 26 plików / 135,8 kB, zip motywu, CHANGELOG, ROADMAP, submission.md; skan sekretów grepem po drzewie i historii: czysty (gitleaks nie zainstalowany). Czeka na: review (W1), presety z P4. | checklista niżej |
 | Q0 blokery zgłoszenia + porządki | **zrobione** na `q0-blokery`, czeka na bramkę | B1 grep czysty; B2 raster na kremowym tle 23,6 % → 0 % (`whitePoint`), zgodność 16/16; B3 12 unikalnych kart, siatka bez pustych pasów 390/768/1024/1440 (test); B4 Lighthouse mobile demo 96 vs 96, TBT 63 ms, ΔLCP 0, CLS 0 (było 70, TBT 525, CLS 0,329); B5 hero z lupą; B6 Next buduje się bez sieci; B7 workflow Pages; B8 checklista niżej. Otwarte: Next TBT 236 vs 148 ms w v0.1.0 (Commit kompozytora). **Bramka (Piotrek, telefon): katalog jak druk, nie brud; hero od razu pokazuje, co robi.** |
+| R0 reset kierunku wizualnego | **zrobione** na `r0-kierunek` (commit lokalny, niewypchnięty), bramka Cowork przeszła 30.10.2026 | 12 zdjęć produktów (Unsplash License, `examples/fixtures/CREDITS.md`), 10 arkuszy `docs/media/r0-*.webp` (+ `.json`), przejścia szyby, lupy i wody (pasek + MP4), makieta `examples/static/r0-hero.html` (wazon w hero, krzesło w karcie, na 390 px zdjęcie od 266,5 px). **Na Q1: szyba (karta), szyba pre-order z datą, lupa.** Na później: water, grain-gradient. Odpada: paper-texture, liquid-metal, pulsing-border, image-dithering, halftone-cmyk. Pełne PNG/GIF lokalnie (gitignore). |
 
 ## Nazwy (29.10.2026)
 
@@ -47,6 +50,14 @@ Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-
 ## Gdzie co jest
 
 - Plan: `docs/vitrine/PLAN.md` · prompty: `docs/vitrine/PROMPTY.md` · ADR: `docs/adr/0001-architektura.md` · API: `docs/vitrine/API.md` · devlogi: `docs/vitrine/devlog/P0-spiki.md`, `P1-element.md`, `P2-liquid.md`, `P3-headless.md` · dowody: `docs/media/p0-*`, `p1-*`, `p2-*`, `p3-*` · motyw: `shopify-theme/` (build `pnpm --filter vitrine-shaders exec tsup --config tsup.theme.config.ts`) · CSV: `examples/niwwts-products.csv` · test motywu: `examples/theme-test/README.md` · spiki: `examples/spikes/` · element: `packages/element/` · wrappery React: `packages/react/` · demo: `examples/static/` · headless: `examples/next-headless/` · Lighthouse: `node scripts/lighthouse.mjs static|next`.
+
+## Bramka R0 (Cowork, potem Piotrek)
+
+1. [x] Cowork: arkusze, licencje, oceny (30.10.2026). Decyzje Piotrka w devlogu R0, sekcja „Decyzje bramki R0”.
+2. [ ] Piotrek: makieta na telefonie: `node examples/r0/build.mjs && pnpm serve` → `http://<ip-maca>:4173/examples/static/r0-hero.html`.
+3. [ ] Merge `r0-kierunek` → `main` po obejrzeniu; push decyduje Piotrek.
+4. [ ] Przepisać PROMPTY-v02 Q1–Q4 pod wybrane efekty; Q1 przepisuje też stare demo NIWWTS (`examples/static/index.html`, `stress.html`, `examples/next-headless`) na nowy kierunek, fixtures NIWWTS zostają tylko w testach zgodności.
+5. Upublicznienie z sekcji niżej czeka, aż demo będzie w nowym kierunku.
 
 ## Po Q0: upublicznienie (B8, Piotrek, w tej kolejności)
 

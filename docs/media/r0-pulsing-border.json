@@ -1,0 +1,71 @@
+{
+  "effect": "pulsing-border",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "08-headphones",
+    "12-plant",
+    "01-vase"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 1500,
+    "fit": "cover",
+    "scale": 1,
+    "colorBack": "#00000000",
+    "roundness": 0,
+    "aspectRatio": "auto",
+    "smoke": 0,
+    "bloom": 0,
+    "softness": 0
+  },
+  "presets": [
+    {
+      "name": "Thread",
+      "props": {
+        "colors": [
+          "#141312"
+        ],
+        "thickness": 0.012,
+        "intensity": 0.4,
+        "spots": 5,
+        "spotSize": 0.9,
+        "pulse": 0.2,
+        "margin": 0.03
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Gilt",
+      "props": {
+        "colors": [
+          "#B8955A"
+        ],
+        "thickness": 0.015,
+        "softness": 0.1,
+        "intensity": 0.5,
+        "spots": 5,
+        "spotSize": 0.9,
+        "pulse": 0.2,
+        "margin": 0.03
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Ink inset",
+      "props": {
+        "colors": [
+          "#141312",
+          "#57524c"
+        ],
+        "thickness": 0.006,
+        "intensity": 0.6,
+        "spots": 6,
+        "spotSize": 1,
+        "pulse": 0,
+        "margin": 0.05
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

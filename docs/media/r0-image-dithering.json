@@ -1,0 +1,50 @@
+{
+  "effect": "image-dithering",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "04-chair",
+    "05-lamp",
+    "06-watch"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 0,
+    "fit": "cover",
+    "colorFront": "#EFEBE4",
+    "colorBack": "#141312",
+    "colorHighlight": "#EFEBE4"
+  },
+  "presets": [
+    {
+      "name": "Ink on paper",
+      "props": {
+        "type": "8x8",
+        "size": 2,
+        "colorSteps": 1,
+        "originalColors": false
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Ink, two steps",
+      "props": {
+        "type": "8x8",
+        "size": 2,
+        "colorSteps": 2,
+        "originalColors": false
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Colour",
+      "props": {
+        "type": "8x8",
+        "size": 1,
+        "colorSteps": 4,
+        "originalColors": true
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

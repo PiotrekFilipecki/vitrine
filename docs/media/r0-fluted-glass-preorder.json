@@ -1,0 +1,60 @@
+{
+  "effect": "fluted-glass-preorder",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "03-sneaker",
+    "02-perfume",
+    "07-bag"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 0,
+    "fit": "cover",
+    "scale": 1.06,
+    "colorBack": "#00000000",
+    "colorShadow": "#141312",
+    "colorHighlight": "#ffffff",
+    "shape": "lines",
+    "angle": 0,
+    "edges": 0,
+    "size": 0.95,
+    "distortionShape": "contour"
+  },
+  "presets": [
+    {
+      "name": "30 days out",
+      "props": {
+        "distortion": 0.5,
+        "blur": 0.6,
+        "stretch": 0.1,
+        "highlights": 0.12,
+        "shadows": 0.2,
+        "grainOverlay": 0.05
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "7 days out",
+      "props": {
+        "distortion": 0.4,
+        "blur": 0.3,
+        "highlights": 0.15,
+        "shadows": 0.2,
+        "grainOverlay": 0.04
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "1 day out",
+      "props": {
+        "distortion": 0.3,
+        "blur": 0.1,
+        "highlights": 0.18,
+        "shadows": 0.2,
+        "grainOverlay": 0.02
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}

@@ -1,0 +1,54 @@
+{
+  "effect": "water",
+  "renderer": "@paper-design/shaders-react 0.0.82, Chromium (Playwright), deviceScaleFactor 2",
+  "photos": [
+    "09-mug",
+    "11-candle",
+    "12-plant"
+  ],
+  "base": {
+    "speed": 0,
+    "frame": 3200,
+    "fit": "cover",
+    "scale": 1.1,
+    "colorBack": "#00000000",
+    "colorHighlight": "#ffffff",
+    "edges": 0
+  },
+  "presets": [
+    {
+      "name": "Pool light",
+      "props": {
+        "caustic": 0.02,
+        "waves": 0.03,
+        "layering": 0.4,
+        "highlights": 0.18,
+        "size": 1.4
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Light and ripple",
+      "props": {
+        "caustic": 0.05,
+        "waves": 0.06,
+        "layering": 0.5,
+        "highlights": 0.12,
+        "size": 1
+      },
+      "resolvedPerPhoto": null
+    },
+    {
+      "name": "Surface",
+      "props": {
+        "caustic": 0.03,
+        "waves": 0.2,
+        "layering": 0,
+        "highlights": 0.04,
+        "size": 2.5
+      },
+      "resolvedPerPhoto": null
+    }
+  ],
+  "consoleErrors": []
+}
