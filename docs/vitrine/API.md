@@ -41,11 +41,35 @@ Pinned to `@paper-design/shaders` 0.0.82 (`PAPER_SHADERS_VERSION`).
 
 Attribute changes re-run the setup (theme editor, frameworks).
 
+## VITRINE-only parameters
+
+Everything in `params` is an upstream prop name, with one exception:
+
+| Param | Effect | Values | Default | What it does |
+| --- | --- | --- | --- | --- |
+| `whitePoint` | `dither` | number in (0, 1) | off (absent, `1`, or out of range) | Levels step on the source luminance before the dither: `min(lum / whitePoint, 1)`. Anything at or above `whitePoint` prints as the highlight colour, so a light mockup background becomes clean paper instead of a dot screen. The `newsprint` preset ships with `0.9` (NIWWTS mockups have a ground at 0.927). |
+
+With the option off the element runs the upstream fragment shader unchanged, so every preset without it is still
+covered by the pixel-compatibility tests. With it on, the element uses a copy of the upstream source with one uniform
+and one line added (`patchWhitePoint` in `effects/dither.ts`, which throws if a version bump moves the anchor lines),
+in its own shared baker. Tests: `effects.test.ts` (patch, mapping) and `e2e/whitepoint.spec.ts` (12 mockups, clean
+ground with the option, raster without it). To switch it off on `newsprint`: `params='{"whitePoint":1}'`.
+
 ## Static vs animated (ADR-0001 / PLAN D3)
 
 - `speed` 0 (dither, halftone and paper by default): rendered once by a shared off-screen context per effect,
   copied to a PNG `<img>` and cached in memory by (effect, params, src, size, DPR). A page of 24 cards ends with
   **0 live WebGL contexts**. Resizing the box re-bakes (debounced 150 ms; same size = cache hit).
+- Since v0.2 (Q0) a bake does not hold the main thread: one global queue gives every bake its own task (elements
+  within half a screen of the viewport first, one per frame; the rest in `requestIdleCallback`, 50 ms timeout where
+  it is missing), the frame is read back through a pixel-pack buffer and a fence (no synchronous `readPixels` wait),
+  and the PNG is encoded in a worker built from a Blob URL. Each step falls back to the v0.1 path when unavailable
+  (no fence, a CSP without `worker-src blob:`). Same pixels either way: the compatibility tests read the result.
+- The texture is the image the browser chose (`currentSrc`), so `srcset`/`sizes` on the content `<img>` decide
+  how much the GPU uploads. A 200 px card fed a 1600 px original costs about five times the main-thread time of the
+  same card fed a 640 px file (median 40 ms vs 8 ms per bake at CPU ×4, Q0 devlog).
+- To keep the element out of LCP on a page whose LCP is an image, import it after that image has painted (see the
+  head script of `examples/static/index.html`).
 - `speed` ≠ 0 (mesh by default): mounted only while in the viewport, at most `maxLive` (default 6) at once, LRU.
   Leaving the viewport or being evicted keeps the last frame as a 2D canvas and releases the context. A context
   lost by the browser (WebKit evicts the oldest) is remounted automatically.
@@ -59,7 +83,9 @@ the dither grid. State is exposed as `data-vitrine-revealed` on the element; red
 
 ## Events (bubble)
 
-- `vitrine:ready` — `detail: { effect, preset, mode: 'baked' | 'live', cached, ms }`
+- `vitrine:ready` — `detail: { effect, preset, mode: 'baked' | 'live', cached, ms, bake? }`. `bake` (baked, not
+  cached): milliseconds `{ total, wait, render, upload, read, gpu, blob, main, readback: 'async' | 'sync',
+  encode: 'worker' | 'main', pixels }`; `main` is the main-thread share.
 - `vitrine:fallback` — `detail: { reason: 'no-webgl2' | 'cors' | 'error', message }`; the `<img>` stays, nothing is logged unless `debug`.
 
 `data-vitrine-state` on the element: `loading` · `baked` · `live` · `fallback`.
@@ -105,5 +131,5 @@ import { ProductMediaShader, CollectionHeroShader, EditorialImageShader } from '
 
 ## Bundle
 
-ESM with code splitting: `index.js` (element, baker, pool, ShaderMount) plus one chunk per effect loaded on first
-use. Sizes are in the P1 devlog.
+ESM with code splitting: `index.js` (element, baker, bake queue, readback, encoder, pool, ShaderMount) plus one chunk
+per effect loaded on first use. Sizes: P1 devlog, updated in the Q0 devlog (core 16.4 KB gzip, dither 3.3 KB).

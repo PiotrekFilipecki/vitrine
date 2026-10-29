@@ -4,7 +4,7 @@ VITRINE is a bridge between [Paper Shaders](https://shaders.paper.design) and Sh
 of the Codrops guide entry, not decoration, so this page records what was done on the Paper canvas, what the agent did
 and what Piotr did. Screenshots live in `docs/media/p4-*`.
 
-## 1. Presets: tuned on the canvas, read back into JSON
+## 1. Presets: frames in Paper, picked on renders of the element
 
 The four effects (image-dithering, halftone-cmyk, mesh-gradient, paper-texture) each got one 1440 px frame in the
 Paper file **"VITRINE — presets"**: three variants per effect on NIWWTS No.06 product photos, with the starting
@@ -49,17 +49,35 @@ layout could be judged before the shader layers existed; the hero is a frame of 
 
 Compare: `docs/media/p4-paper-demo-1440.png` (canvas) vs `docs/media/p4-demo-1440.png` (code), and the 390 pair.
 
+Since Q0 (v0.2) the top of the page no longer follows the canvas: the ink plate over the mesh was replaced in code by
+a proof print with a loupe (section 4). The rest of the layout is still the canvas layout.
+
 ## 3. What the agent did, what Piotr did
 
 | | Agent | Piotr |
 | --- | --- | --- |
 | Paper file, tokens, frames, labels, photos | ✔ | |
-| Shader layers and tuning | | ✔ (X1) |
+| Tuning: variant sheets rendered with the element, winners into JSON | ✔ (X1, on Piotr's request) | delegated the step |
+| Shader layers on the canvas | not built: the Paper MCP has no shader fill | planned for Q2, by Piotr |
 | Reading values back, JSON, compatibility tests | ✔ | |
 | Demo page layout and copy on the canvas | ✔ | review |
 | Code from the canvas, screenshots, GIFs | ✔ | gate on the phone |
 
-## 4. Notes for the write-up
+## 4. Q0 (v0.2): what changed without the canvas
+
+Everything in this section was done by the agent in code, on Piotr's Q0 brief; nothing here was designed or tuned in
+Paper.
+
+- **`whitePoint` on `newsprint`.** The dither printed the cream mockup ground (luminance 0.927) as a dot screen over
+  the whole card. Variant sheets on the 12 mockups (`docs/media/q0-dither-variants.png`) showed that no upstream
+  parameter clears it: 8 % of the ground stays raster at best (1 step or random), 23.6 % with the shipped values.
+  The agent added a VITRINE-only levels step (`whitePoint`, off by default) and set 0.9 on `newsprint`: 0 % raster on
+  the ground of all 12 (`docs/media/q0-dither-before-after.png`). Upstream presets render with the upstream shader.
+- **Hero.** Lock and direction in the Q0 devlog: the hero shows a NIWWTS print in dithering with a loupe that shows the
+  photo under the cursor; the mesh became the colour bar at the foot of the print.
+- **Catalogue.** 12 unique products instead of 12 repeated to 24; the 24-card case moved to `stress.html`.
+
+## 5. Notes for the write-up
 
 - Paper MCP imports JPG assets reliably; WebP and 8-bit PNG timed out or came in as "Missing image", so the assets
   were converted first.

@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-29T20:06:03.634Z",
+  "target": "static",
+  "page": "stress.html",
+  "runs": 3,
+  "results": {
+    "effects": {
+      "runs": [
+        {
+          "score": 88,
+          "lcpMs": 3604,
+          "cls": 0,
+          "tbtMs": 179,
+          "fcpMs": 904,
+          "lcpElement": null
+        },
+        {
+          "score": 88,
+          "lcpMs": 3603,
+          "cls": 0,
+          "tbtMs": 174,
+          "fcpMs": 903,
+          "lcpElement": null
+        },
+        {
+          "score": 85,
+          "lcpMs": 3695,
+          "cls": 0,
+          "tbtMs": 226,
+          "fcpMs": 1574,
+          "lcpElement": null
+        }
+      ],
+      "median": {
+        "score": 88,
+        "lcpMs": 3604,
+        "cls": 0,
+        "tbtMs": 179,
+        "fcpMs": 904
+      }
+    },
+    "noEffects": {
+      "runs": [
+        {
+          "score": 93,
+          "lcpMs": 3229,
+          "cls": 0,
+          "tbtMs": 0,
+          "fcpMs": 904,
+          "lcpElement": null
+        },
+        {
+          "score": 93,
+          "lcpMs": 3229,
+          "cls": 0,
+          "tbtMs": 0,
+          "fcpMs": 904,
+          "lcpElement": null
+        },
+        {
+          "score": 93,
+          "lcpMs": 3228,
+          "cls": 0,
+          "tbtMs": 0,
+          "fcpMs": 903,
+          "lcpElement": null
+        }
+      ],
+      "median": {
+        "score": 93,
+        "lcpMs": 3229,
+        "cls": 0,
+        "tbtMs": 0,
+        "fcpMs": 904
+      }
+    }
+  },
+  "deltaLcpMs": 375
+}

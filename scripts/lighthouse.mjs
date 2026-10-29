@@ -4,6 +4,8 @@
 //        node scripts/lighthouse.mjs static   → examples/static on scripts/serve.mjs :4199, docs/media/p1-lighthouse.json
 //        node scripts/lighthouse.mjs next     → examples/next-headless production build (next start :4198), docs/media/p3-lighthouse.json
 // Both need `pnpm build` first.
+// VITRINE_LH_OUT=<file.json> writes elsewhere than the phase default (Q0: before/after files keep P1 evidence intact);
+// VITRINE_LH_PAGE=<page.html> measures another page of examples/static (e.g. stress.html).
 import { spawn } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -20,8 +22,8 @@ const TARGETS = {
     port: 4199,
     server: () => spawn('node', [`${root}scripts/serve.mjs`, '4199'], { stdio: 'ignore' }),
     urls: (p) => ({
-      effects: `http://localhost:${p}/examples/static/`,
-      noEffects: `http://localhost:${p}/examples/static/?effects=off`,
+      effects: `http://localhost:${p}/examples/static/${process.env.VITRINE_LH_PAGE ?? ''}`,
+      noEffects: `http://localhost:${p}/examples/static/${process.env.VITRINE_LH_PAGE ?? ''}?effects=off`,
     }),
     out: 'p1-lighthouse.json',
   },
@@ -82,7 +84,13 @@ if (target === 'store' && process.env.VITRINE_STORE_PASSWORD) {
   await page.close();
 }
 
-const out = { date: new Date().toISOString(), target, runs: RUNS, results: {} };
+const out = {
+  date: new Date().toISOString(),
+  target,
+  page: process.env.VITRINE_LH_PAGE ?? null,
+  runs: RUNS,
+  results: {},
+};
 try {
   for (const [key, url] of Object.entries(cfg.urls(cfg.port))) {
     const runs = [];
@@ -120,7 +128,7 @@ try {
   }
   out.deltaLcpMs = out.results.effects.median.lcpMs - out.results.noEffects.median.lcpMs;
   mkdirSync(`${root}docs/media`, { recursive: true });
-  writeFileSync(`${root}docs/media/${cfg.out}`, JSON.stringify(out, null, 2));
+  writeFileSync(`${root}docs/media/${process.env.VITRINE_LH_OUT ?? cfg.out}`, JSON.stringify(out, null, 2));
   console.log(
     JSON.stringify(
       {

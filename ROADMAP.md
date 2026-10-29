@@ -19,7 +19,7 @@ preset file and a pixel-compatibility test; the bake/pool runtime needs no chang
 
 ## Chunked `vitrine.js` for themes
 
-Today the theme asset is one 44 KB gzip file. Split chunks in a flat `assets/` folder would cut a dither-only page to
+Today the theme asset is one 46 KB gzip file. Split chunks in a flat `assets/` folder would cut a dither-only page to
 about 20 KB; the dynamic import next to `asset_url`'s `?v=` needs verifying on a store first.
 
 ## Svelte, Vue, Astro
@@ -30,7 +30,7 @@ one example per framework.
 ## Presets from the community
 
 `presets/*.json` is a plain format (`{ effect, shader, paperShaders, presets: { id: { name, source, params } } }`).
-A presets gallery page and a PR template for new presets, tuned in Paper, with the compatibility test as the gate.
+A presets gallery page and a PR template for community presets: values read from a Paper shader layer, the compatibility test as the gate.
 
 ## Theme coverage
 

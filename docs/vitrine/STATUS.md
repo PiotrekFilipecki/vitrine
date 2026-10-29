@@ -1,6 +1,8 @@
 # VITRINE · STATUS
 
-Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-element` → `p3-headless` → `p2-liquid` (każda od poprzedniej; czekają na bramki). Piotrek merguje po bramkach w kolejności p1 → p3 → p2. Dev store: `niwwts.myshopify.com` (12 produktów NIWWTS zaimportowanych z `examples/niwwts-products.csv`; motyw testowy „VITRINE test (p2)” id 193335820605, nieopublikowany).
+Aktualizacja: 29.10.2026, koniec Q0 (v0.2) na gałęzi `q0-blokery` od `main` (= v0.1.0 + docs). Prompty v0.2: `docs/vitrine/PROMPTY-v02.md`, devlog: `docs/vitrine/devlog/Q0-blokery.md`. Niżej historia P0–P5 bez zmian.
+
+Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-element` → `p3-headless` → `p2-liquid` (każda od poprzedniej; czekają na bramki). Piotrek merguje po bramkach w kolejności p1 → p3 → p2. Dev store: `niwwts.myshopify.com` (12 produktów NIWWTS zaimportowanych z `examples/niwwts-products.csv`; motyw testowy „VITRINE test (p2)” id 193335820605, nieopublikowany).
 
 ## Fazy
 
@@ -12,6 +14,7 @@ Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p
 | P3 headless Next | **zrobione** (przed P2) | SSR = zwykły `<img>`; 7 testów SSR + 7 e2e na buildzie produkcyjnym (Chromium + WebKit): 25 wypalonych, 1 żywy hero, 0 kontekstów po bake, 0 błędów hydracji; Lighthouse mobile ΔLCP **−2 ms** (755 vs 757), CLS 0, TBT +134 ms; wrappery 860 B gz. **Bramka (Piotrek, telefon): ta sama karta co w `examples/static`.** Tryb Storefront API niewykonany na sklepie (brak tokena). |
 | P4 Paper: presety, demo, README | **w toku** na `p4-paper` (od p2): plik Paper „VITRINE — presets” (4 ramki × 3 warianty) i „Demo page” (1440/390) zbudowane przez MCP; strona demo przeniesiona do kodu; README z 2 GIF-ami; process.md. X1 zrobione przez agenta na renderach elementu (polecenie Piotrka): `newsprint` 3 kroki, `riso` bez C, `folded-lookbook` pełne zagięcie, nowy `acid-night`; zgodność 16/16. | README jak obcy developer: 30 s; strona demo nie wygląda jak szablon |
 | P5 przegląd, wydanie, zgłoszenie | **w toku** na `p5-wydanie` (od p4): wersje 0.1.0, subpath `vitrine-shaders/react` składany do paczki, `npm publish --dry-run` 26 plików / 135,8 kB, zip motywu, CHANGELOG, ROADMAP, submission.md; skan sekretów grepem po drzewie i historii: czysty (gitleaks nie zainstalowany). Czeka na: review (W1), presety z P4. | checklista niżej |
+| Q0 blokery zgłoszenia + porządki | **zrobione** na `q0-blokery`, czeka na bramkę | B1 grep czysty; B2 raster na kremowym tle 23,6 % → 0 % (`whitePoint`), zgodność 16/16; B3 12 unikalnych kart, siatka bez pustych pasów 390/768/1024/1440 (test); B4 Lighthouse mobile demo 96 vs 96, TBT 63 ms, ΔLCP 0, CLS 0 (było 70, TBT 525, CLS 0,329); B5 hero z lupą; B6 Next buduje się bez sieci; B7 workflow Pages; B8 checklista niżej. Otwarte: Next TBT 236 vs 148 ms w v0.1.0 (Commit kompozytora). **Bramka (Piotrek, telefon): katalog jak druk, nie brud; hero od razu pokazuje, co robi.** |
 
 ## Nazwy (29.10.2026)
 
@@ -45,7 +48,22 @@ Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p
 
 - Plan: `docs/vitrine/PLAN.md` · prompty: `docs/vitrine/PROMPTY.md` · ADR: `docs/adr/0001-architektura.md` · API: `docs/vitrine/API.md` · devlogi: `docs/vitrine/devlog/P0-spiki.md`, `P1-element.md`, `P2-liquid.md`, `P3-headless.md` · dowody: `docs/media/p0-*`, `p1-*`, `p2-*`, `p3-*` · motyw: `shopify-theme/` (build `pnpm --filter vitrine-shaders exec tsup --config tsup.theme.config.ts`) · CSV: `examples/niwwts-products.csv` · test motywu: `examples/theme-test/README.md` · spiki: `examples/spikes/` · element: `packages/element/` · wrappery React: `packages/react/` · demo: `examples/static/` · headless: `examples/next-headless/` · Lighthouse: `node scripts/lighthouse.mjs static|next`.
 
-## Przed upublicznieniem (P5 · W6, Piotrek)
+## Po Q0: upublicznienie (B8, Piotrek, w tej kolejności)
+
+Kolejność ma znaczenie: README paczki npm linkuje do repo, a workflow Pages rusza dopiero przy publicznym repo.
+
+1. [ ] **Bramka Q0 na telefonie**, potem merge `q0-blokery` → `main` (`git checkout main && git merge --ff-only q0-blokery && git push origin main`).
+2. [ ] **Repo publiczne:** `gh repo edit PiotrekFilipecki/vitrine --visibility public --accept-visibility-change-consequences` (albo Settings → Danger zone → Change visibility). Przed tym nic nie trzeba czyścić: gitleaks na całej historii był czysty w P5, Q0 nie dodał sekretów.
+3. [ ] **GitHub Pages:** Settings → Pages → Build and deployment → Source: **GitHub Actions**. Potem Actions → „Pages (static demo)” → Run workflow (albo dowolny push na `main`). Workflow `.github/workflows/pages.yml` buduje paczki, odpala `pnpm test`, składa `_site/` (`node scripts/pages-site.mjs`) i publikuje. Adres: `https://piotrekfilipecki.github.io/vitrine/examples/static/` (korzeń przekierowuje). Podmień `TODO_PAGES_URL` w README.
+4. [ ] **npm:** najpierw decyzja o wersji. `packages/element` i `packages/react` mają `0.1.0`, a kod na `main` po Q0 różni się od tagu `v0.1.0` (whitePoint, kolejka, odczyt asynchroniczny). Rekomendacja: podbij obie paczki do `0.2.0` i dopisz datę w CHANGELOG, potem:
+   `npm login` → `pnpm build` → `cd packages/element && npm publish --dry-run` (oczekiwane 26 plików, ok. 146 kB) → `npm publish`. Nazwa `vitrine-shaders` była wolna 29.10.2026.
+   Alternatywa bez zmiany wersji: publish z tagu (`git checkout v0.1.0 && pnpm install && pnpm build && cd packages/element && npm publish`), wtedy README na `main` opisuje opcje, których w paczce nie ma.
+5. [ ] **Vercel (headless):** vercel.com → Add New → Project → import `PiotrekFilipecki/vitrine` → Root Directory `examples/next-headless` → Framework Next.js → Deploy. Zmienne środowiskowe nie są potrzebne (fixtures z repo); tryb sklepu: dwie zmienne z `examples/next-headless/.env.example`. Build działa bez sieci od Q0 (lokalny Archivo). Podmień `TODO_VERCEL_URL` w README i `TODO_DEMO_URL` w `docs/vitrine/submission.md`.
+6. [ ] `examples/niwwts-products.csv`: po upublicznieniu można przepiąć URL-e obrazów na `raw.githubusercontent.com/…/examples/spikes/fixtures/`.
+7. [ ] Zgłoszenia dopiero po Q2 (prompt v0.2): Codrops → komentarz pod przewodnikiem → X → Discord Papera.
+8. [ ] Motyw testowy „VITRINE test (p2)” na `niwwts.myshopify.com` ma kod v0.1.0; plik `shopify-theme/assets/vitrine.js` w repo jest już z Q0 (46,1 KB gzip). Pomiar na sklepie: niewykonany w Q0.
+
+## Przed upublicznieniem (P5 · W6, Piotrek, historia)
 
 - [x] P4 X1: presety zestrojone (na renderach elementu), `presets/*.json` zapisane, testy zgodności 16/16.
 - [x] Merge gałęzi `p1-element` → `p3-headless` → `p2-liquid` → `p4-paper` → `p5-wydanie` do `main` (fast-forward, 29.10.2026, na polecenie „zrob to wszystko za mnie”; bramki na telefonie nadal warto przejść).
