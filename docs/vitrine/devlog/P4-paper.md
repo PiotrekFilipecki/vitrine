@@ -18,7 +18,13 @@ https://app.paper.design/file/01M64ER5PDV2TPY8N2M73DBSZP (strony „Page 1” = 
 
 Zbudowane przez MCP: tokeny (`--color-paper/ink/blue-rice/orange/acid`, Archivo, rozmiary), 4 ramki 1440×900, po 3 sloty 432×518 ze zdjęciami NIWWTS (JPG; WebP i 8-bit PNG nie wchodziły przez `paper-asset://`) i parametrami startowymi pod slotem. Zrzuty: `docs/media/p4-paper-presets-{dither,halftone,mesh,paper}.png`.
 
-**Stan: strojenie nie wykonane** (Piotrek, 40 min). Po „gotowe”: odczyt parametrów warstw (MCP `get_jsx`/`get_computed_styles` na warstwie shadera; plan B: eksport React do `docs/vitrine/paper-export/`), zapis do `presets/*.json`, `pnpm test` + `pnpm test:e2e` (testy zgodności z shaders-react na nowych presetach), tabela „przed / po” w `process.md`.
+**Strojenie wykonał agent** na prośbę Piotrka („zrob to wszystko za mnie”): arkusze wariantów renderowane prawdziwym elementem (`docs/media/p4-tuning-{dither,halftone,paper,mesh}.png`), wybór wg niwwts-aesthetic, zapis do `presets/*.json`, tabela przed/po w `process.md`. Zmiany: `newsprint` colorSteps 3; `riso` bez kanału C, size 0.4; `folded-lookbook` folds 1, crumples 0.3, angle 300; nowy `mesh/acid-night`; odrzucony `dither/riso-2tone` (oranż na całej karcie). Odstępstwo od PROMPTY („nie strój za mnie”) na wyraźne polecenie. Warstwy shaderów na płótnie Papera nie powstały (MCP nie ma narzędzia do shader fill); ramki zostają jako zapis punktów startowych.
+
+```
+$ pnpm exec playwright test packages/element/e2e/compat.spec.ts --project=chromium --project=webkit   (nowe presety)
+16 passed (13.2s)
+$ pnpm test → Tests 38 passed (38)
+```
 
 ## X2 · strona demo
 
@@ -34,7 +40,7 @@ $ pnpm exec playwright test packages/element/e2e/static.spec.ts --project=chromi
 ## X3 · README i GIF-y
 
 - `README.md` (EN): 802 słowa; co to jest, GIF karty, dlaczego, instalacja Liquid / React / HTML, API skrót, tabela wydajności z trzech stacków, limity, licencja.
-- `docs/media/vitrine-card-reveal.gif`: Playwright (nagranie wideo, hover na 3 kartach) → ffmpeg (paleta 96 kolorów, 15 fps, 800 px) = **2,50 MB** (`node scripts/gif-card.mjs`).
+- `docs/media/vitrine-card-reveal.gif`: Playwright (nagranie wideo, hover na 3 kartach) → ffmpeg (paleta 96 kolorów, 15 fps, 800 px) = **2,73 MB** po nowych presetach (`node scripts/gif-card.mjs`).
 - `docs/media/vitrine-theme-editor.gif`: nagranie z edytora motywu w Chrome (zmiana koloru 3 hero na acid, mesh przebudowuje się na żywo), 8 klatek = **1,93 MB**.
 
 ```
@@ -59,11 +65,10 @@ Lock ✔ · font ✔ · akcent + faktura ✔ · złamanie siatki (płyta na mesh
 
 ## Pominięte
 
-- Strojenie presetów (X1) i tabela przed/po: czeka na Piotrka.
+- Warstwy shaderów w Paperze: niemożliwe przez MCP; strojenie zrobione na renderach elementu (patrz X1).
 - Podgląd shaderów na płótnie przez MCP: brak takiej możliwości w narzędziach; mesh w mocku to klatka z żywego elementu.
 - GIF edytora pokazuje motyw deweloperski (nazwa „VITRINE test (p2)”), nie sklep produkcyjny; tak ma być.
 
 ## Kroki ręczne (Piotrek)
 
-1. X1 w Paperze (40 min), potem „gotowe”.
-2. Bramka P4: README jak obcy developer (30 s), strona demo na telefonie: `pnpm build && pnpm serve` → `http://<ip-maca>:4173/examples/static/`.
+1. Bramka P4: README jak obcy developer (30 s), strona demo na telefonie: `pnpm build && pnpm serve` → `http://<ip-maca>:4173/examples/static/`.

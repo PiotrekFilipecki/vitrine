@@ -13,18 +13,21 @@ parameters printed under every slot.
 - **Agent:** built the frames through the Paper MCP (tokens for the NIWWTS palette and Archivo, one frame, three
   slots with the photos, then duplicated and relabelled for the other effects). Starting values = the P1 drafts in
   `presets/*.json`; C = Paper's own default preset kept 1:1 as a reference.
-- **Piotr:** adds the shader layer over each photo in Paper and tunes it by eye (40 minutes). A = the preset that
-  ships (`newsprint`, `riso`, `drop-night`, `folded-lookbook`), B = a second look, C = untouched.
-- **Agent, after "gotowe":** reads the layer parameters back (MCP, or the React export in
-  `docs/vitrine/paper-export/` as plan B) and writes `presets/*.json`. The pixel-compatibility tests from P1 run on
-  the new values, so a preset that renders differently from shaders-react cannot ship.
+- **Tuning (29.10.2026):** Piotr asked the agent to take this step as well. Instead of shader layers on the
+  canvas, the agent rendered variant sheets with the real element (3–4 variants per effect on NIWWTS photos,
+  `docs/media/p4-tuning-*.png`), judged them with the NIWWTS rules (two tones, one accent, no noise for its own sake)
+  and wrote the winners into `presets/*.json`. The Paper frames stay as the record of the starting points and the
+  variants; the canvas is where the next round of tuning happens.
+- **After tuning:** the pixel-compatibility tests from P1 ran on the new values (16/16, Chromium + WebKit), so a
+  preset that renders differently from shaders-react cannot ship.
 
 | Frame | Before (P1 draft) | After tuning |
 | --- | --- | --- |
-| dither · newsprint | 8×8 Bayer, size 2, 2 steps, ink on paper | PENDING_TUNING |
-| halftone · riso | C blue-rice, M orange, Y off, K ink, size 0.3 | PENDING_TUNING |
-| mesh · drop-night | ink, blue-rice, orange, paper; distortion 0.9, swirl 0.25, speed 0.6 | PENDING_TUNING |
-| paper · folded-lookbook | cover, blending 0.9, one fold (0.6), crumples 0.6, seed 49 | PENDING_TUNING |
+| dither · newsprint | 8×8 Bayer, size 2, 2 steps, ink on paper | **3 steps**: the artwork printed on a tee stays legible, 2 steps flattened it to a silhouette; the dot screen on cream mockup backgrounds stays (it reads as newsprint grain). Rejected: `random` (noise), `4x4` size 3 (loses the artwork) |
+| halftone · riso | C blue-rice, M orange, Y off, K ink, size 0.3 | **cyan off, size 0.4**: the cyan channel put a blue speckle over the paper that read as noise; two inks (No.06 orange + ink) read as riso |
+| mesh · drop-night | ink, blue-rice, orange, paper; distortion 0.9, swirl 0.25, speed 0.6 | unchanged (frame 0 is the strongest); added **acid-night** (ink, acid, blue-rice, paper; swirl 0.4, speed 0.4) as the one place acid is allowed |
+| paper · folded-lookbook | cover, blending 0.9, half a fold (0.6), crumples 0.6, angle 60, seed 49 | **one full fold, crumples 0.3, light from 300°**: a crease you can see instead of a general wrinkle |
+| dither · riso-2tone (tried) | ink / orange / paper, 4×4 size 3, 3 steps | rejected: the cream background becomes a full orange field, accent far over 20 % of the card |
 
 ![Dither frame on the Paper canvas](../media/p4-paper-presets-dither.png)
 

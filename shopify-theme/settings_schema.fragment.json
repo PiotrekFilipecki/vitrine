@@ -31,7 +31,7 @@
       "type": "select",
       "id": "vitrine_card_preset",
       "label": "Preset",
-      "info": "dither: newsprint · default; halftone: riso · default",
+      "info": "dither: newsprint / default; halftone: riso / default",
       "options": [
         {
           "value": "newsprint",
@@ -39,7 +39,7 @@
         },
         {
           "value": "riso",
-          "label": "Riso 2-tone (halftone)"
+          "label": "Riso (halftone)"
         },
         {
           "value": "default",

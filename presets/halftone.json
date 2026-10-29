@@ -43,7 +43,7 @@
     },
     "riso": {
       "name": "Riso 2-tone",
-      "source": "VITRINE P1 draft: NIWWTS blue-rice + No.06 orange on paper, yellow channel off; P4 replaces it with the Paper-tuned version",
+      "source": "VITRINE P4: tuned by eye on NIWWTS No.06 renders of the element (sheets in docs/media/p4-tuning-*.png), niwwts-aesthetic as arbiter; cyan channel off: the blue speckle it put on the paper read as noise, two inks (orange + ink) read as riso",
       "params": {
         "fit": "cover",
         "scale": 1,
@@ -57,11 +57,11 @@
         "speed": 0,
         "frame": 0,
         "colorBack": "#f1ece2",
-        "colorC": "#3a4df0",
+        "colorC": "#3a4df000",
         "colorM": "#f2861e",
         "colorY": "#f1ece200",
         "colorK": "#151311",
-        "size": 0.3,
+        "size": 0.4,
         "contrast": 1.1,
         "softness": 0.3,
         "grainSize": 0.4,
