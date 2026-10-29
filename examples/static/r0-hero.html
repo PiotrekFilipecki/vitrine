@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VITRINE · R0 mockup: hero and card behind reeded glass</title>
+    <meta
+      name="description"
+      content="R0 direction mockup: one product behind reeded shop-window glass that slides open under the cursor or on tap. Paper, ink and type; colour only from the photograph."
+    />
+    <link
+      rel="preload"
+      href="../fonts/archivo/archivo-latin-wdth-wght.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="../fixtures/products/w1000/01-vase.webp"
+      imagesrcset="../fixtures/products/w640/01-vase.webp 640w, ../fixtures/products/w1000/01-vase.webp 1000w, ../fixtures/products/01-vase.webp 1600w"
+      imagesizes="(min-width: 901px) 54vw, 100vw"
+      fetchpriority="high"
+    />
+    <style>
+      @font-face {
+        font-family: 'Archivo';
+        font-style: normal;
+        font-weight: 400 700;
+        font-stretch: 62% 125%;
+        font-display: swap;
+        src: url('../fonts/archivo/archivo-latin-wdth-wght.woff2') format('woff2');
+      }
+      :root {
+        --paper: #efebe4;
+        --ink: #141312;
+        --ink-2: #57524c;
+        --rule: rgba(20, 19, 18, 0.18);
+        --bar: 64px;
+        --gutter: clamp(16px, 3.4vw, 48px);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        background: var(--paper);
+        color: var(--ink);
+        font-family: 'Archivo', serif;
+        font-stretch: 100%;
+        -webkit-font-smoothing: antialiased;
+      }
+      body {
+        margin: 0;
+      }
+      a {
+        color: inherit;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+      :focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 3px;
+      }
+
+      /* bar */
+      .bar {
+        height: var(--bar);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--gutter);
+        border-bottom: 1px solid var(--ink);
+      }
+      .wordmark {
+        font-stretch: 62%;
+        font-weight: 700;
+        font-size: 26px;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+      .bar nav {
+        display: flex;
+        gap: 28px;
+        font-size: 14px;
+      }
+      .bar nav a {
+        text-decoration: none;
+      }
+      .bar nav a:hover {
+        text-decoration: underline;
+      }
+
+      /* hero: 46 / 54, the photograph runs to the right and bottom edges. 54 % keeps the frame close to square at
+         1440 × 900, so a portrait product shot is not cut at top and bottom. Areas: the title and the copy share the
+         left column on desktop; on a phone the photo sits between them, so it starts in the top half of the screen. */
+      .hero {
+        display: grid;
+        grid-template-columns: 46fr 54fr;
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+          'head photo'
+          'body photo';
+        min-height: calc(100svh - var(--bar));
+      }
+      .hero__head {
+        grid-area: head;
+        padding: clamp(32px, 6vh, 72px) var(--gutter) 0;
+      }
+      .hero__body {
+        grid-area: body;
+        padding: 0 var(--gutter) var(--gutter);
+      }
+      .hero__photo {
+        grid-area: photo;
+      }
+      .eyebrow {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 700;
+        font-stretch: 125%;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 0;
+        font-stretch: 62%;
+        font-weight: 700;
+        font-size: clamp(56px, 10.4vw, 168px);
+        line-height: 0.86;
+        letter-spacing: -0.012em;
+        text-transform: uppercase;
+      }
+      .lede {
+        margin: 28px 0 0;
+        max-width: 30ch;
+        font-size: 17px;
+        line-height: 1.45;
+        color: var(--ink-2);
+      }
+      .hint {
+        margin: 40px 0 0;
+        font-size: 13px;
+        color: var(--ink-2);
+      }
+      .hint--touch {
+        display: none;
+      }
+      @media (hover: none) {
+        .hint--mouse {
+          display: none;
+        }
+        .hint--touch {
+          display: block;
+        }
+      }
+      .product {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        margin-top: 20px;
+        padding-top: 14px;
+        border-top: 1px solid var(--ink);
+        font-size: 15px;
+      }
+      .product b {
+        font-weight: 700;
+      }
+      .price {
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* the window: photo, then two glass panes that part at the pointer */
+      .window {
+        position: relative;
+        overflow: hidden;
+        background: #c9c0b4;
+        cursor: default;
+        border: 0;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: manipulation;
+      }
+      .window img,
+      .pane {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .window img {
+        object-fit: cover;
+        object-position: 50% 50%;
+      }
+      .pane {
+        pointer-events: none;
+      }
+
+      /* card section: one product, lots of paper */
+      .objects {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        column-gap: var(--gutter);
+        padding: clamp(72px, 14vh, 160px) var(--gutter) clamp(56px, 10vh, 120px);
+        border-top: 1px solid var(--ink);
+      }
+      .objects h2 {
+        grid-column: 1 / span 3;
+        margin: 0;
+        font-stretch: 62%;
+        font-weight: 700;
+        font-size: clamp(40px, 4.4vw, 64px);
+        line-height: 0.9;
+        text-transform: uppercase;
+      }
+      .card {
+        grid-column: 5 / span 4;
+      }
+      .card .window {
+        aspect-ratio: 4 / 5;
+        height: auto;
+        background: #d9d9d7;
+      }
+      .card__meta {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12px;
+        font-size: 15px;
+      }
+      .objects aside {
+        grid-column: 10 / span 3;
+        align-self: end;
+        font-size: 13px;
+        line-height: 1.5;
+        color: var(--ink-2);
+      }
+      footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        flex-wrap: wrap;
+        padding: 18px var(--gutter) 28px;
+        border-top: 1px solid var(--rule);
+        font-size: 12px;
+        color: var(--ink-2);
+      }
+
+      @media (max-width: 900px) {
+        .bar nav {
+          gap: 18px;
+        }
+        .bar nav .hide-s {
+          display: none;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          grid-template-rows: auto auto auto;
+          grid-template-areas:
+            'head'
+            'photo'
+            'body';
+          min-height: 0;
+        }
+        .hero__head {
+          padding: 24px var(--gutter) 20px;
+        }
+        .hero__photo {
+          height: min(118vw, 72svh);
+        }
+        .hero__body {
+          padding-top: 4px;
+        }
+        .hero__body .product {
+          margin-top: 0;
+          border-top: 0;
+          padding-top: 12px;
+        }
+        .lede {
+          margin-top: 20px;
+        }
+        .hint {
+          margin-top: 16px;
+        }
+        .objects {
+          grid-template-columns: 1fr;
+          row-gap: 28px;
+        }
+        .objects h2,
+        .card,
+        .objects aside {
+          grid-column: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="bar">
+      <a class="wordmark" href="#">Store</a>
+      <nav aria-label="Main">
+        <a href="#objects">Objects</a>
+        <a class="hide-s" href="#">Journal</a>
+        <a href="#">Cart (0)</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__head">
+          <p class="eyebrow">New in the window</p>
+          <h1 id="hero-title">Look<br />through<br />the glass.</h1>
+        </div>
+        <div class="hero__photo">
+          <button
+            class="window"
+            id="hero"
+            type="button"
+            aria-pressed="false"
+            aria-label="Vase, sand stoneware: slide the glass open"
+          >
+            <img
+              alt=""
+              src="../fixtures/products/w1000/01-vase.webp"
+              srcset="
+                ../fixtures/products/w640/01-vase.webp   640w,
+                ../fixtures/products/w1000/01-vase.webp 1000w,
+                ../fixtures/products/01-vase.webp       1600w
+              "
+              sizes="(min-width: 901px) 54vw, 100vw"
+              fetchpriority="high"
+            />
+            <span class="pane" data-side="left"></span>
+            <span class="pane" data-side="right"></span>
+          </button>
+        </div>
+        <div class="hero__body">
+          <div class="product">
+            <span><b>Vase</b> · sand stoneware</span><span class="price">€ 68</span>
+          </div>
+          <p class="lede">One object at a time, behind reeded glass, like a shop window on a quiet street.</p>
+          <p class="hint hint--mouse">Move over the photograph and the glass slides open.</p>
+          <p class="hint hint--touch">Tap the photograph to slide the glass open.</p>
+        </div>
+      </section>
+
+      <section class="objects" id="objects" aria-labelledby="objects-title">
+        <h2 id="objects-title">Objects</h2>
+        <article class="card">
+          <button
+            class="window"
+            id="card"
+            type="button"
+            aria-pressed="false"
+            aria-label="Bar stool, black shell and oak legs: slide the glass open"
+          >
+            <img
+              alt=""
+              loading="lazy"
+              src="../fixtures/products/w1000/04-chair.webp"
+              srcset="
+                ../fixtures/products/w640/04-chair.webp   640w,
+                ../fixtures/products/w1000/04-chair.webp 1000w
+              "
+              sizes="(min-width: 901px) 34vw, 100vw"
+            />
+            <span class="pane" data-side="whole"></span>
+          </button>
+          <div class="card__meta">
+            <span><b>Bar stool</b> · black shell, oak legs</span><span class="price">€ 240</span>
+          </div>
+        </article>
+        <aside>
+          Card, at rest behind the same glass. Hover or tap and the pane slides to the right, like a shop
+          door. Effect: fluted-glass, preset Window (R0).
+        </aside>
+      </section>
+    </main>
+
+    <footer>
+      <span>
+        R0 direction mockup, not a shop. Photographs: Jocelyn Morales and Eugene Chystiakov on Unsplash (<a
+          href="../fixtures/CREDITS.md"
+          >credits</a
+        >).
+      </span>
+      <a href="https://shaders.paper.design">Powered by Paper Shaders</a>
+    </footer>
+
+    <script type="module">
+      // Mockup only: the React wrappers bundled for R0 (node examples/r0/build.mjs). VITRINE itself mounts vanilla
+      // @paper-design/shaders through <vitrine-shader>; fluted-glass is not in the element yet.
+      import { mount } from '../r0/r0.bundle.js';
+      import { EFFECTS } from '../r0/effects.js';
+      import { ease, focalCrop, loadImage } from '../r0/lib.js';
+
+      const fluted = EFFECTS.find((e) => e.id === 'fluted-glass');
+      const glass = { ...fluted.base, ...fluted.presets[0].props };
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const clamp = (v) => Math.min(1, Math.max(0, v));
+      window.__r0 = { ready: 0 };
+
+      async function aimedProps(win, photo, src) {
+        const im = await loadImage(src);
+        const r = win.getBoundingClientRect();
+        const { cx, objectPosition } = focalCrop(
+          photo,
+          r.width,
+          r.height,
+          im.naturalWidth / im.naturalHeight
+        );
+        win.querySelector('img').style.objectPosition = objectPosition;
+        return { ...glass, image: src, offsetX: (0.5 - cx) * (glass.scale ?? 1) };
+      }
+
+      /** Tween a value towards a target with the Lock's single easing; returns a setter for new targets. */
+      function tween(apply, from = 0) {
+        let value = from,
+          start = from,
+          target = from,
+          t0 = 0,
+          dur = 0,
+          raf = 0;
+        const step = (now) => {
+          const k = dur ? clamp((now - t0) / dur) : 1;
+          value = start + (target - start) * ease.out(k);
+          apply(value);
+          raf = k < 1 ? requestAnimationFrame(step) : 0;
+        };
+        return (to, ms) => {
+          start = value;
+          target = to;
+          t0 = performance.now();
+          dur = reduce ? 0 : ms;
+          if (!raf) raf = requestAnimationFrame(step);
+        };
+      }
+
+      // Hero: two panes that part at the pointer like sliding doors. Each pane is clipped to its half; its glass
+      // ends `gap` before the split, so the gap shows the plain photograph.
+      async function hero() {
+        const win = document.getElementById('hero');
+        const img = win.querySelector('img');
+        const src = img.currentSrc || img.src;
+        const props = await aimedProps(win, '01-vase', src);
+        const [left, right] = [...win.querySelectorAll('.pane')];
+        const [L, R] = await Promise.all([
+          mount(left, 'fluted-glass', props),
+          mount(right, 'fluted-glass', props),
+        ]);
+        let cx = 0.5,
+          gap = 0,
+          open = false,
+          hovering = false;
+        const draw = () => {
+          left.style.clipPath = `inset(0 ${((1 - cx) * 100).toFixed(3)}% 0 0)`;
+          right.style.clipPath = `inset(0 0 0 ${(cx * 100).toFixed(3)}%)`;
+          L.render({ ...props, marginRight: clamp(1 - cx + gap) });
+          R.render({ ...props, marginLeft: clamp(cx + gap) });
+        };
+        const toGap = tween((v) => ((gap = v), draw()));
+        const toCx = tween((v) => ((cx = v), draw()), 0.5);
+        draw();
+        const at = (e) => clamp((e.clientX - win.getBoundingClientRect().left) / win.clientWidth);
+        win.addEventListener('pointerenter', (e) => {
+          if (e.pointerType !== 'mouse' || open) return;
+          hovering = true;
+          toCx(at(e), 0);
+          toGap(0.2, 520);
+        });
+        win.addEventListener('pointermove', (e) => {
+          if (e.pointerType === 'mouse' && hovering && !open) toCx(at(e), 160);
+        });
+        win.addEventListener('pointerleave', (e) => {
+          if (e.pointerType !== 'mouse' || open) return;
+          hovering = false;
+          toGap(0, 380);
+        });
+        win.addEventListener('click', (e) => {
+          open = !open;
+          win.setAttribute('aria-pressed', String(open));
+          if (e.detail && e.clientX) toCx(at(e), open ? 0 : 160);
+          else toCx(0.5, 0);
+          toGap(open ? 1 : hovering ? 0.2 : 0, open ? 640 : 420);
+        });
+        window.__r0.hero = { set: (c, g) => ((cx = c), (gap = g), draw()), draw };
+        window.__r0.ready++;
+      }
+
+      // Card: one pane that slides to the right on hover or tap (marginLeft 0 → 1).
+      async function card() {
+        const win = document.getElementById('card');
+        const img = win.querySelector('img');
+        await new Promise((r) => (img.complete ? r() : img.addEventListener('load', r, { once: true })));
+        const props = await aimedProps(win, '04-chair', img.currentSrc || img.src);
+        const P = await mount(win.querySelector('.pane'), 'fluted-glass', props);
+        let open = false;
+        const to = tween((v) => P.render({ ...props, marginLeft: v }));
+        win.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && !open && to(1, 520));
+        win.addEventListener('pointerleave', (e) => e.pointerType === 'mouse' && !open && to(0, 380));
+        win.addEventListener('click', () => {
+          open = !open;
+          win.setAttribute('aria-pressed', String(open));
+          to(open ? 1 : 0, open ? 520 : 380);
+        });
+        window.__r0.card = { set: (v) => P.render({ ...props, marginLeft: v }) };
+        window.__r0.ready++;
+      }
+
+      hero().catch((e) => (window.__r0.error = String(e)));
+      // the card mounts when it is near the viewport, like the element's lazy mode
+      new IntersectionObserver(
+        (entries, io) => {
+          if (entries.some((x) => x.isIntersecting)) {
+            io.disconnect();
+            card().catch((e) => (window.__r0.error = String(e)));
+          }
+        },
+        { rootMargin: '400px' }
+      ).observe(document.getElementById('card'));
+    </script>
+  </body>
+</html>
