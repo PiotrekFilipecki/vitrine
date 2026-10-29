@@ -79,10 +79,11 @@
         pixelStats,
         probeContextSlots,
         uaInfo,
+        fixtureUrl,
       } from './spike-lib.js';
 
       const q = new URLSearchParams(location.search);
-      const fixture = q.get('fixture') ?? 'fixtures/fixture-01.jpg';
+      const fixture = q.get('fixture') ?? fixtureUrl(0);
       const out = document.getElementById('result');
       const result = { page: 'bake', fixture, env: uaInfo(), done: false };
       window.__spike = result;

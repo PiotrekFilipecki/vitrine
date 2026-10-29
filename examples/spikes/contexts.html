@@ -60,6 +60,7 @@
         watchContextLost,
         probeContextSlots,
         uaInfo,
+        fixtureUrl,
       } from './spike-lib.js';
 
       const q = new URLSearchParams(location.search);
@@ -86,9 +87,7 @@
       try {
         if (mode === 'live') {
           // 24 live mounts kept alive: how many does the browser evict?
-          const images = await Promise.all(
-            cards.map((_, i) => loadImage(`fixtures/fixture-${String((i % 12) + 1).padStart(2, '0')}.jpg`))
-          );
+          const images = await Promise.all(cards.map((_, i) => loadImage(fixtureUrl(i))));
           const lost = { count: 0 };
           const t0 = performance.now();
           const mounts = cards.map((el, i) => {
@@ -116,9 +115,7 @@
           window.__mounts = mounts;
         } else if (mode === 'bake') {
           // 24 cards baked one after another: live contexts must be 0 at the end.
-          const images = await Promise.all(
-            cards.map((_, i) => loadImage(`fixtures/fixture-${String((i % 12) + 1).padStart(2, '0')}.jpg`))
-          );
+          const images = await Promise.all(cards.map((_, i) => loadImage(fixtureUrl(i))));
           const unexpectedLost = { count: 0 };
           const times = [];
           const gls = [];
@@ -149,9 +146,7 @@
           void unexpectedLost;
         } else if (mode === 'bake-shared') {
           // One reusable off-screen baker context per effect: cards only ever get <img>, no new contexts.
-          const images = await Promise.all(
-            cards.map((_, i) => loadImage(`fixtures/fixture-${String((i % 12) + 1).padStart(2, '0')}.jpg`))
-          );
+          const images = await Promise.all(cards.map((_, i) => loadImage(fixtureUrl(i))));
           const host = document.createElement('div');
           host.style.cssText = 'position:fixed;left:-10000px;top:0;width:200px;height:260px;';
           document.body.appendChild(host);

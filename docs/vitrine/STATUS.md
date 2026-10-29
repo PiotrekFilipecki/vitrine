@@ -25,15 +25,15 @@ Aktualizacja: 29.10.2026, koniec P0. Gałąź `p0-fundament` (3 commity + docs),
 
 ## Zasady z tej sesji
 
-- **Żadnych operacji na sklepach klientów** (friendzstore.pl, friendzdev, emwuhats.pl), także odczytów. Testy na własnym sklepie `vitrine-demo` (zakłada Piotrek przed P2) lub na zasobach Shopify. Zapisane w CLAUDE.md.
+- **Żadnych operacji na sklepach klientów** (friendzstore.pl, friendzdev, emwuhats.pl), także odczytów. Testy na własnym sklepie `niwwts-lab` (zakłada Piotrek, PLAN D13) lub na zasobach Shopify. Zapisane w CLAUDE.md.
 - Fixtures do spików są syntetyczne (`examples/spikes/fixtures/make-fixtures.py`).
 
 ## Kroki ręczne (Piotrek)
 
 1. **Firefox:** `cd ~/Desktop/Projects/vitrine && pnpm exec playwright test --project=firefox` poza sesją Claude. Jeśli dalej „Could not find profile folder”, to problem buildu Playwrighta na macOS 27, do zgłoszenia/obejścia później; nie blokuje P1.
 2. **Decyzja przed P1:** przyjąć propozycje P1 i P2 z ADR-0001 (rekomendacja: tak, obie).
-3. **Przed P2:** dev store `vitrine-demo` (test data) + `shopify auth login`; `claude mcp add --transport stdio shopify-dev-mcp -- npx -y @shopify/dev-mcp@1.18.0`.
-4. **Zdjęcia do demo (P1/P4):** własne marki (NIWWTS) albo dane testowe `vitrine-demo`; zdjęć klientów nie używamy.
+3. **Przed P2:** dev store `niwwts-lab` (pusty, PLAN D13) + `shopify auth login`; **Spike C (CORS) do powtórzenia na starcie P2 na niwwts-lab**: pomiar z P0 był na sklepie należącym do Shopify (hardware.shopify.com), nie na sklepie Piotrka; `claude mcp add --transport stdio shopify-dev-mcp -- npx -y @shopify/dev-mcp@1.18.0`.
+4. **Zdjęcia do demo:** prace NIWWTS No.06 z repo shop (od P1 w `examples/spikes/fixtures/`, źródło w README); zdjęć klientów nie używamy.
 5. Paper Desktop + MCP przed P4 (`claude mcp list` pokazuje `paper: ✔ Connected` już teraz).
 
 ## Gdzie co jest

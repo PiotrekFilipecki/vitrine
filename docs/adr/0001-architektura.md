@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (29.10.2026). Dwie **propozycje** poniżej (P1, P2 w sekcji „Co pokazały spiki”) czekają na decyzję Piotrka przed P1; nie zmieniają decyzji z PLAN.md, doprecyzowują D3.
+Accepted (29.10.2026). Propozycje P1 i P2 z sekcji „Co pokazały spiki” **przyjęte 29.10.2026** (Piotrek: „działaj dalej” po raporcie P0; rekomendacja była „tak, obie”). Nie zmieniają decyzji z PLAN.md, doprecyzowują D3 i obowiązują od P1.
 
 ## Kontekst
 

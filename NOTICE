@@ -1,0 +1,10 @@
+VITRINE (vitrine-shaders)
+Copyright 2026 Piotr Filipecki
+Licensed under the Apache License, Version 2.0.
+
+This product bundles Paper Shaders (@paper-design/shaders 0.0.82)
+https://github.com/paper-design/shaders — Apache License 2.0.
+Its LICENSE and NOTICE are kept verbatim in third_party/paper-shaders/.
+
+Powered by Paper Shaders:
+https://shaders.paper.design

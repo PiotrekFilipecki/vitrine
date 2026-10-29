@@ -8,6 +8,6 @@ VITRINE is a `<vitrine-shader>` custom element built on the vanilla `@paper-desi
 - The `<img>` stays the content: LCP, alt text and SEO are untouched, and without WebGL2 you simply see the photo.
 - Static effects are baked once and release their WebGL context, so a 24-product grid costs zero live contexts.
 
-Status: P0 (foundation and spikes). Not published yet. Apache-2.0.
+Status: P1 (the element, presets, static NIWWTS demo). Not published yet. Apache-2.0. API: `docs/vitrine/API.md`.
 
 Powered by [Paper Shaders](https://shaders.paper.design) by Lost Coast Labs, Inc. (Apache-2.0; see `NOTICE` and `third_party/paper-shaders/`).

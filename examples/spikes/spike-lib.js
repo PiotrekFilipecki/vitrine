@@ -12,6 +12,23 @@ import {
 
 export { ShaderMount, imageDitheringFragmentShader, meshGradientFragmentShader };
 
+/** NIWWTS No.06 fixtures (see fixtures/README.md). */
+export const FIXTURES = [
+  '01-tee-el-funkador',
+  '02-print-uptown-saturday-descent',
+  '03-tee-molnar',
+  '04-print-opart_accent',
+  '05-tee-the-hustle-recursive',
+  '06-print-flow',
+  '07-tee-bauhaus_accent',
+  '08-print-faded-in-studio-54',
+  '09-tee-ollie',
+  '10-print-kredki-warm',
+  '11-tee-mothership-reflection',
+  '12-print-type_accent',
+];
+export const fixtureUrl = (i) => `fixtures/${FIXTURES[i % FIXTURES.length]}.webp`;
+
 export function loadImage(src, crossOrigin = false) {
   return new Promise((resolve, reject) => {
     const img = new Image();
