@@ -11,3 +11,4 @@ examples/theme-test/*
 packages/element/e2e/ref/ref.bundle.js
 packages/element/e2e/ref/ref.bundle.js.map
 .lighthouse/
+release/

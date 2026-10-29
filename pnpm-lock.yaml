@@ -96,6 +96,12 @@ importers:
       '@paper-design/shaders':
         specifier: 0.0.82
         version: 0.0.82
+      react:
+        specifier: '>=19.0.0 <20.0.0'
+        version: 19.3.1
+      react-dom:
+        specifier: '>=19.0.0 <20.0.0'
+        version: 19.3.1(react@19.3.1)
 
   packages/react:
     dependencies:

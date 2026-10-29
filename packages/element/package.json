@@ -1,6 +1,6 @@
 {
   "name": "vitrine-shaders",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Paper Shaders for Shopify themes and headless storefronts: the <vitrine-shader> custom element",
   "license": "Apache-2.0",
   "author": "Piotr Filipecki",
@@ -13,6 +13,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js",
+      "default": "./dist/react/index.js"
     }
   },
   "files": [
@@ -27,5 +32,37 @@
   },
   "dependencies": {
     "@paper-design/shaders": "0.0.82"
-  }
+  },
+  "peerDependencies": {
+    "react": ">=19.0.0 <20.0.0",
+    "react-dom": ">=19.0.0 <20.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PiotrekFilipecki/vitrine.git",
+    "directory": "packages/element"
+  },
+  "homepage": "https://github.com/PiotrekFilipecki/vitrine",
+  "keywords": [
+    "shopify",
+    "paper-shaders",
+    "webgl",
+    "custom-element",
+    "dither",
+    "halftone",
+    "mesh-gradient",
+    "react",
+    "liquid"
+  ],
+  "sideEffects": [
+    "./dist/index.js"
+  ]
 }
