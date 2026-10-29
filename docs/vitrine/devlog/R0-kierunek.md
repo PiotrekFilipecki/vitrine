@@ -223,7 +223,15 @@ lens-distortion  strip 0.48 MB · mp4 0.10 MB · gif 0.74 MB (400 px, 20 fps) ·
 water            strip 0.57 MB · mp4 0.06 MB · gif 1.55 MB (400 px, 20 fps) · 75 frames
 ```
 
-`r0-image-dithering.webp` i `r0-halftone-cmyk.webp` zmieściły się w limicie dopiero przy q 50 i 2023 px: raster w tych dwóch kopiach jest przeskalowany, więc ewentualna mora to skutek eksportu; wzorcem są lokalne PNG (oba efekty i tak ODPADA). Razem w gicie: 34 pliki, **3,9 MB** (`du -ch docs/media/r0-*.webp docs/media/r0-*.json docs/media/r0-*.mp4`).
+Limit w pierwszym eksporcie był liczony w KiB (409 600 B) i `r0-image-dithering.webp` wyszedł na 402 282 B, czyli ponad 400 kB; limit poprawiony na 400 000 B i oba ciężkie pliki wyeksportowane jeszcze raz:
+
+```
+$ node -e "…toWebp('docs/media/r0-image-dithering.png'), toWebp('docs/media/r0-halftone-cmyk.png')"
+r0-image-dithering.webp 379 kB (q 66, 1720 px)
+r0-halftone-cmyk.webp 392 kB (q 50, 2023 px)
+```
+
+W tych dwóch kopiach raster jest przeskalowany (1720 i 2023 px zamiast 2800), więc ewentualna mora to skutek eksportu; wzorcem są lokalne PNG (oba efekty i tak ODPADA). Razem w gicie: 34 pliki, **3,9 MB** (`du -ch docs/media/r0-*.webp docs/media/r0-*.json docs/media/r0-*.mp4`).
 
 ## R3 · Exit Check i werdykt per arkusz
 

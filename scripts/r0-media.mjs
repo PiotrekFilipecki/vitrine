@@ -4,7 +4,7 @@
 import { execFileSync } from 'node:child_process';
 import { statSync } from 'node:fs';
 
-export const WEBP_LIMIT = 400 * 1024;
+export const WEBP_LIMIT = 400_000; // bytes: 400 kB, also under 400 KiB
 
 /** Encode `png` to a sibling .webp ≤ 400 KB: quality 82 → 50 first, then 85 % smaller steps. Returns the result. */
 export function toWebp(png) {
@@ -23,4 +23,4 @@ export function toWebp(png) {
 }
 
 export const describe = ({ out, size, q, width }) =>
-  `${out.split('/').pop()} ${(size / 1024).toFixed(0)} KB (q ${q}, ${width} px)`;
+  `${out.split('/').pop()} ${(size / 1000).toFixed(0)} kB (q ${q}, ${width} px)`;
