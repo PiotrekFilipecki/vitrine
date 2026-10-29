@@ -1,0 +1,29 @@
+{
+  "elements": 12,
+  "states": {
+    "baked": 12
+  },
+  "effects": {
+    "dither": 12
+  },
+  "scriptTags": 12,
+  "canvases": 0,
+  "bakerHosts": 0,
+  "cardImgsInShader": 12,
+  "cardImgsPlain": 0,
+  "errors": [],
+  "console": [
+    "[info] Successfully preconnected to https://cdn.shopify.com/",
+    "[info] Successfully preconnected to https://cdn.shopify.com/",
+    "[error] Cross-origin redirection to https://cdn.shopify.com/shopifycloud/storefront/assets/storefront/origin_trials-318ab40a.js denied by Cross-Origin Resource Sharing policy: Origin http://127.0.0.1:9292 is not allowed by Access-Control-Allow-Origin. Status code: 301",
+    "[error] Failed to load resource: Cross-origin redirection to https://cdn.shopify.com/shopifycloud/storefront/assets/storefront/origin_trials-318ab40a.js denied by Cross-Origin Resource Sharing policy: Origin http://127.0.0.1:9292 is not allowed by Access-Control-Allow-Origin. Status code: 301",
+    "[info] [HotReload] Connected",
+    "[debug] [HotReload] Event: {type: open, pid: 97049, themeId: 193335853373, version: 1}",
+    "[error] Failed to load resource: the server responded with a status of 400 ()",
+    "[error] [shopify-account] Menu \"customer-account-main-menu\" not found in Storefront API. Falling back to default menu items.",
+    "[info] Successfully preconnected to https://cdn.shopify.com/",
+    "[info] Successfully preconnected to https://cdn.shopify.com/",
+    "[error] Failed to load resource: the server responded with a status of 400 (Bad Request)",
+    "[error] Failed to load resource: the server responded with a status of 403 ()"
+  ]
+}

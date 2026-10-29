@@ -1,0 +1,28 @@
+{
+  "page": "cors",
+  "src": "http://localhost:4174/examples/spikes/fixtures/01-tee-el-funkador.webp",
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "plainImg": {
+    "loaded": true,
+    "natural": "1600x1920",
+    "canvasTainted": true,
+    "taintError": "SecurityError"
+  },
+  "corsImg": {
+    "loaded": false
+  },
+  "shader": {
+    "mounted": false,
+    "error": "Error: image failed to load: http://localhost:4174/examples/spikes/fixtures/01-tee-el-funkador.webp",
+    "errorName": "Error"
+  },
+  "consoleErrors": [
+    "[error] Access to image at 'http://localhost:4174/examples/spikes/fixtures/01-tee-el-funkador.webp' from origin 'http://localhost:4173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "[error] Failed to load resource: net::ERR_FAILED"
+  ]
+}

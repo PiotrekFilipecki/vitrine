@@ -1,0 +1,34 @@
+{
+  "page": "cors",
+  "src": "https://niwwts.myshopify.com/cdn/shop/files/01-tee-el-funkador.jpg?width=800",
+  "env": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+    "dpr": 2,
+    "hwc": 8
+  },
+  "done": true,
+  "plainImg": {
+    "loaded": true,
+    "natural": "800x960",
+    "canvasTainted": true,
+    "taintError": "SecurityError"
+  },
+  "corsImg": {
+    "loaded": true,
+    "natural": "800x960"
+  },
+  "shader": {
+    "mounted": true,
+    "canvas": "480x480",
+    "stats": {
+      "minLuma": 13.4,
+      "maxLuma": 236.5,
+      "meanLuma": 168.4,
+      "opaquePct": 100
+    },
+    "glError": 0
+  },
+  "consoleErrors": [
+    "[error] Unable to get image data from canvas because the canvas has been tainted by cross-origin data."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "page": "cors",
+  "src": "http://localhost:4174/examples/spikes/fixtures/01-tee-el-funkador.webp",
+  "env": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+    "dpr": 2,
+    "hwc": 8
+  },
+  "done": true,
+  "plainImg": {
+    "loaded": true,
+    "natural": "1600x1920",
+    "canvasTainted": true,
+    "taintError": "SecurityError"
+  },
+  "corsImg": {
+    "loaded": false
+  },
+  "shader": {
+    "mounted": false,
+    "error": "Error: image failed to load: http://localhost:4174/examples/spikes/fixtures/01-tee-el-funkador.webp",
+    "errorName": "Error"
+  },
+  "consoleErrors": [
+    "[error] Unable to get image data from canvas because the canvas has been tainted by cross-origin data.",
+    "[error] Origin http://localhost:4173 is not allowed by Access-Control-Allow-Origin. Status code: 200",
+    "[error] Cannot load image http://localhost:4174/examples/spikes/fixtures/01-tee-el-funkador.webp due to access control checks.",
+    "[error] Failed to load resource: Origin http://localhost:4173 is not allowed by Access-Control-Allow-Origin. Status code: 200"
+  ]
+}

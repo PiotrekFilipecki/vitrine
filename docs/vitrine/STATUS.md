@@ -1,6 +1,6 @@
 # VITRINE · STATUS
 
-Aktualizacja: 29.10.2026, koniec P3. `main` = P0. Gałęzie: `p1-element` (czeka na bramkę P1) → `p3-headless` (od p1, czeka na bramkę P3). P2 (Liquid) przesunięte za P3, bo dev store powstał w trakcie P3; Piotrek merguje po bramkach w kolejności p1 → p3 → p2.
+Aktualizacja: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-element` → `p3-headless` → `p2-liquid` (każda od poprzedniej; czekają na bramki). Piotrek merguje po bramkach w kolejności p1 → p3 → p2. Dev store: `niwwts.myshopify.com` (12 produktów NIWWTS zaimportowanych z `examples/niwwts-products.csv`; motyw testowy „VITRINE test (p2)” id 193335820605, nieopublikowany).
 
 ## Fazy
 
@@ -8,7 +8,7 @@ Aktualizacja: 29.10.2026, koniec P3. `main` = P0. Gałęzie: `p1-element` (czeka
 |---|---|---|
 | P0 fundament + spiki | **zrobione** | bake: potwierdzony (0 różnych pikseli, Chromium + WebKit); CORS: potwierdzony (ACAO `*` na obu wariantach URL, tekstura działa). Firefox: niezmierzony (build Playwrighta nie startuje na tej maszynie). Decyzja Piotrka: propozycje P1/P2 w ADR-0001 (piekarnik współdzielony; ochrona żywych montaży w WebKit). |
 | P1 element | **zrobione** | zgodność pikseli z React: 0 różnych px, 8/8 przypadków, Chromium + WebKit; 24 karty + hero: 0 `webglcontextlost`, 0 kontekstów po bake; klawiatura, reduced motion, fallback CORS: testy zielone; LCP +5 ms vs bez efektów (Lighthouse mobile, mediana z 3). **Bramka wizualna (Piotrek, telefon): „druk czy filtr?”** — uwaga na raster na kremowym tle (parametr presetu, P4). |
-| P2 Liquid + demo statyczne | nie zaczęte (następne; dev store `niwwts.myshopify.com` jest, czeka na `shopify auth login` w zwykłym Terminalu) | — |
+| P2 Liquid + demo statyczne | **zrobione** | `theme check` 0 błędów w plikach VITRINE; `theme-markup.html` 9/9 (Chromium + WebKit); na sklepie (proxy `theme dev`) 8/8: 12/12 kart w `<vitrine-shader>`, 0 canvasów, 1 żądanie `vitrine.js`; Spike C na własnym sklepie: ACAO `*` oba warianty; Lighthouse mobile na CDN: 100 vs 99, LCP 1 808 vs 1 938 ms (Δ −130), CLS 0; edytor: zmiana koloru, add/remove/drag sekcji, grupa ustawień. **Bramka (Piotrek, telefon + edytor): kolory hero i karty bez kodu.** |
 | P3 headless Next | **zrobione** (przed P2) | SSR = zwykły `<img>`; 7 testów SSR + 7 e2e na buildzie produkcyjnym (Chromium + WebKit): 25 wypalonych, 1 żywy hero, 0 kontekstów po bake, 0 błędów hydracji; Lighthouse mobile ΔLCP **−2 ms** (755 vs 757), CLS 0, TBT +134 ms; wrappery 860 B gz. **Bramka (Piotrek, telefon): ta sama karta co w `examples/static`.** Tryb Storefront API niewykonany na sklepie (brak tokena). |
 | P4 Paper: presety, demo, README | nie zaczęte | — |
 | P5 przegląd, wydanie, zgłoszenie | nie zaczęte | — |
@@ -32,13 +32,14 @@ Aktualizacja: 29.10.2026, koniec P3. `main` = P0. Gałęzie: `p1-element` (czeka
 
 1. **Bramka P1:** `pnpm build && pnpm serve`, telefon w tej samej sieci → `http://<ip-maca>:4173/examples/static/`; tap na kartę odsłania zdjęcie. Werdykt „druk czy filtr?”. Po bramce merge `p1-element` → `main`.
 2. **Firefox:** `pnpm exec playwright test --project=firefox` poza sesją Claude (jak w P0: „Could not find profile folder”).
-3. **Przed P2:** dev store `niwwts.myshopify.com` (jest) + `shopify auth login --store niwwts.myshopify.com`; **Spike C (CORS) do powtórzenia na starcie P2 na niwwts (niwwts.myshopify.com)**: pomiar z P0 był na sklepie należącym do Shopify (hardware.shopify.com), nie na sklepie Piotrka; `claude mcp add --transport stdio shopify-dev-mcp -- npx -y @shopify/dev-mcp@1.18.0`.
+3. **Spike C powtórzony na `niwwts.myshopify.com` w P2** (ACAO `*`, tekstura działa; `docs/media/p2-cors-*`). Shopify Dev MCP nadal niepodłączony (`claude mcp add --transport stdio shopify-dev-mcp -- npx -y @shopify/dev-mcp@1.18.0`), zastąpiony przez `shopify theme check`.
 4. **Zdjęcia do demo:** prace NIWWTS No.06 z repo shop (od P1 w `examples/spikes/fixtures/`, źródło w README); zdjęć klientów nie używamy.
 5. Paper Desktop + MCP przed P4 (`claude mcp list` pokazuje `paper: ✔ Connected` już teraz).
 6. **Bramka P3:** `pnpm build && pnpm --filter next-headless start`, telefon → `http://<ip-maca>:3000/`. Po bramce merge `p3-headless` → `main` (po p1).
 7. **Tryb sklepu w P3:** kanał Headless w `niwwts.myshopify.com` → publiczny token Storefront API → `examples/next-headless/.env.local` (wzór `.env.example`). Vercel: import z Root Directory `examples/next-headless` (nie wdrażam sam).
-8. **Logowanie CLI:** `shopify auth login` w zwykłym Terminal.app (prefiks `!` w Claude Code jest nieinteraktywny i CLI żąda `--alias`).
+8. **Logowanie CLI:** `shopify auth login` w zwykłym Terminal.app (prefiks `!` w Claude Code jest nieinteraktywny i CLI żąda `--alias`). Zrobione 29.10.2026.
+9. **Bramka P2:** podgląd `https://niwwts.myshopify.com?preview_theme_id=193335820605` na telefonie + edytor motywu (kolory hero, Theme settings → VITRINE). Motyw testowy usuń sam, gdy zbędny.
 
 ## Gdzie co jest
 
-- Plan: `docs/vitrine/PLAN.md` · prompty: `docs/vitrine/PROMPTY.md` · ADR: `docs/adr/0001-architektura.md` · API: `docs/vitrine/API.md` · devlogi: `docs/vitrine/devlog/P0-spiki.md`, `P1-element.md`, `P3-headless.md` · dowody: `docs/media/p0-*`, `p1-*`, `p3-*` · spiki: `examples/spikes/` · element: `packages/element/` · wrappery React: `packages/react/` · demo: `examples/static/` · headless: `examples/next-headless/` · Lighthouse: `node scripts/lighthouse.mjs static|next`.
+- Plan: `docs/vitrine/PLAN.md` · prompty: `docs/vitrine/PROMPTY.md` · ADR: `docs/adr/0001-architektura.md` · API: `docs/vitrine/API.md` · devlogi: `docs/vitrine/devlog/P0-spiki.md`, `P1-element.md`, `P2-liquid.md`, `P3-headless.md` · dowody: `docs/media/p0-*`, `p1-*`, `p2-*`, `p3-*` · motyw: `shopify-theme/` (build `pnpm --filter vitrine-shaders exec tsup --config tsup.theme.config.ts`) · CSV: `examples/niwwts-products.csv` · test motywu: `examples/theme-test/README.md` · spiki: `examples/spikes/` · element: `packages/element/` · wrappery React: `packages/react/` · demo: `examples/static/` · headless: `examples/next-headless/` · Lighthouse: `node scripts/lighthouse.mjs static|next`.

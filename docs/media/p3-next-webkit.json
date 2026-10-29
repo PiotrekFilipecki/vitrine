@@ -10,5 +10,6 @@
   "heroState": "live",
   "heroContextLost": false,
   "fallbacks": 0,
+  "errors": [],
   "console": []
 }

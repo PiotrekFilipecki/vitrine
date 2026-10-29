@@ -58,3 +58,12 @@ Dwa doprecyzowania D3 wychodzą z pomiaru, zapisane jako propozycje:
 - **D5 w headless:** obraz przez `next/image` idzie z `/_next/image`, więc tekstura jest same-origin także dla `cdn.shopify.com`; CORS CDN-u dotyczy tylko Liquid i czystego HTML. Element czyta `img.currentSrc`, więc srcset `next/image` działa bez zmian w elemencie.
 - **Bramka wydajności:** LCP z VITRINE 755 ms vs 757 ms bez (Lighthouse mobile, mediana z 3, build produkcyjny), CLS 0. Koszt to TBT +134 ms (wypalanie kart, które są w viewporcie przy starcie).
 - **Zmiana kolejności faz:** P3 zrobione przed P2, bo Liquid wymaga sklepu, a ten powstał w trakcie P3. Nie zmienia decyzji; `p3-headless` wychodzi z `p1-element`.
+
+## Uzupełnienie z P2 (29.10.2026, pomiary w `docs/vitrine/devlog/P2-liquid.md`)
+
+- **D5 potwierdzone na sklepie Piotrka** (`niwwts.myshopify.com`): `access-control-allow-origin: *` na `cdn.shopify.com/s/files/…`, na `<sklep>/cdn/shop/files/…` i na assetach motywu; tekstura działa w Chromium i WebKit. `image_url` zwraca dziś URL na domenie sklepu, więc wariant „store” jest tym, którego używa Liquid.
+- **D7 doprecyzowanie: jeden plik `assets/vitrine.js`** (44 KB gz) zamiast chunków. Folder assets jest płaski, a `asset_url` dokleja `?v=`, więc dynamiczny import względny byłby niezweryfikowanym założeniem. Dedup ładowania robi przeglądarka (jeden URL modułu = jedno wykonanie; 26 tagów → 1 żądanie), nie Liquid.
+- **Reveal: jawny `[data-vitrine-card]` ma pierwszeństwo nad najbliższym `a`.** W Horizon link klawiaturowy karty jest rodzeństwem obrazu (stretched link), a wrapper obrazu to `a.contents`, którego nie da się sfokusować. Bez markera reveal z klawiatury nie działał. Zmiana w elemencie (P1 kod), udokumentowana w API.md, test na sklepie.
+- **Reveal po ponownym setupie** odczytuje `:focus-within` zamiast czekać na `focusin` (flaky test WebKit → błąd elementu; P2 devlog).
+- **Bramka wydajności w motywie:** Lighthouse mobile na CDN, kolekcja 12 kart: 100 vs 99, LCP 1 808 vs 1 938 ms, CLS 0. Pomiar przez proxy `theme dev` odrzucony (LCP ~10 s w obu wariantach, artefakt proxy).
+- **Sekcje:** szerokość strony przez `--page-width` motywu z fallbackiem 1200 px, bo sekcja VITRINE nie wie, jak motyw liczy marginesy; ustawienia width/padding w schemacie.

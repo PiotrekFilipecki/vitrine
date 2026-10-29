@@ -1,0 +1,19 @@
+{
+  "scriptTags": 26,
+  "modes": {
+    "live": 1,
+    "baked": 25
+  },
+  "fallbacks": [],
+  "cardCanvases": 0,
+  "cardBakedImgs": 24,
+  "bakerHosts": 0,
+  "heroState": "live",
+  "heroContextLost": false,
+  "styleTags": 2,
+  "vitrineRequests": 1,
+  "console": [
+    "[info] Successfully preconnected to https://fonts.gstatic.com/",
+    "[info] Successfully preconnected to https://fonts.googleapis.com/"
+  ]
+}

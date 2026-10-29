@@ -1,0 +1,34 @@
+{
+  "page": "cors",
+  "src": "https://niwwts.myshopify.com/cdn/shop/files/01-tee-el-funkador.jpg?width=800",
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "plainImg": {
+    "loaded": true,
+    "natural": "800x960",
+    "canvasTainted": true,
+    "taintError": "SecurityError"
+  },
+  "corsImg": {
+    "loaded": true,
+    "natural": "800x960"
+  },
+  "shader": {
+    "mounted": true,
+    "canvas": "480x480",
+    "stats": {
+      "minLuma": 13.4,
+      "maxLuma": 236.5,
+      "meanLuma": 168.6,
+      "opaquePct": 100
+    },
+    "glError": 0
+  },
+  "consoleErrors": [
+    "[warning] [.WebGL-0x13c00441400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ]
+}
