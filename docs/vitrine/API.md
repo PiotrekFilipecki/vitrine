@@ -35,7 +35,7 @@ Pinned to `@paper-design/shaders` 0.0.82 (`PAPER_SHADERS_VERSION`).
 | `effect` | `dither` · `halftone` · `mesh` · `paper` | required | image-dithering, halftone-cmyk, mesh-gradient, paper-texture |
 | `preset` | key from `presets/<effect>.json` | `default` | `default` = upstream Default preset 1:1; unknown names fall back to `default` |
 | `params` | JSON object | `{}` | overrides on top of the preset, same names as `@paper-design/shaders-react` props |
-| `reveal` | `hover` · `none` | `none` | `hover`: pointer over, tap on, or focus inside the nearest `a` / `[data-vitrine-card]` reveals the photo |
+| `reveal` | `hover` · `none` | `none` | `hover`: pointer over, tap on, or focus inside the surface reveals the photo. Surface = nearest `[data-vitrine-card]` ancestor if there is one (explicit wins), else the nearest `a`, else the element |
 | `speed` | number | preset value | `0` = static: baked once to an `<img>`, no live context; `≠ 0` = animated, pooled |
 | `debug` | boolean attribute | off | `console.warn` on fallbacks and bad attributes |
 

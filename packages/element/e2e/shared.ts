@@ -28,9 +28,9 @@ export async function waitForDone(page: Page, timeout = 60_000): Promise<PageRes
   return page.evaluate(() => (window as unknown as { __spike: PageResult }).__spike);
 }
 
-export function saveJson(name: string, testInfo: TestInfo, data: unknown): string {
+export function saveJson(name: string, testInfo: TestInfo, data: unknown, phase = 'p1'): string {
   mkdirSync(MEDIA, { recursive: true });
-  const file = `${MEDIA}/p1-${name}-${testInfo.project.name}.json`;
+  const file = `${MEDIA}/${phase}-${name}-${testInfo.project.name}.json`;
   writeFileSync(file, JSON.stringify(data, null, 2));
   return file;
 }

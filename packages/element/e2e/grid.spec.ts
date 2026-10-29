@@ -89,8 +89,14 @@ test.describe('P1 · grid of 24 (D3 budget, D6 keyboard, reduced motion)', () =>
     );
     const first = page.locator('.card').first();
     const second = page.locator('.card').nth(1);
+    await expect(first.locator('vitrine-shader')).toHaveAttribute('data-vitrine-state', 'baked', {
+      timeout: 60_000,
+    });
+    await expect(second.locator('vitrine-shader')).toHaveAttribute('data-vitrine-state', 'baked', {
+      timeout: 60_000,
+    });
     await first.focus();
-    await expect(first.locator('vitrine-shader')).toHaveAttribute('data-vitrine-revealed', '');
+    await expect(first.locator('vitrine-shader')).toHaveAttribute('data-vitrine-revealed');
     await expect
       .poll(() => first.locator('.vitrine-layer').evaluate((el) => getComputedStyle(el).opacity), {
         timeout: 2000,
@@ -98,8 +104,8 @@ test.describe('P1 · grid of 24 (D3 budget, D6 keyboard, reduced motion)', () =>
       .toBe('0');
     await page.keyboard.press(tab);
     await expect(second).toBeFocused();
-    await expect(first.locator('vitrine-shader')).not.toHaveAttribute('data-vitrine-revealed', '');
-    await expect(second.locator('vitrine-shader')).toHaveAttribute('data-vitrine-revealed', '');
+    await expect(first.locator('vitrine-shader')).not.toHaveAttribute('data-vitrine-revealed');
+    await expect(second.locator('vitrine-shader')).toHaveAttribute('data-vitrine-revealed');
     const duration = await first
       .locator('.vitrine-layer')
       .evaluate((el) => getComputedStyle(el).transitionDuration);
@@ -117,9 +123,9 @@ test.describe('P1 · grid of 24 (D3 budget, D6 keyboard, reduced motion)', () =>
     );
     const card = page.locator('.card').nth(2);
     await card.hover();
-    await expect(card.locator('vitrine-shader')).toHaveAttribute('data-vitrine-revealed', '');
+    await expect(card.locator('vitrine-shader')).toHaveAttribute('data-vitrine-revealed');
     await page.mouse.move(0, 0);
-    await expect(card.locator('vitrine-shader')).not.toHaveAttribute('data-vitrine-revealed', '');
+    await expect(card.locator('vitrine-shader')).not.toHaveAttribute('data-vitrine-revealed');
     await expect(card.locator('.vitrine-layer')).toHaveAttribute('aria-hidden', 'true');
     await expect(card.locator('.vitrine-layer > img')).toHaveAttribute('alt', '');
   });

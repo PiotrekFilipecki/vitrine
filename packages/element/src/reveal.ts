@@ -6,7 +6,13 @@
 export const REVEAL_ATTR = 'data-vitrine-revealed';
 
 export function attachReveal(el: HTMLElement): () => void {
-  const surface = (el.closest('a, [data-vitrine-card]') as HTMLElement | null) ?? el;
+  // An explicit card marker wins over the nearest link: in themes like Horizon the image sits inside a
+  // `display: contents` link that cannot take focus, while the keyboard-reachable link is a sibling. Marking
+  // the card root with data-vitrine-card makes hover, tap and focus-within work on the whole card.
+  const surface =
+    (el.closest('[data-vitrine-card]') as HTMLElement | null) ??
+    (el.closest('a') as HTMLElement | null) ??
+    el;
   const set = (on: boolean) => el.toggleAttribute(REVEAL_ATTR, on);
 
   let touchOutside: ((e: PointerEvent) => void) | null = null;
@@ -48,6 +54,9 @@ export function attachReveal(el: HTMLElement): () => void {
   surface.addEventListener('pointerdown', onDown);
   surface.addEventListener('focusin', onFocusIn);
   surface.addEventListener('focusout', onFocusOut);
+  // Setup re-runs when the box resizes (late fonts, theme editor) and tears the previous reveal down;
+  // a focus that already happened fires no new focusin, so read the current state instead of waiting.
+  if (surface.matches(':focus-within')) set(true);
 
   return () => {
     surface.removeEventListener('pointerenter', onEnter);
