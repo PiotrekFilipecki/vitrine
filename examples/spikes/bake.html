@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spike A · bake</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        font:
+          14px/1.4 ui-monospace,
+          monospace;
+        background: #f3f1ec;
+        color: #111;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+      figure {
+        margin: 0;
+      }
+      figcaption {
+        font-size: 12px;
+        margin-top: 4px;
+      }
+      .box {
+        width: 300px;
+        height: 400px;
+        background: #ddd;
+      }
+      .box img,
+      .box canvas.diff {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 12px;
+        background: #fff;
+        padding: 8px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Spike A · bake image-dithering (speed 0, preserveDrawingBuffer)</h1>
+    <div class="row">
+      <figure>
+        <div class="box" id="live"></div>
+        <figcaption>live ShaderMount (kept alive, default context attrs)</figcaption>
+      </figure>
+      <figure>
+        <div class="box" id="baked"></div>
+        <figcaption>baked: canvas → toBlob → &lt;img&gt;, context disposed</figcaption>
+      </figure>
+      <figure>
+        <div class="box"><canvas class="diff" id="diff"></canvas></div>
+        <figcaption>diff (red = |Δ| &gt; 8)</figcaption>
+      </figure>
+    </div>
+    <pre id="result">running…</pre>
+    <script type="module">
+      import {
+        ShaderMount,
+        imageDitheringFragmentShader,
+        loadImage,
+        ditherUniforms,
+        afterFirstFrame,
+        bake,
+        readPixelsFlipped,
+        imageToPixels,
+        diffPixels,
+        pixelsToCanvas,
+        pixelStats,
+        probeContextSlots,
+        uaInfo,
+      } from './spike-lib.js';
+
+      const q = new URLSearchParams(location.search);
+      const fixture = q.get('fixture') ?? 'fixtures/fixture-01.jpg';
+      const out = document.getElementById('result');
+      const result = { page: 'bake', fixture, env: uaInfo(), done: false };
+      window.__spike = result;
+
+      try {
+        const image = await loadImage(fixture);
+        const uniforms = ditherUniforms(image);
+
+        // 1) Live reference: default attrs (no preserveDrawingBuffer); read pixels synchronously right after a render.
+        const liveParent = document.getElementById('live');
+        const live = new ShaderMount(liveParent, imageDitheringFragmentShader, uniforms, undefined, 0, 0, 2);
+        const liveGl = live.canvasElement.getContext('webgl2');
+        await afterFirstFrame(live);
+        const w = live.canvasElement.width,
+          h = live.canvasElement.height;
+        const livePx = readPixelsFlipped(liveGl, live.canvasElement);
+        result.live = { canvas: `${w}x${h}`, stats: pixelStats(livePx), contextLost: liveGl.isContextLost() };
+
+        // 2) Bake: same uniforms, preserveDrawingBuffer, dispose after copying out.
+        const bakedParent = document.getElementById('baked');
+        const b = await bake(bakedParent, imageDitheringFragmentShader, ditherUniforms(image));
+        b.img.alt = 'baked';
+        bakedParent.appendChild(b.img);
+        const bakedPx = imageToPixels(b.img, w, h);
+        result.bake = {
+          canvas: `${b.width}x${b.height}`,
+          blobBytes: b.blobBytes,
+          ms: b.ms,
+          stats: pixelStats(bakedPx),
+          contextLostAfterDispose: b.contextLostAfterDispose,
+          canvasRemovedFromDom: !bakedParent.querySelector('canvas'),
+          paperShaderMountRefCleared: bakedParent.paperShaderMount === undefined,
+        };
+
+        // 3) Diff live vs baked.
+        const d = diffPixels(livePx, bakedPx, w, h, 8);
+        pixelsToCanvas(d.diff, w, h, document.getElementById('diff'));
+        result.diff = { differentPixels: d.different, pct: d.pct, meanDelta: d.meanDelta, threshold: 8 };
+
+        // 4) Is the baked context really released? Chromium keeps at most 16 active contexts (measured in Spike B).
+        //    The live reference holds one slot, so 15 probes fit only if the baked context no longer counts.
+        const probeDelay = Number(q.get('probeDelay') ?? 200);
+        await new Promise((r) => setTimeout(r, probeDelay));
+        result.probeDelayMs = probeDelay;
+        result.bakedContextCollected = b.glRef.deref() === undefined;
+        result.lostEventsOnBakedCanvas = b.lostEventsOnThisCanvas.count;
+        result.probe = await probeContextSlots(15);
+        result.liveStillAliveAfterProbe = !liveGl.isContextLost();
+      } catch (err) {
+        result.error = String(err && err.stack ? err.stack : err);
+      }
+      result.done = true;
+      out.textContent = JSON.stringify(result, null, 2);
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+{
+  "page": "bake",
+  "fixture": "fixtures/fixture-01.jpg",
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "live": {
+    "canvas": "600x800",
+    "stats": {
+      "minLuma": 13.4,
+      "maxLuma": 236.5,
+      "meanLuma": 122.4,
+      "opaquePct": 100
+    },
+    "contextLost": false
+  },
+  "bake": {
+    "canvas": "600x800",
+    "blobBytes": 49531,
+    "ms": {
+      "toFirstFrame": 187.2,
+      "toBlob": 36.9,
+      "toImg": 1.4,
+      "dispose": 2.9,
+      "total": 228.4
+    },
+    "stats": {
+      "minLuma": 13.4,
+      "maxLuma": 236.5,
+      "meanLuma": 122.4,
+      "opaquePct": 100
+    },
+    "contextLostAfterDispose": true,
+    "canvasRemovedFromDom": true,
+    "paperShaderMountRefCleared": true
+  },
+  "diff": {
+    "differentPixels": 0,
+    "pct": 0,
+    "meanDelta": 0,
+    "threshold": 8
+  },
+  "probeDelayMs": 200,
+  "bakedContextCollected": false,
+  "lostEventsOnBakedCanvas": 1,
+  "probe": {
+    "requested": 15,
+    "nullContexts": 0,
+    "lostEventsDuringProbe": 0,
+    "aliveAfterProbe": 15
+  },
+  "liveStillAliveAfterProbe": true,
+  "consoleErrors": [
+    "[warning] [.WebGL-0x11c00441400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x11c00441400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x11c00441400]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels",
+    "[warning] [.WebGL-0x11c00437e00]GL Driver Message (OpenGL, Performance, GL_CLOSE_PATH_NV, High): GPU stall due to ReadPixels (this message will no longer repeat)"
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "page": "contexts",
+  "mode": "bake-shared",
+  "n": 24,
+  "env": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+    "dpr": 2,
+    "hwc": 8
+  },
+  "done": true,
+  "bakeShared": {
+    "cards": 24,
+    "contextsCreated": 1,
+    "bakerCanvas": "400x520",
+    "msAll": 213,
+    "msPerCardMedian": 7,
+    "msPerCardMax": 15,
+    "lostEventsOnBaker": 0,
+    "imagesInDom": 24,
+    "canvasesInDom": 0
+  },
+  "consoleErrors": []
+}

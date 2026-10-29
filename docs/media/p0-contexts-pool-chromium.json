@@ -1,0 +1,22 @@
+{
+  "page": "contexts",
+  "mode": "pool",
+  "n": 24,
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "pool": {
+    "maxLive": 6,
+    "mountsCreated": 40,
+    "disposes": 38,
+    "liveNow": 2,
+    "liveContextsNow": 2,
+    "unexpectedContextLost": 0,
+    "maxAllowed": 6
+  },
+  "scrollHeight": 2438,
+  "consoleErrors": []
+}

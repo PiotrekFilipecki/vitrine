@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spike B · contexts</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        font:
+          14px/1.4 ui-monospace,
+          monospace;
+        background: #f3f1ec;
+        color: #111;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 200px);
+        gap: 12px;
+      }
+      .card {
+        width: 200px;
+        height: 260px;
+        background: #ddd;
+        position: relative;
+      }
+      .card img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .pool .card {
+        height: 320px;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 12px;
+        background: #fff;
+        padding: 8px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="title">Spike B · contexts</h1>
+    <pre id="result">running…</pre>
+    <div class="grid" id="grid"></div>
+    <script type="module">
+      import {
+        ShaderMount,
+        imageDitheringFragmentShader,
+        meshGradientFragmentShader,
+        loadImage,
+        ditherUniforms,
+        meshUniforms,
+        afterFirstFrame,
+        bake,
+        watchContextLost,
+        probeContextSlots,
+        uaInfo,
+      } from './spike-lib.js';
+
+      const q = new URLSearchParams(location.search);
+      const mode = q.get('mode') ?? 'live';
+      const N = Number(q.get('n') ?? 24);
+      const MAX_LIVE = Number(q.get('max') ?? 6);
+      const grid = document.getElementById('grid');
+      const out = document.getElementById('result');
+      document.getElementById('title').textContent =
+        `Spike B · contexts · mode=${mode} n=${N}` + (mode === 'pool' ? ` max=${MAX_LIVE}` : '');
+      const result = { page: 'contexts', mode, n: N, env: uaInfo(), done: false };
+      window.__spike = result;
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+      const cards = [];
+      for (let i = 0; i < N; i++) {
+        const el = document.createElement('div');
+        el.className = 'card';
+        el.dataset.i = String(i);
+        grid.appendChild(el);
+        cards.push(el);
+      }
+
+      try {
+        if (mode === 'live') {
+          // 24 live mounts kept alive: how many does the browser evict?
+          const images = await Promise.all(
+            cards.map((_, i) => loadImage(`fixtures/fixture-${String((i % 12) + 1).padStart(2, '0')}.jpg`))
+          );
+          const lost = { count: 0 };
+          const t0 = performance.now();
+          const mounts = cards.map((el, i) => {
+            const m = new ShaderMount(
+              el,
+              imageDitheringFragmentShader,
+              ditherUniforms(images[i]),
+              undefined,
+              0,
+              0,
+              2
+            );
+            watchContextLost(m.canvasElement, lost);
+            return m;
+          });
+          await afterFirstFrame(mounts[mounts.length - 1]);
+          await sleep(500);
+          const alive = mounts.filter((m) => !m.canvasElement.getContext('webgl2')?.isContextLost()).length;
+          result.live = {
+            mounts: mounts.length,
+            msMountAll: +(performance.now() - t0).toFixed(1),
+            contextLostEvents: lost.count,
+            liveContextsAfterSettle: alive,
+          };
+          window.__mounts = mounts;
+        } else if (mode === 'bake') {
+          // 24 cards baked one after another: live contexts must be 0 at the end.
+          const images = await Promise.all(
+            cards.map((_, i) => loadImage(`fixtures/fixture-${String((i % 12) + 1).padStart(2, '0')}.jpg`))
+          );
+          const unexpectedLost = { count: 0 };
+          const times = [];
+          const gls = [];
+          const t0 = performance.now();
+          for (let i = 0; i < N; i++) {
+            const b = await bake(cards[i], imageDitheringFragmentShader, ditherUniforms(images[i]));
+            cards[i].appendChild(b.img);
+            times.push(b.ms.total);
+            gls.push(b.glRef);
+          }
+          const msAll = performance.now() - t0;
+          await sleep(300);
+          const sorted = [...times].sort((a, b) => a - b);
+          result.bake = {
+            cards: N,
+            msAll: +msAll.toFixed(1),
+            msPerCardMedian: sorted[Math.floor(sorted.length / 2)],
+            msPerCardMax: sorted[sorted.length - 1],
+            liveContextsAfterBake: gls.filter((ref) => {
+              const gl = ref.deref();
+              return gl && !gl.isContextLost();
+            }).length,
+            contextsAlreadyCollected: gls.filter((ref) => ref.deref() === undefined).length,
+            imagesInDom: grid.querySelectorAll('img').length,
+            canvasesInDom: grid.querySelectorAll('canvas').length,
+          };
+          result.probe = await probeContextSlots(16);
+          void unexpectedLost;
+        } else if (mode === 'bake-shared') {
+          // One reusable off-screen baker context per effect: cards only ever get <img>, no new contexts.
+          const images = await Promise.all(
+            cards.map((_, i) => loadImage(`fixtures/fixture-${String((i % 12) + 1).padStart(2, '0')}.jpg`))
+          );
+          const host = document.createElement('div');
+          host.style.cssText = 'position:fixed;left:-10000px;top:0;width:200px;height:260px;';
+          document.body.appendChild(host);
+          const lost = { count: 0 };
+          const t0 = performance.now();
+          const baker = new ShaderMount(
+            host,
+            imageDitheringFragmentShader,
+            ditherUniforms(images[0]),
+            { preserveDrawingBuffer: true },
+            0,
+            0,
+            2
+          );
+          watchContextLost(baker.canvasElement, lost);
+          await afterFirstFrame(baker);
+          const times = [];
+          for (let i = 0; i < N; i++) {
+            const t = performance.now();
+            baker.setUniforms({ u_image: images[i] }); // uploads the texture and renders synchronously (speed 0)
+            const blob = await new Promise((r) => baker.canvasElement.toBlob(r, 'image/png'));
+            const img = await loadImage(URL.createObjectURL(blob));
+            cards[i].appendChild(img);
+            times.push(+(performance.now() - t).toFixed(1));
+          }
+          const msAll = performance.now() - t0;
+          baker.dispose();
+          host.remove();
+          const sorted = [...times].sort((a, b) => a - b);
+          result.bakeShared = {
+            cards: N,
+            contextsCreated: 1,
+            bakerCanvas: `${baker.canvasElement.width}x${baker.canvasElement.height}`,
+            msAll: +msAll.toFixed(1),
+            msPerCardMedian: sorted[Math.floor(sorted.length / 2)],
+            msPerCardMax: sorted[sorted.length - 1],
+            lostEventsOnBaker: lost.count,
+            imagesInDom: grid.querySelectorAll('img').length,
+            canvasesInDom: grid.querySelectorAll('canvas').length,
+          };
+          // No slot probe here on purpose: the probe itself would create 16 contexts and (in WebKit) trigger
+          // an eviction of the already-lost baker, which would pollute the "no eviction" console check.
+        } else if (mode === 'pool') {
+          // Animated mesh-gradient cards; at most MAX_LIVE mounted, LRU by last viewport entry.
+          document.body.classList.add('pool');
+          const pool = new Map(); // el -> { mount, gl, t }
+          const lostUnexpected = { count: 0 };
+          let maxLive = 0;
+          let mountsCreated = 0;
+          let disposes = 0;
+          const disposeEl = (el) => {
+            const e = pool.get(el);
+            if (!e) return;
+            e.mount.dispose();
+            pool.delete(el);
+            disposes += 1;
+          };
+          const mountEl = (el) => {
+            if (pool.has(el)) {
+              pool.get(el).t = performance.now();
+              return;
+            }
+            if (pool.size >= MAX_LIVE) {
+              let oldest = null;
+              for (const [k, v] of pool) if (!oldest || v.t < pool.get(oldest).t) oldest = k;
+              disposeEl(oldest);
+            }
+            const i = Number(el.dataset.i);
+            const m = new ShaderMount(
+              el,
+              meshGradientFragmentShader,
+              meshUniforms({ rotation: i * 15 }),
+              undefined,
+              1,
+              i * 1000,
+              2
+            );
+            const gl = m.canvasElement.getContext('webgl2');
+            m.canvasElement.addEventListener('webglcontextlost', () => {
+              if (pool.has(el)) lostUnexpected.count += 1;
+            });
+            pool.set(el, { mount: m, gl, t: performance.now() });
+            mountsCreated += 1;
+            maxLive = Math.max(maxLive, pool.size);
+          };
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const en of entries) {
+                if (en.isIntersecting) mountEl(en.target);
+                else disposeEl(en.target);
+              }
+              result.pool = {
+                maxLive,
+                mountsCreated,
+                disposes,
+                liveNow: pool.size,
+                liveContextsNow: [...pool.values()].filter((e) => e.gl && !e.gl.isContextLost()).length,
+                unexpectedContextLost: lostUnexpected.count,
+                maxAllowed: MAX_LIVE,
+              };
+              out.textContent = JSON.stringify(result, null, 2);
+            },
+            { rootMargin: '0px', threshold: 0.01 }
+          );
+          cards.forEach((el) => io.observe(el));
+          await sleep(600);
+          result.pool = {
+            maxLive,
+            mountsCreated,
+            disposes,
+            liveNow: pool.size,
+            unexpectedContextLost: lostUnexpected.count,
+            maxAllowed: MAX_LIVE,
+          };
+          window.__poolStats = () => result.pool;
+        }
+      } catch (err) {
+        result.error = String(err && err.stack ? err.stack : err);
+      }
+      result.done = true;
+      out.textContent = JSON.stringify(result, null, 2);
+    </script>
+  </body>
+</html>

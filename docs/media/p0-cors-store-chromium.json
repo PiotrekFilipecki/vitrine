@@ -1,0 +1,32 @@
+{
+  "page": "cors",
+  "src": "https://hardware.shopify.com/cdn/shop/files/B1_Pro-Space_Gray-01_c166d8d3-f30b-48c9-909d-5f63f040ebc9.png?v=1777905665&width=800",
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "plainImg": {
+    "loaded": true,
+    "natural": "800x800",
+    "canvasTainted": true,
+    "taintError": "SecurityError"
+  },
+  "corsImg": {
+    "loaded": true,
+    "natural": "800x800"
+  },
+  "shader": {
+    "mounted": true,
+    "canvas": "480x480",
+    "stats": {
+      "minLuma": 13.4,
+      "maxLuma": 236.5,
+      "meanLuma": 149.1,
+      "opaquePct": 100
+    },
+    "glError": 0
+  },
+  "consoleErrors": []
+}

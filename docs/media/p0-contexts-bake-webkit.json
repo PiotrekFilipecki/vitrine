@@ -1,0 +1,31 @@
+{
+  "page": "contexts",
+  "mode": "bake",
+  "n": 24,
+  "env": {
+    "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+    "dpr": 2,
+    "hwc": 8
+  },
+  "done": true,
+  "bake": {
+    "cards": 24,
+    "msAll": 760,
+    "msPerCardMedian": 30,
+    "msPerCardMax": 51,
+    "liveContextsAfterBake": 0,
+    "contextsAlreadyCollected": 23,
+    "imagesInDom": 24,
+    "canvasesInDom": 0
+  },
+  "probe": {
+    "requested": 16,
+    "nullContexts": 0,
+    "lostEventsDuringProbe": 0,
+    "aliveAfterProbe": 16
+  },
+  "consoleErrors": [
+    "[error] There are too many active WebGL contexts on this page, the oldest context will be lost.",
+    "[error] WebGL: INVALID_OPERATION: loseContext: context already lost"
+  ]
+}

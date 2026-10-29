@@ -1,0 +1,27 @@
+{
+  "page": "contexts",
+  "mode": "live",
+  "n": 24,
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "live": {
+    "mounts": 24,
+    "msMountAll": 4499.1,
+    "contextLostEvents": 8,
+    "liveContextsAfterSettle": 16
+  },
+  "consoleErrors": [
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost.",
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost.",
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost.",
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost.",
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost.",
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost.",
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost.",
+    "[warning] WARNING: Too many active WebGL contexts. Oldest context will be lost."
+  ]
+}

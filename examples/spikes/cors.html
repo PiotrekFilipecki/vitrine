@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spike C · CORS</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        font:
+          14px/1.4 ui-monospace,
+          monospace;
+        background: #f3f1ec;
+        color: #111;
+      }
+      .row {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .box {
+        width: 240px;
+        height: 240px;
+        background: #ddd;
+      }
+      .box img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      pre {
+        white-space: pre-wrap;
+        font-size: 12px;
+        background: #fff;
+        padding: 8px;
+        border: 1px solid #ccc;
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Spike C · cross-origin texture from Shopify CDN</h1>
+    <div class="row">
+      <div class="box" id="plain"></div>
+      <div class="box" id="shader"></div>
+    </div>
+    <pre id="result">running…</pre>
+    <script type="module">
+      import {
+        ShaderMount,
+        imageDitheringFragmentShader,
+        loadImage,
+        ditherUniforms,
+        afterFirstFrame,
+        readPixelsFlipped,
+        pixelStats,
+        uaInfo,
+      } from './spike-lib.js';
+
+      const q = new URLSearchParams(location.search);
+      const src = q.get('src');
+      const out = document.getElementById('result');
+      const result = { page: 'cors', src, env: uaInfo(), done: false };
+      window.__spike = result;
+
+      // 1) Plain <img> without crossorigin: must always display (this is the fallback path).
+      try {
+        const plain = await loadImage(src, false);
+        document.getElementById('plain').appendChild(plain);
+        result.plainImg = { loaded: true, natural: `${plain.naturalWidth}x${plain.naturalHeight}` };
+        const c = document.createElement('canvas');
+        c.width = 4;
+        c.height = 4;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(plain, 0, 0, 4, 4);
+        try {
+          ctx.getImageData(0, 0, 1, 1);
+          result.plainImg.canvasTainted = false;
+        } catch (e) {
+          result.plainImg.canvasTainted = true;
+          result.plainImg.taintError = e.name;
+        }
+      } catch (e) {
+        result.plainImg = { loaded: false, error: String(e) };
+      }
+
+      // 2) crossorigin="anonymous" image as a WebGL texture via ShaderMount; read pixels back.
+      try {
+        const img = await loadImage(src, true);
+        result.corsImg = { loaded: true, natural: `${img.naturalWidth}x${img.naturalHeight}` };
+        const parent = document.getElementById('shader');
+        const m = new ShaderMount(
+          parent,
+          imageDitheringFragmentShader,
+          ditherUniforms(img),
+          undefined,
+          0,
+          0,
+          2
+        );
+        const gl = m.canvasElement.getContext('webgl2');
+        await afterFirstFrame(m);
+        const px = readPixelsFlipped(gl, m.canvasElement);
+        result.shader = {
+          mounted: true,
+          canvas: `${m.canvasElement.width}x${m.canvasElement.height}`,
+          stats: pixelStats(px),
+          glError: gl.getError(),
+        };
+      } catch (e) {
+        result.corsImg = result.corsImg ?? { loaded: false };
+        result.shader = { mounted: false, error: String(e), errorName: e && e.name };
+      }
+      result.done = true;
+      out.textContent = JSON.stringify(result, null, 2);
+    </script>
+  </body>
+</html>
