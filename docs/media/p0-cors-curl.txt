@@ -1,0 +1,153 @@
+# Spike C · CORS headers, curl from Piotrek's Mac, 2026-10-29T12:08Z
+# Store: hardware.shopify.com (owned by Shopify, not a client). Image: product photo via image CDN.
+
+## (a) cdn.shopify.com, Origin: https://example.com
+URL: https://cdn.shopify.com/s/files/1/0842/3905/6918/files/B1_Pro-Space_Gray-01_c166d8d3-f30b-48c9-909d-5f63f040ebc9.png?v=1777905665&width=800
+HTTP/2 200 
+date: Thu, 29 Oct 2026 12:08:53 GMT
+content-type: image/png
+content-length: 837197
+access-control-allow-origin: *
+access-control-expose-headers: *
+cache-control: public, max-age=31557600
+cache-tag: segment4-13387,shop-84239056918,mime-image/png-13387,time-bucket-20261029-13387,f37bbb21de06f6b83bedd3af97c2688afc83bb8da6ca12caab0cdf473ab8069b,host-cdn.shopify.com-13387
+link: <https://cdn.shopify.com/s/files/1/0842/3905/6918/files/B1_Pro-Space_Gray-01_c166d8d3-f30b-48c9-909d-5f63f040ebc9.png>; rel="canonical"
+server-timing: imagery;dur=620.970, imageryFetch;dur=147.081, imageryProcess;dur=361.606;desc="image"
+source-length: 3943482
+source-type: image/png
+timing-allow-origin: *
+vary: Accept
+x-content-type-options: nosniff
+x-shopid: 84239056918
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-dc: gcp-us-east1,gcp-us-east1
+x-request-id: 01a18790-234a-7b3c-9658-fc5ee5ee6c5e-1793275732
+server: envoy
+nel: {"max_age":0}
+alt-svc: h3=":443"; ma=2592000
+alt-svc: h3=":443"; ma=2592000
+x-shopify-gclb-trace-timing: 1793275732.810
+via: 1.1 google
+
+
+## (a2) cdn.shopify.com, no Origin header
+HTTP/2 200 
+content-length: 837197
+access-control-allow-origin: *
+access-control-expose-headers: *
+cache-tag: segment4-13387,shop-84239056918,mime-image/png-13387,time-bucket-20261029-13387,f37bbb21de06f6b83bedd3af97c2688afc83bb8da6ca12caab0cdf473ab8069b,host-cdn.shopify.com-13387
+link: <https://cdn.shopify.com/s/files/1/0842/3905/6918/files/B1_Pro-Space_Gray-01_c166d8d3-f30b-48c9-909d-5f63f040ebc9.png>; rel="canonical"
+server-timing: imagery;dur=620.970, imageryFetch;dur=147.081, imageryProcess;dur=361.606;desc="image"
+source-length: 3943482
+source-type: image/png
+timing-allow-origin: *
+x-content-type-options: nosniff
+x-shopid: 84239056918
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-dc: gcp-us-east1,gcp-us-east1
+x-request-id: 01a18790-234a-7b3c-9658-fc5ee5ee6c5e-1793275732
+server: envoy
+nel: {"max_age":0}
+alt-svc: h3=":443"; ma=2592000
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+x-shopify-gclb-trace-timing: 1793275732.810
+via: 1.1 google
+date: Thu, 29 Oct 2026 12:08:53 GMT
+cache-control: public, max-age=31557600
+content-type: image/png
+vary: Accept
+age: 0
+
+
+## (b) <store domain>/cdn/shop/files, Origin: https://example.com
+URL: https://hardware.shopify.com/cdn/shop/files/B1_Pro-Space_Gray-01_c166d8d3-f30b-48c9-909d-5f63f040ebc9.png?v=1777905665&width=800
+HTTP/2 200 
+date: Thu, 29 Oct 2026 12:08:54 GMT
+content-type: image/png
+content-length: 837197
+access-control-allow-origin: *
+access-control-expose-headers: *
+cache-control: public, max-age=31557600
+last-modified: Thu, 29 Oct 2026 12:08:54 GMT
+server-timing: imagery;dur=452.990, imageryFetch;dur=108.161, imageryProcess;dur=242.998;desc="image"
+source-length: 3943482
+source-type: image/png
+timing-allow-origin: *
+vary: Accept
+x-content-type-options: nosniff
+nel: {"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=vTW46PNvb6sF7%2B4LX9k3ob1H0l38CDFAVkJmL87VpjTQDvqx8Gr%2BqxKecH1Cjpi0MeTSqNr2q7w3PrUfNMhpdNvixsZD1ANLRXCbZ2mO%2FRybTr%2Ba3pLqgZUVQNtAIaATSWrObdX6"}]}
+x-permitted-cross-domain-policies: none
+x-dc: gcp-us-central1,gcp-us-central1
+x-request-id: 21780fc7-0013-4a8c-ab26-817b06bf5683-1792937591
+server: cloudflare
+accept-ranges: bytes
+x-download-options: noopen
+cf-cache-status: HIT
+cf-ray: a522117a7e3f3a12-TXL
+alt-svc: h3=":443"; ma=86400
+
+
+## (b2) <store domain>/cdn/shop/files, no Origin header
+HTTP/2 200 
+date: Thu, 29 Oct 2026 12:08:54 GMT
+content-type: image/png
+content-length: 837197
+access-control-allow-origin: *
+access-control-expose-headers: *
+cache-control: public, max-age=31557600
+last-modified: Thu, 29 Oct 2026 12:08:54 GMT
+server-timing: imagery;dur=452.990, imageryFetch;dur=108.161, imageryProcess;dur=242.998;desc="image"
+source-length: 3943482
+source-type: image/png
+timing-allow-origin: *
+vary: Accept
+x-content-type-options: nosniff
+nel: {"report_to":"cf-nel","success_fraction":0.01,"max_age":604800}
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=XnNlwCB%2F5pDKXKBuzDMOlX8z2MnhbJp6DoF%2BIShmzwYTh2Hsx4JRQVLdyvqyJPIOoNNktVSlpv9kHw4iD%2Bb9K8mQu%2BV4DAf37WSZh4ftaHuWXT94SFliHfo0bKITH6eahG%2Fnxu2U"}]}
+x-permitted-cross-domain-policies: none
+x-dc: gcp-us-central1,gcp-us-central1
+x-request-id: 21780fc7-0013-4a8c-ab26-817b06bf5683-1792937591
+server: cloudflare
+accept-ranges: bytes
+x-download-options: noopen
+cf-cache-status: HIT
+age: 338142
+cf-ray: a522117d0b792281-TXL
+alt-svc: h3=":443"; ma=86400
+
+
+## (c) cdn.shopify.com with Accept: image/webp (format negotiation)
+HTTP/2 200 
+date: Thu, 29 Oct 2026 12:08:55 GMT
+content-type: image/webp
+content-length: 37968
+access-control-allow-origin: *
+access-control-expose-headers: *
+cache-control: public, max-age=31557600
+cache-tag: segment4-13387,shop-84239056918,mime-image/webp-13387,time-bucket-20261029-13387,f37bbb21de06f6b83bedd3af97c2688afc83bb8da6ca12caab0cdf473ab8069b,host-cdn.shopify.com-13387
+link: <https://cdn.shopify.com/s/files/1/0842/3905/6918/files/B1_Pro-Space_Gray-01_c166d8d3-f30b-48c9-909d-5f63f040ebc9.png>; rel="canonical"
+server-timing: imagery;dur=419.216, imageryFetch;dur=104.063, imageryProcess;dur=313.879;desc="image"
+source-length: 3943482
+source-type: image/png
+timing-allow-origin: *
+vary: Accept
+x-content-type-options: nosniff
+x-shopid: 84239056918
+x-xss-protection: 1; mode=block
+strict-transport-security: max-age=63072000; includeSubDomains; preload
+x-dc: gcp-us-east1,gcp-us-east1
+x-request-id: 01a18790-2b07-7a06-b755-9e58d2743258-1793275734
+server: envoy
+nel: {"max_age":0}
+alt-svc: h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+alt-svc: h3=":443"; ma=2592000
+x-shopify-gclb-trace-timing: 1793275734.791
+via: 1.1 google
+

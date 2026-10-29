@@ -1,0 +1,31 @@
+{
+  "name": "vitrine-shaders",
+  "version": "0.0.0",
+  "description": "Paper Shaders for Shopify themes and headless storefronts: the <vitrine-shader> custom element",
+  "license": "Apache-2.0",
+  "author": "Piotr Filipecki",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "NOTICE",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@paper-design/shaders": "0.0.82"
+  }
+}

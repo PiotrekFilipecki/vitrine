@@ -1,0 +1,11 @@
+node_modules
+dist
+pnpm-lock.yaml
+test-results
+playwright-report
+docs/media
+docs/vitrine
+examples/spikes/fixtures
+third_party
+LICENSE
+NOTICE
