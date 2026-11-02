@@ -5,6 +5,9 @@ import { formatPrice, releaseLabel, type Product } from '@/lib/catalog';
 
 const SIZES = '(min-width: 901px) 30vw, 48vw';
 
+/** "11 November" → "11 Nov": cards are narrow (two columns on a phone), the tag stays on one line. */
+const shortDate = (label: string) => label.replace(/^(\d+ \w{3}).*$/, '$1');
+
 /** Card crop per photo, as in examples/static (portrait shots 3:4 to 2:3, landscape shots 4:3). */
 export function ratioOf(p: Product): string {
   const w = p.image.width ?? 4;
@@ -50,7 +53,7 @@ export function ProductCard({ product, effects = true }: { product: Product; eff
         </span>
         <span className="card__note">{product.note}</span>
         {product.releaseDate ? (
-          <span className="card__tag">Pre-order · ships {releaseLabel(product.releaseDate)}</span>
+          <span className="card__tag">Pre-order · {shortDate(releaseLabel(product.releaseDate))}</span>
         ) : null}
       </Link>
     </article>

@@ -1,11 +1,12 @@
 {%- doc -%}
-  VITRINE · product card media: wraps the card image in <vitrine-shader> (dither or halftone), photo revealed on
-  hover, tap or focus of the nearest link. The <img> stays the content (LCP, alt, fallback without WebGL2).
+  VITRINE · product card media: wraps the card image in <vitrine-shader>, photo revealed on hover, tap or focus of the
+  nearest link. Effect from the theme settings: glass (v0.2 default, the pane slides away; same as
+  'vitrine-glass-card'), dither or halftone (v0.1 print looks). The <img> stays the content (LCP, alt, fallback).
 
   Theme settings (paste the fragment from shopify-theme/README.md into config/settings_schema.json):
-  settings.vitrine_cards_enabled (checkbox), settings.vitrine_card_effect (dither | halftone),
-  settings.vitrine_card_preset (newsprint | riso | default), settings.vitrine_card_reveal (checkbox).
-  Without the fragment: dither / newsprint / reveal on.
+  settings.vitrine_cards_enabled (checkbox), settings.vitrine_card_effect (glass | dither | halftone),
+  settings.vitrine_card_preset (window | newsprint | riso | default), settings.vitrine_card_reveal (checkbox).
+  Without the fragment: glass / window / reveal on (v0.1 installs keep the values they saved).
 
   @param {object} image - Image object (product.featured_image, media.preview_image, card_product.featured_media…)
   @param {string} [widths] - image_tag widths, default '240, 352, 640, 832, 1200, 1600'
@@ -25,8 +26,17 @@
   assign loading = loading | default: 'lazy'
   assign fetchpriority = fetchpriority | default: 'auto'
   assign alt = alt | default: image.alt | default: ''
-  assign effect = settings.vitrine_card_effect | default: 'dither'
-  assign preset = settings.vitrine_card_preset | default: 'newsprint'
+  assign effect = settings.vitrine_card_effect | default: 'glass'
+  assign preset = settings.vitrine_card_preset | default: 'window'
+  comment
+    A preset of another effect falls back to the effect's own (glass: window; v0.1 effects: their default).
+  endcomment
+  if effect == 'glass' and preset != 'window' and preset != 'default'
+    assign preset = 'window'
+  endif
+  if effect != 'glass' and preset == 'window'
+    assign preset = 'default'
+  endif
   assign reveal = 'hover'
   if settings.vitrine_card_reveal == false
     assign reveal = 'none'

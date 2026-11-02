@@ -38,6 +38,9 @@ const glass: EffectModule = {
   image: 'required',
   mipmaps: ['u_image'],
   presets: file.presets,
+  interactionShader(p) {
+    return p['doors'] === true || p['doors'] === 'true' ? glassDoorsShader() : null;
+  },
   toUniforms(p, { image }) {
     const uniforms = {
       u_image: image!,
@@ -72,3 +75,53 @@ const glass: EffectModule = {
 };
 
 export default glass;
+
+const MAIN_ANCHOR = 'void main() {';
+const MASK_ANCHOR = 'float maskStrokeInner = maskInner - mask;';
+const MARGIN_UNIFORM_ANCHOR = 'uniform float u_marginBottom;';
+
+/**
+ * VITRINE-only "doors" (Q1 follow-up, ADR-0003 debt): one uniform `u_vitrineGap` = (from, to) in canvas x opens a hole
+ * in the glass, so two panes part at the pointer on ONE context (the R0 hero needed two). Each pane is the upstream
+ * margin mask with its own margins, so the cut edges get the same highlight and shadow strokes as the outer edges.
+ * With from ≥ to the upstream masks are used unchanged (the rest frame is pixel-identical). Throws if upstream moves
+ * the anchor lines, so a version bump cannot silently drop the patch.
+ */
+export function patchDoors(source: string): string {
+  for (const a of [MAIN_ANCHOR, MASK_ANCHOR, MARGIN_UNIFORM_ANCHOR]) {
+    if (source.split(a).length !== 2)
+      throw new Error('fluted-glass source changed upstream: doors patch anchors not found');
+  }
+  const helpers = `
+float vitrinePaneMask(vec4 m, vec2 p, vec2 sw, int kind) {
+  if (kind == 0) return smoothstep(m[0], m[0] + sw.x, p.x + sw.x) * smoothstep(m[2], m[2] + sw.x, 1.0 - p.x + sw.x) *
+    smoothstep(m[1], m[1] + sw.y, p.y + sw.y) * smoothstep(m[3], m[3] + sw.y, 1.0 - p.y + sw.y);
+  if (kind == 1) return smoothstep(m[0] - sw.x, m[0], p.x + sw.x) * smoothstep(m[2] - sw.x, m[2], 1.0 - p.x + sw.x) *
+    smoothstep(m[1] - sw.y, m[1], p.y + sw.y) * smoothstep(m[3] - sw.y, m[3], 1.0 - p.y + sw.y);
+  return smoothstep(m[0] - 2. * sw.x, m[0], p.x) * smoothstep(m[2] - 2. * sw.x, m[2], 1.0 - p.x) *
+    smoothstep(m[1] - 2. * sw.y, m[1], p.y) * smoothstep(m[3] - 2. * sw.y, m[3], 1.0 - p.y);
+}
+
+`;
+  const split = `
+  if (u_vitrineGap.y > u_vitrineGap.x) {
+    vec4 mL = vec4(margins[0], margins[1], max(margins[2], 1. - u_vitrineGap.x), margins[3]);
+    vec4 mR = vec4(max(margins[0], u_vitrineGap.y), margins[1], margins[2], margins[3]);
+    mask = vitrinePaneMask(mL, uvMask, sw, 0) + vitrinePaneMask(mR, uvMask, sw, 0);
+    maskOuter = vitrinePaneMask(mL, uvMask, sw, 1) + vitrinePaneMask(mR, uvMask, sw, 1);
+    maskInner = vitrinePaneMask(mL, uvMask, sw, 2) + vitrinePaneMask(mR, uvMask, sw, 2);
+    maskStroke = maskOuter - mask;
+    maskStrokeInner = maskInner - mask;
+  }`;
+  return source
+    .replace(MARGIN_UNIFORM_ANCHOR, `${MARGIN_UNIFORM_ANCHOR}\nuniform vec2 u_vitrineGap;`)
+    .replace(MAIN_ANCHOR, `${helpers}${MAIN_ANCHOR}`)
+    .replace(MASK_ANCHOR, `${MASK_ANCHOR}${split}`);
+}
+
+let doorsShader: string | null = null;
+/** The patched source, built once. */
+export function glassDoorsShader(): string {
+  doorsShader ??= patchDoors(flutedGlassFragmentShader);
+  return doorsShader;
+}

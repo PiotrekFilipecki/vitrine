@@ -30,6 +30,11 @@ export interface EffectModule {
   presets: Record<string, PresetDef>;
   /** Returns a patched shader when VITRINE-only parameters ask for one; null = upstream shader. */
   variant?(params: VitrineParams): EffectVariant | null;
+  /**
+   * VITRINE-only shader for the live interaction (Q1: glass "doors"), or null for the upstream source. Never used for
+   * the baked rest frame, so the rest frame stays the upstream render (covered by the pixel-compatibility tests).
+   */
+  interactionShader?(params: VitrineParams): string | null;
   /** 1:1 port of the React component's props → uniforms mapping. */
   toUniforms(params: VitrineParams, textures: EffectTextures): ShaderMountUniforms;
 }

@@ -1,6 +1,7 @@
 import { ShaderMount, type ShaderMountUniforms } from '#paper/shader-mount.js';
 import { getConfig } from './config.js';
 import { LivePool } from './pool.js';
+import type { RevealVia } from './reveal.js';
 import { twoFrames } from './texture.js';
 
 /**
@@ -148,7 +149,9 @@ export class GlassMotion {
     return this.#mount !== null;
   }
 
-  set(open: boolean): void {
+  /** `via` is accepted for a common signature with GlassDoors; the card glass opens the same way whatever opened it. */
+  set(open: boolean, via?: RevealVia): void {
+    void via;
     if (this.#disposed) return;
     const target = open ? 1 : 0;
     this.#target = target;
@@ -161,6 +164,9 @@ export class GlassMotion {
     interactionPool.acquire(this, { onEvict: () => this.#jump(this.#target) });
     const ms = this.#durationFor(target);
     if (this.#mount && this.#painted) {
+      // Reused within the grace period: the static state hid the canvas, bring it back before it moves.
+      this.#render(this.#tween.value);
+      this.#showLive();
       this.#tween.to(target, ms);
       return;
     }
@@ -244,8 +250,225 @@ export class GlassMotion {
     this.#showStatic(target);
   }
 
+  #showLive(): void {
+    this.#o.layer.style.visibility = '';
+    if (this.#host) this.#host.style.visibility = '';
+    this.#o.baked.style.visibility = 'hidden';
+    this.#o.el.removeAttribute('data-vitrine-open');
+  }
+
   #showStatic(v: number): void {
     // Open: the layer is hidden and the content <img> (scaled like the shader, see styles.ts) is the picture.
+    this.#o.layer.style.visibility = v >= 1 ? 'hidden' : '';
+    this.#o.baked.style.visibility = v >= 1 ? 'hidden' : '';
+    if (this.#host) this.#host.style.visibility = 'hidden';
+    this.#o.el.toggleAttribute('data-vitrine-open', v >= 1);
+  }
+
+  #dropLive(): void {
+    const had = this.#mount !== null;
+    disposeMount(this.#mount);
+    this.#mount = null;
+    this.#painted = false;
+    this.#host?.remove();
+    this.#host = null;
+    interactionPool.release(this);
+    if (had) this.#o.onLive?.(false);
+  }
+
+  #cancelGrace(): void {
+    if (this.#grace) clearTimeout(this.#grace);
+    this.#grace = null;
+  }
+}
+
+/** R0 hero ("doors"): peek gap on hover, full opening on tap/click/focus/key, cursor follow (examples/static/r0-hero.html). */
+export const DOORS_PEEK = 0.2;
+export const DOORS_PEEK_MS = 520;
+export const DOORS_OPEN_MS = 640;
+export const DOORS_CLOSE_PEEK_MS = 380;
+export const DOORS_CLOSE_OPEN_MS = 420;
+export const DOORS_FOLLOW_MS = 160;
+
+export interface GlassDoorsOptions extends GlassMotionOptions {
+  /** The patched shader with `u_vitrineGap` (effects/glass.ts, patchDoors). */
+  fragmentShader: string;
+}
+
+/**
+ * Hero glass as two panes that part at the pointer (the R0 mockup), on ONE live context: the doors patch cuts a hole
+ * `[cx − gap, cx + gap]` into the glass. Hover peeks (gap 0.2, follows the cursor), tap/click/focus/Enter open fully
+ * (gap 1). Rest = the baked frame (gap 0 renders the upstream masks), fully open = the content <img>; the context
+ * lives only while the panes are apart and less than fully open, or moving.
+ */
+export class GlassDoors {
+  #o: GlassDoorsOptions;
+  #gap: Tween;
+  #cx: Tween;
+  #target = 0;
+  #mount: ShaderMount | null = null;
+  #host: HTMLDivElement | null = null;
+  #painted = false;
+  #grace: ReturnType<typeof setTimeout> | null = null;
+  #disposed = false;
+  #pointerX = 0.5;
+  #detach: () => void;
+
+  constructor(o: GlassDoorsOptions) {
+    this.#o = o;
+    this.#gap = new Tween(
+      0,
+      () => this.#render(),
+      (v) => this.#settle(v)
+    );
+    this.#cx = new Tween(
+      0.5,
+      () => this.#render(),
+      () => undefined
+    );
+    this.#showStatic(0);
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      const r = this.#o.el.getBoundingClientRect();
+      this.#pointerX = Math.min(1, Math.max(0, (e.clientX - r.left) / Math.max(1, r.width)));
+      // Follow the cursor only while peeking (R0: 160 ms); a full opening stays where it is.
+      if (this.#target > 0 && this.#target < 1 && this.#mount) this.#cx.to(this.#pointerX, DOORS_FOLLOW_MS);
+    };
+    this.#o.el.addEventListener('pointermove', onMove);
+    this.#o.el.addEventListener('pointerenter', onMove);
+    this.#detach = () => {
+      this.#o.el.removeEventListener('pointermove', onMove);
+      this.#o.el.removeEventListener('pointerenter', onMove);
+    };
+  }
+
+  get value(): number {
+    return this.#gap.value;
+  }
+
+  get live(): boolean {
+    return this.#mount !== null;
+  }
+
+  set(open: boolean, via: RevealVia = 'click'): void {
+    if (this.#disposed) return;
+    const peek = via === 'pointer';
+    const target = open ? (peek ? DOORS_PEEK : 1) : 0;
+    const from = this.#gap.value;
+    this.#target = target;
+    if (this.#o.reducedMotion()) {
+      // Reduced motion: no peek (it is pure motion); open and close at once, without a context.
+      this.#target = open && !peek ? 1 : 0;
+      this.#jump(this.#target);
+      return;
+    }
+    if (from === target && !this.#gap.running) return;
+    this.#cancelGrace();
+    interactionPool.acquire(this, { onEvict: () => this.#jump(this.#target >= 1 ? 1 : 0) });
+    if (open && peek && from === 0) this.#cx.value = this.#pointerX;
+    if (open && !peek && from === 0) this.#cx.value = 0.5;
+    const ms = this.#duration(from, target);
+    if (this.#mount && this.#painted) {
+      this.#render();
+      this.#showLive();
+      this.#gap.to(target, ms);
+      return;
+    }
+    if (this.#mount) return;
+    this.#createLive();
+  }
+
+  dispose(): void {
+    this.#disposed = true;
+    this.#detach();
+    this.#gap.stop();
+    this.#cx.stop();
+    this.#cancelGrace();
+    this.#dropLive();
+  }
+
+  #duration(from: number, target: number): number {
+    if (target >= 1) return cssMs(this.#o.el, '--vitrine-glass-open', DOORS_OPEN_MS);
+    if (target > 0) return cssMs(this.#o.el, '--vitrine-glass-peek', DOORS_PEEK_MS);
+    return from >= 1 - 1e-6
+      ? cssMs(this.#o.el, '--vitrine-glass-close', DOORS_CLOSE_OPEN_MS)
+      : cssMs(this.#o.el, '--vitrine-glass-close-peek', DOORS_CLOSE_PEEK_MS);
+  }
+
+  #uniformGap(): [number, number] {
+    const g = this.#gap.value;
+    if (g <= 1e-4) return [0, 0];
+    const cx = this.#cx.value;
+    return [Math.max(0, cx - g), Math.min(1, cx + g)];
+  }
+
+  #createLive(): void {
+    const host = this.#o.el.ownerDocument.createElement('div');
+    host.className = 'vitrine-live';
+    this.#o.layer.insertBefore(host, this.#o.baked);
+    this.#host = host;
+    this.#o.layer.style.visibility = '';
+    let mount: ShaderMount;
+    try {
+      mount = createMount(host, this.#o, { u_vitrineGap: this.#uniformGap() });
+    } catch {
+      this.#dropLive();
+      this.#jump(this.#target >= 1 ? 1 : 0);
+      return;
+    }
+    this.#mount = mount;
+    this.#painted = false;
+    this.#o.onLive?.(true);
+    mount.canvasElement.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      if (this.#mount === mount) this.#jump(this.#target >= 1 ? 1 : 0);
+    });
+    // Same as GlassMotion: paint under the baked frame first, move after the first composite.
+    void twoFrames()
+      .then(() => {
+        if (this.#mount !== mount || this.#disposed) return;
+        mount.setUniforms({ u_vitrineGap: this.#uniformGap() });
+        return twoFrames();
+      })
+      .then(() => {
+        if (this.#mount !== mount || this.#disposed) return;
+        this.#painted = true;
+        this.#o.baked.style.visibility = 'hidden';
+        this.#gap.to(this.#target, this.#duration(this.#gap.value, this.#target));
+      });
+  }
+
+  #render(): void {
+    this.#mount?.setUniforms({ u_vitrineGap: this.#uniformGap() });
+  }
+
+  #settle(v: number): void {
+    if (v > 0 && v < 1) return; // peeking: the context stays while the cursor is there
+    this.#showStatic(v);
+    this.#cancelGrace();
+    this.#grace = setTimeout(() => {
+      this.#grace = null;
+      this.#dropLive();
+    }, RELEASE_GRACE_MS);
+  }
+
+  #jump(target: number): void {
+    this.#gap.stop();
+    this.#cx.stop();
+    this.#gap.value = target;
+    this.#cancelGrace();
+    this.#dropLive();
+    this.#showStatic(target);
+  }
+
+  #showLive(): void {
+    this.#o.layer.style.visibility = '';
+    if (this.#host) this.#host.style.visibility = '';
+    this.#o.baked.style.visibility = 'hidden';
+    this.#o.el.removeAttribute('data-vitrine-open');
+  }
+
+  #showStatic(v: number): void {
     this.#o.layer.style.visibility = v >= 1 ? 'hidden' : '';
     this.#o.baked.style.visibility = v >= 1 ? 'hidden' : '';
     if (this.#host) this.#host.style.visibility = 'hidden';

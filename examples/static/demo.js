@@ -25,8 +25,13 @@ function rollDates() {
   }
   const day = release.getUTCDate();
   const month = release.toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' });
-  for (const el of document.querySelectorAll('[data-release-label]'))
-    el.textContent = `Pre-order · ships ${day} ${month}`;
+  for (const el of document.querySelectorAll('[data-release-label]')) {
+    // Cards are narrow (two columns on a phone): the short form keeps the tag on one line.
+    el.textContent =
+      el.getAttribute('data-release-label') === 'short'
+        ? `Pre-order · ${day} ${month.slice(0, 3)}`
+        : `Pre-order · ships ${day} ${month}`;
+  }
   for (const el of document.querySelectorAll('[data-release-date]')) {
     el.innerHTML = `Ships<br />${day} ${month.slice(0, 3)}`;
   }

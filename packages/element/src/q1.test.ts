@@ -6,7 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 // The R0 harness is plain ESM (examples/r0): the presets the R0 gate approved.
 import { byId } from '../../../examples/r0/effects.js';
 import { DATE_ANCHORS, dateFrost, formatDateBind, parseBind } from './bind.js';
-import glass from './effects/glass.js';
+import { flutedGlassFragmentShader } from '#paper/shaders/fluted-glass.js';
+import glass, { glassDoorsShader, patchDoors } from './effects/glass.js';
 import lens from './effects/lens.js';
 import { coverBox, loupeSizing } from './motion.js';
 import { resolveParams } from './params.js';
@@ -261,5 +262,28 @@ describe('loupe geometry (R0 loupeProps)', () => {
     // Pointer to the right: the image moves left (negative offset), proportional to the distance.
     const r = loupeSizing({ cellW: 400, cellH: 500, aspect: 1.6, L: 200, cx: 300, cy: 250, zoom: 2.2 });
     expect(r.offsetX).toBeCloseTo((-c.scale * 100) / cell.x, 10);
+  });
+});
+
+describe('glass doors patch (VITRINE-only)', () => {
+  it('should add one uniform, the pane-mask helper and the split, and leave the upstream lines in place', () => {
+    const src = glassDoorsShader();
+    expect(src).toContain('uniform vec2 u_vitrineGap;');
+    expect(src).toContain('float vitrinePaneMask(');
+    expect(src).toContain('if (u_vitrineGap.y > u_vitrineGap.x)');
+    // every upstream line survives: the patch only inserts
+    for (const line of flutedGlassFragmentShader.split('\n')) expect(src).toContain(line);
+  });
+
+  it('should throw when upstream moves an anchor line, instead of dropping the option silently', () => {
+    expect(() => patchDoors(flutedGlassFragmentShader.replace('void main() {', 'void main(){'))).toThrow(
+      /anchors/
+    );
+  });
+
+  it('should be used for the interaction only when params.doors is set', () => {
+    expect(glass.interactionShader?.({ doors: true })).toBe(glassDoorsShader());
+    expect(glass.interactionShader?.({})).toBeNull();
+    expect(glass.interactionShader?.({ doors: false })).toBeNull();
   });
 });

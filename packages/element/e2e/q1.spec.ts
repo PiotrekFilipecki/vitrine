@@ -123,6 +123,34 @@ test.describe('Q1 · glass card', () => {
   });
 });
 
+test.describe('Q1 · hero doors', () => {
+  test('hover peeks (panes part at the pointer, 1 context, not open), focus opens fully, 0 contexts after', async ({
+    page,
+  }) => {
+    await ready(page);
+    const doors = page.locator('#doors');
+    await doors.scrollIntoViewIfNeeded();
+    const b = (await doors.boundingBox())!;
+    await page.mouse.move(b.x + b.width * 0.3, b.y + b.height / 2, { steps: 3 });
+    await expect.poll(async () => (await stats(page)).interactionMounts).toBe(1);
+    await page.waitForTimeout(800);
+    expect(await isOpen(page, '#doors')).toBe(false); // a peek, not a full opening
+    expect(await doors.locator('.vitrine-baked').evaluate((e) => (e as HTMLElement).style.visibility)).toBe(
+      'hidden'
+    );
+    await page.mouse.move(b.x + b.width * 0.7, b.y + b.height / 2, { steps: 4 }); // follows the cursor
+    await page.waitForTimeout(300);
+    await page.mouse.move(5, 5);
+    await page.waitForTimeout(2000);
+    expect((await stats(page)).interactionMounts).toBe(0);
+    expect(await doors.locator('canvas').count()).toBe(0);
+    const link = page.locator('#doors-link');
+    await link.focus();
+    await expect.poll(() => isOpen(page, '#doors')).toBe(true);
+    expect((await probe(page)).maxInteraction).toBe(1);
+  });
+});
+
 test.describe('Q1 · touch', () => {
   test.use({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
   test('tap opens the glass and does not navigate; the second tap follows the link', async ({

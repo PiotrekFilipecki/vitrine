@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VITRINE v0.2 theme markup (glass card, pre-order card, loupe)</title>
+    <!--
+      Q1 · the HTML the three v0.2 snippets render (shopify-theme/snippets/vitrine-glass-card, vitrine-preorder-card,
+      vitrine-loupe-media) around Shopify's image_tag, loading the single-file theme asset (no chunks), 26 copies of
+      the script tag like a theme would print them. Photos: examples/fixtures (Unsplash).
+    -->
+    <link rel="stylesheet" href="../../../../shopify-theme/assets/vitrine-theme.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        background: #efebe4;
+        font: 14px/1.4 sans-serif;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 220px);
+        gap: 16px;
+      }
+      .product-card {
+        display: block;
+        color: inherit;
+      }
+      .product-media__image {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        object-fit: cover;
+      }
+      .pdp .product-media__image {
+        aspect-ratio: auto;
+        width: 480px;
+        height: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <ul class="grid" id="cards"></ul>
+    <section class="pdp" id="pdp"></section>
+    <script>
+      // Liquid output, written out: one glass card per photo, one pre-order card (release in 9 days), one loupe.
+      const FX = '/examples/fixtures/products';
+      const photos = ['04-chair', '05-lamp', '08-headphones', '09-mug', '12-plant', '02-perfume', '07-bag'];
+      const tag = '<script type="module" src="../../../../shopify-theme/assets/vitrine.js"><\/script>';
+      const img = (p, extra = '') =>
+        `<img src="${FX}/w640/${p}.webp" alt="${p}" srcset="${FX}/w640/${p}.webp 640w, ${FX}/w1000/${p}.webp 1000w" width="640" height="800" loading="lazy" class="product-media__image"${extra}>`;
+      let html = '';
+      for (const p of photos) {
+        html += `<li><a class="product-card" href="#${p}"><vitrine-shader effect="glass" preset="window" reveal="hover" class="vitrine-glass-card">${img(p)}</vitrine-shader>${tag}<span>${p}</span></a></li>`;
+      }
+      const release = new Date(Date.now() + 9 * 86400000).toISOString().replace(/\.\d+Z$/, '+0000');
+      html += `<li><a class="product-card" href="#pre"><vitrine-shader effect="glass" preset="window" bind="date:${release}" reveal="none" class="vitrine-preorder-card">${img('03-sneaker')}</vitrine-shader>${tag}<span>pre-order</span></a></li>`;
+      document.getElementById('cards').innerHTML = html;
+      document.getElementById('pdp').innerHTML =
+        `<vitrine-shader effect="lens" preset="loupe" bind="pointer" class="vitrine-loupe-media"><img src="${FX}/07-bag.webp" alt="Satchel" width="1600" height="1000" fetchpriority="high" class="product-media__image"></vitrine-shader>${tag}`;
+      // Script tags inserted through innerHTML do not run; a theme prints them in the HTML. Add the same number for real.
+      for (let i = 0; i < 9; i++) {
+        const s = document.createElement('script');
+        s.type = 'module';
+        s.src = '../../../../shopify-theme/assets/vitrine.js';
+        document.body.appendChild(s);
+      }
+    </script>
+  </body>
+</html>

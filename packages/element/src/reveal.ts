@@ -11,10 +11,13 @@ export const REVEAL_ATTR = 'data-vitrine-revealed';
 
 export type RevealMode = 'hover' | 'tap';
 
+/** What opened or closed the surface: glass "doors" peek on a pointer and open fully on everything else. */
+export type RevealVia = 'pointer' | 'touch' | 'click' | 'focus' | 'key' | 'outside';
+
 export interface RevealOptions {
   mode?: RevealMode;
   /** Called on every state change (glass runs its transition from here). */
-  onChange?: (on: boolean) => void;
+  onChange?: (on: boolean, via: RevealVia) => void;
   consumeFirstTap?: boolean;
 }
 
@@ -32,11 +35,11 @@ export function attachReveal(el: HTMLElement, opts: RevealOptions = {}): () => v
   const surface = revealSurface(el);
   const isLink = (node: EventTarget | null) => node instanceof Element && node.closest('a[href]') !== null;
   let on = el.hasAttribute(REVEAL_ATTR);
-  const set = (next: boolean) => {
+  const set = (next: boolean, via: RevealVia) => {
     el.toggleAttribute(REVEAL_ATTR, next);
     if (next === on) return;
     on = next;
-    opts.onChange?.(next);
+    opts.onChange?.(next, via);
   };
 
   let touchOutside: ((e: PointerEvent) => void) | null = null;
@@ -50,7 +53,7 @@ export function attachReveal(el: HTMLElement, opts: RevealOptions = {}): () => v
     clearTouchOutside();
     touchOutside = (ev: PointerEvent) => {
       if (!surface.contains(ev.target as Node)) {
-        set(false);
+        set(false, 'outside');
         clearTouchOutside();
       }
     };
@@ -68,16 +71,16 @@ export function attachReveal(el: HTMLElement, opts: RevealOptions = {}): () => v
 
   const onEnter = (e: PointerEvent) => {
     if (mode !== 'hover' || e.pointerType === 'touch') return;
-    set(true);
+    set(true, 'pointer');
   };
   const onLeave = (e: PointerEvent) => {
     if (mode !== 'hover' || e.pointerType === 'touch') return;
-    if (!surface.matches(':focus-within')) set(false);
+    if (!surface.matches(':focus-within')) set(false, 'pointer');
   };
   const onDown = (e: PointerEvent) => {
     if (mode !== 'hover' || e.pointerType !== 'touch') return;
     if (!on && opts.consumeFirstTap && isLink(e.target)) armConsume();
-    set(true);
+    set(true, 'touch');
     closeOnOutsideTouch();
   };
   const onClick = (e: MouseEvent) => {
@@ -90,24 +93,24 @@ export function attachReveal(el: HTMLElement, opts: RevealOptions = {}): () => v
     if (!on) {
       // First tap or click opens; on a link it does not navigate yet.
       if (isLink(e.target)) e.preventDefault();
-      set(true);
+      set(true, 'click');
       closeOnOutsideTouch();
     } else if (!isLink(e.target)) {
-      set(false);
+      set(false, 'click');
     }
   };
   const onKey = (e: KeyboardEvent) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     if (e.target !== surface || isLink(surface) || e.repeat) return;
     if (e.key === ' ') e.preventDefault();
-    set(!on);
+    set(!on, 'key');
   };
   const onFocusIn = () => {
-    if (mode === 'hover') set(true);
+    if (mode === 'hover') set(true, 'focus');
   };
   const onFocusOut = (e: FocusEvent) => {
     if (e.relatedTarget instanceof Node && surface.contains(e.relatedTarget)) return;
-    if (mode === 'tap' || !surface.matches(':hover')) set(false);
+    if (mode === 'tap' || !surface.matches(':hover')) set(false, 'focus');
   };
 
   surface.addEventListener('pointerenter', onEnter);
@@ -119,7 +122,8 @@ export function attachReveal(el: HTMLElement, opts: RevealOptions = {}): () => v
   surface.addEventListener('focusout', onFocusOut);
   // Setup re-runs when the box resizes (late fonts, theme editor) and tears the previous reveal down;
   // a focus that already happened fires no new focusin, so read the current state instead of waiting.
-  if (mode === 'hover' && (surface.matches(':focus-within') || surface.matches(':hover'))) set(true);
+  if (mode === 'hover' && surface.matches(':focus-within')) set(true, 'focus');
+  else if (mode === 'hover' && surface.matches(':hover')) set(true, 'pointer');
 
   return () => {
     surface.removeEventListener('pointerenter', onEnter);

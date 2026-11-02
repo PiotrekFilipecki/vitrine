@@ -63,7 +63,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ v
         </div>
         <Link className="hero__photo" href={`/products/${hero.handle}`}>
           {effects ? (
-            <GlassProductImage image={hero.image} className="shot">
+            <GlassProductImage image={hero.image} className="shot" params={{ doors: true }}>
               {heroImg}
             </GlassProductImage>
           ) : (
@@ -83,8 +83,8 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ v
           <p className="lede">
             One object at a time, behind reeded glass, like a shop window on a quiet street.
           </p>
-          <p className="hint hint--mouse">Move over the photograph and the glass slides away.</p>
-          <p className="hint hint--touch">Tap the photograph and the glass slides away.</p>
+          <p className="hint hint--mouse">Move over the photograph and the glass parts where you point.</p>
+          <p className="hint hint--touch">Tap the photograph and the glass opens.</p>
         </div>
       </section>
 

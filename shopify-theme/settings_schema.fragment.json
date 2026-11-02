@@ -3,7 +3,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Product card effect by VITRINE (Paper Shaders). The photo stays the content; the print is a layer that lifts on hover, tap or focus."
+      "content": "Product card effect by VITRINE (Paper Shaders). The photo stays the content; the effect is a layer that gives way on hover, tap or focus. Glass is the v0.2 default; dither and halftone are the print looks of v0.1."
     },
     {
       "type": "checkbox",
@@ -17,6 +17,10 @@
       "label": "Effect",
       "options": [
         {
+          "value": "glass",
+          "label": "Glass (shop window)"
+        },
+        {
           "value": "dither",
           "label": "Dither (newsprint)"
         },
@@ -25,14 +29,18 @@
           "label": "Halftone (CMYK / riso)"
         }
       ],
-      "default": "dither"
+      "default": "glass"
     },
     {
       "type": "select",
       "id": "vitrine_card_preset",
       "label": "Preset",
-      "info": "dither: newsprint / default; halftone: riso / default",
+      "info": "glass: window; dither: newsprint / default; halftone: riso / default. A preset of another effect falls back to that effect's own.",
       "options": [
+        {
+          "value": "window",
+          "label": "Window (glass)"
+        },
         {
           "value": "newsprint",
           "label": "Newsprint (dither)"
@@ -46,12 +54,12 @@
           "label": "Paper Shaders default"
         }
       ],
-      "default": "newsprint"
+      "default": "window"
     },
     {
       "type": "checkbox",
       "id": "vitrine_card_reveal",
-      "label": "Reveal the photo on hover / tap / focus",
+      "label": "Reveal the photo on hover / tap / focus (glass: the pane slides away)",
       "default": true
     }
   ]

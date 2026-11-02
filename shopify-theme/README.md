@@ -1,8 +1,10 @@
 # shopify-theme/ · VITRINE for Online Store 2.0 themes
 
-Paper Shaders in a Shopify theme without an app: copy this folder into your theme and you get a hero with an animated
-mesh gradient, an editorial image with paper texture and product cards printed in dithering that turn into the photo on
-hover, tap or focus. Merchants tune colours and sliders in the theme editor; no code after the install.
+Paper Shaders in a Shopify theme without an app: copy this folder into your theme and your product cards stand behind
+reeded shop-window glass that slides away on hover, tap or focus, pre-order cards stay frosted until their release
+date, and the product page gets a loupe (v0.2). The v0.1 pieces are still here: a hero with an animated mesh gradient,
+an editorial image with paper texture, and dither/halftone as print looks for cards. Merchants pick the card effect
+and tune sliders in the theme editor; no code after the install.
 Powered by [Paper Shaders](https://shaders.paper.design) (Apache-2.0, see the header of `assets/vitrine.js`).
 
 Tested on **Horizon 4.3.0** (Shopify's current first-party theme, 29.10.2026). Dawn 16 notes below.
@@ -15,9 +17,9 @@ Tested on **Horizon 4.3.0** (Shopify's current first-party theme, 29.10.2026). D
 | `assets/vitrine-theme.css`           | styles for the two sections and the card wrapper (radius 0, no shadows; typography inherits from the theme)                                                    |
 | `sections/vitrine-hero.liquid`       | mesh gradient surface + ink plate; colour pickers ×4, speed / distortion / swirl / grain / scale sliders, height, plate colours; blocks: heading, text, button |
 | `sections/vitrine-editorial.liquid`  | paper texture on an `image_picker` image + text column; folds / crumples / grain / fibre / light angle / seed sliders; blocks: kicker, heading, text, button   |
-| `snippets/vitrine-card-media.liquid` | wraps a card image in `<vitrine-shader effect="dither\|halftone" reveal="hover">`; reads the theme settings below                                              |
+| `snippets/vitrine-card-media.liquid` | wraps a card image in `<vitrine-shader>` with the effect from the theme settings below: `glass` (v0.2 default), `dither` or `halftone`                         |
 | `snippets/vitrine-script.liquid`     | the `<script type="module">` tag; rendered by the sections and the card snippet only                                                                           |
-| `settings_schema.fragment.json`      | the "VITRINE" settings group to paste into `config/settings_schema.json` (effect on cards on/off, dither/halftone, preset, reveal)                             |
+| `settings_schema.fragment.json`      | the "VITRINE" settings group to paste into `config/settings_schema.json` (effect on cards on/off, glass/dither/halftone, preset, reveal)                       |
 
 ## v0.2: glass card, pre-order glass, loupe (ADR-0003)
 

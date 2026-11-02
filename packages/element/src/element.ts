@@ -5,7 +5,7 @@ import { getConfig, setConfig } from './config.js';
 import { isEffect, loadEffect } from './effects/registry.js';
 import type { EffectModule, EffectTextures } from './effects/types.js';
 import { hashParams, parseParamsAttribute, resolveParams } from './params.js';
-import { GlassMotion, Loupe, interactionPool } from './motion.js';
+import type { GlassDoors, GlassMotion, Loupe } from './motion.js';
 import { num } from './params.js';
 import { LivePool } from './pool.js';
 import { attachReveal, type RevealMode } from './reveal.js';
@@ -33,6 +33,15 @@ export const VITRINE_TAG = 'vitrine-shader' as const;
 type VitrineState = 'idle' | 'loading' | 'baked' | 'live' | 'clear' | 'interactive' | 'fallback';
 
 const pool = new LivePool<VitrineShader>(() => getConfig().maxLive);
+
+/** Interactions (glass, loupe) are their own chunk: a page with only v0.1 effects never downloads them. */
+type MotionModule = typeof import('./motion.js');
+let motionModule: MotionModule | null = null;
+let motionPromise: Promise<MotionModule> | null = null;
+function loadMotion(): Promise<MotionModule> {
+  motionPromise ??= import('./motion.js').then((m) => (motionModule = m));
+  return motionPromise;
+}
 let webgl2: boolean | null = null;
 let reducedMotion: MediaQueryList | null = null;
 
@@ -89,7 +98,7 @@ export class VitrineShader extends BaseElement {
       liveMounts: pool.size,
       bakerContexts: Baker.activeContexts(),
       bakedCached: bakeCache.size,
-      interactionMounts: interactionPool.size,
+      interactionMounts: motionModule?.interactionPool.size ?? 0,
     };
   }
 
@@ -113,7 +122,7 @@ export class VitrineShader extends BaseElement {
   #readySent = false;
 
   // Q1 interactions: glass transition, pointer loupe
-  #glass: GlassMotion | null = null;
+  #glass: GlassMotion | GlassDoors | null = null;
   #loupe: Loupe | null = null;
 
   // teardown hooks
@@ -372,8 +381,19 @@ export class VitrineShader extends BaseElement {
       this.style.removeProperty('--vitrine-image-scale');
     }
 
+    // Fetched in parallel with the bake; needed only once someone interacts.
+    const motion = interactive ? loadMotion() : null;
+
     if (module.effect === 'lens' && bind.kind === 'pointer') {
-      this.#setupLoupe(module, resolved.presetId, params, uniforms, textures.image!);
+      let m: MotionModule;
+      try {
+        m = await motion!;
+      } catch (err) {
+        if (alive()) this.#fallback('error', `interaction module failed to load: ${String(err)}`);
+        return;
+      }
+      if (!alive()) return;
+      this.#setupLoupe(m, module, resolved.presetId, params, uniforms, textures.image!);
       return;
     }
 
@@ -382,8 +402,11 @@ export class VitrineShader extends BaseElement {
 
     if (speed === 0) {
       await this.#setupBaked(run, module, resolved.presetId, params, uniforms, frame, src);
-      if (module.effect === 'glass' && alive() && this.#state === 'baked')
-        this.#setupGlass(module, uniforms, reveal);
+      if (module.effect === 'glass' && alive() && this.#state === 'baked' && reveal) {
+        // Without the interaction chunk the glass simply stays shut: the baked frame is already on screen.
+        const m = await motion!.catch(() => null);
+        if (m && alive() && this.#state === 'baked') this.#setupGlass(m, module, params, uniforms, reveal);
+      }
     } else {
       this.#fragmentShader = module.variant?.(params)?.fragmentShader ?? module.fragmentShader;
       this.#setupLive(module, resolved.presetId, uniforms, speed, frame);
@@ -412,32 +435,38 @@ export class VitrineShader extends BaseElement {
   }
 
   #setupGlass(
+    motion: MotionModule,
     module: EffectModule,
+    params: VitrineParams,
     uniforms: ReturnType<EffectModule['toUniforms']>,
     reveal: RevealMode | null
   ): void {
     const layer = this.#ensureLayer();
     const baked = layer.querySelector(':scope > img.vitrine-baked') as HTMLImageElement | null;
     if (!baked || !reveal) return;
-    const glass = new GlassMotion({
+    const doorsShader = module.interactionShader?.(params) ?? null;
+    const opts = {
       el: this,
       layer,
       baked,
-      fragmentShader: module.variant?.({})?.fragmentShader ?? module.fragmentShader,
+      fragmentShader: doorsShader ?? module.fragmentShader,
       uniforms,
       mipmaps: module.mipmaps,
       reducedMotion: prefersReducedMotion,
-    });
+    };
+    // `doors` (VITRINE-only param): two panes part at the pointer (R0 hero); otherwise one pane slides right (card).
+    const glass = doorsShader ? new motion.GlassDoors(opts) : new motion.GlassMotion(opts);
     this.#glass = glass;
     this.#detachReveal = attachReveal(this, {
       mode: reveal,
       consumeFirstTap: true,
-      onChange: (on) => glass.set(on),
+      onChange: (on, via) => glass.set(on, via),
     });
-    if (this.hasAttribute('data-vitrine-revealed')) glass.set(true);
+    if (this.hasAttribute('data-vitrine-revealed')) glass.set(true, 'focus');
   }
 
   #setupLoupe(
+    motion: MotionModule,
     module: EffectModule,
     presetId: string,
     params: VitrineParams,
@@ -446,7 +475,7 @@ export class VitrineShader extends BaseElement {
   ): void {
     const layer = this.#ensureLayer();
     layer.replaceChildren();
-    this.#loupe = new Loupe({
+    this.#loupe = new motion.Loupe({
       el: this,
       layer,
       fragmentShader: module.fragmentShader,
