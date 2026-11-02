@@ -1,6 +1,14 @@
 import { useEffect } from 'react';
 import { registerVitrine } from './register.js';
-import type { HeroShaderProps, ImageShaderProps, ShaderElementProps, StorefrontImage } from './types.js';
+import type {
+  GlassImageProps,
+  HeroShaderProps,
+  ImageShaderProps,
+  LoupeImageProps,
+  PreorderGlassImageProps,
+  ShaderElementProps,
+  StorefrontImage,
+} from './types.js';
 
 function attrs(p: ShaderElementProps) {
   return {
@@ -38,17 +46,20 @@ function ContentImage({
   );
 }
 
-function ImageShader({
-  effect,
-  reveal,
-  image,
-  imgProps,
-  children,
-  ...rest
-}: ImageShaderProps & { effect: NonNullable<ImageShaderProps['effect']> }) {
+type AnyImageProps = Omit<ImageShaderProps, 'effect'> & {
+  effect: 'dither' | 'halftone' | 'paper' | 'glass' | 'lens';
+  bind?: string;
+};
+
+function ImageShader({ effect, reveal, bind, image, imgProps, children, ...rest }: AnyImageProps) {
   useVitrine();
   return (
-    <vitrine-shader effect={effect} {...(reveal ? { reveal } : {})} {...attrs(rest)}>
+    <vitrine-shader
+      effect={effect}
+      {...(reveal ? { reveal } : {})}
+      {...(bind ? { bind } : {})}
+      {...attrs(rest)}
+    >
       {children ?? <ContentImage image={image} imgProps={imgProps} />}
     </vitrine-shader>
   );
@@ -98,5 +109,54 @@ export function CollectionHeroShader({
     >
       {children}
     </vitrine-shader>
+  );
+}
+
+/**
+ * v0.2 · Product card behind reeded shop-window glass (`fluted-glass`, preset `window`). At rest the glass is a baked
+ * image (no WebGL context); hover, tap or keyboard focus slides it away on one short-lived context.
+ */
+export function GlassProductImage({ preset = 'window', reveal = 'hover', ...rest }: GlassImageProps) {
+  return <ImageShader effect="glass" preset={preset} reveal={reveal} {...rest} />;
+}
+
+/**
+ * v0.2 · Pre-order card: the same glass, frosted by the days left to `releaseDate` (30 → 7 → 1 day → clear).
+ * Computed once in the browser and baked; the server sends the plain image. Clear on and after the release.
+ */
+export function PreorderGlassImage({
+  releaseDate,
+  preorderFrom,
+  preset = 'window',
+  reveal,
+  ...rest
+}: PreorderGlassImageProps) {
+  const bind = JSON.stringify({
+    date: preorderFrom ? { from: preorderFrom, to: releaseDate } : { to: releaseDate },
+  });
+  return <ImageShader effect="glass" preset={preset} bind={bind} {...(reveal ? { reveal } : {})} {...rest} />;
+}
+
+/**
+ * v0.2 · Product page image with a loupe under the pointer (`lens-distortion`, preset `loupe`). Mouse/pen over the
+ * image or a touch held still shows it; nothing (and no WebGL context) otherwise. Decoration: the image keeps its alt.
+ */
+export function LoupeImage({ preset = 'loupe', loupeSize, zoom, params, ...rest }: LoupeImageProps) {
+  const merged =
+    loupeSize !== undefined || zoom !== undefined
+      ? {
+          ...(params ?? {}),
+          ...(loupeSize !== undefined ? { loupeSize } : {}),
+          ...(zoom !== undefined ? { zoom } : {}),
+        }
+      : params;
+  return (
+    <ImageShader
+      effect="lens"
+      preset={preset}
+      bind="pointer"
+      {...(merged ? { params: merged } : {})}
+      {...rest}
+    />
   );
 }

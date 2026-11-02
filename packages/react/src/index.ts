@@ -5,7 +5,14 @@
  */
 import './jsx.js';
 
-export { ProductMediaShader, CollectionHeroShader, EditorialImageShader } from './shaders.js';
+export {
+  ProductMediaShader,
+  CollectionHeroShader,
+  EditorialImageShader,
+  GlassProductImage,
+  PreorderGlassImage,
+  LoupeImage,
+} from './shaders.js';
 export { registerVitrine } from './register.js';
 export type {
   StorefrontImage,
@@ -13,6 +20,9 @@ export type {
   HeroShaderProps,
   ShaderElementProps,
   ImgPassthrough,
+  GlassImageProps,
+  PreorderGlassImageProps,
+  LoupeImageProps,
   VitrineShaderIntrinsicProps,
 } from './types.js';
 export type { VitrineEffect, VitrineParams, VitrineReveal } from 'vitrine-shaders';

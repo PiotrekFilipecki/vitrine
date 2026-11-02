@@ -5,6 +5,8 @@
 export { VitrineShader, VITRINE_TAG, define } from './element.js';
 export { EFFECTS, isEffect } from './effects/registry.js';
 export { parseParamsAttribute, resolveParams, hashParams, stableStringify } from './params.js';
+export { parseBind, formatDateBind, dateFrost, DATE_ANCHORS } from './bind.js';
+export type { VitrineBind, DateFrost } from './bind.js';
 export type {
   VitrineEffect,
   VitrineReveal,

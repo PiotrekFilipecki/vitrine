@@ -39,6 +39,28 @@ export interface ImageShaderProps extends ShaderElementProps {
   children?: ReactNode;
 }
 
+/** v0.2 wrappers (ADR-0003): the effect is fixed by the wrapper; `reveal` and the image work as in ImageShaderProps. */
+export interface GlassImageProps extends Omit<ImageShaderProps, 'effect'> {
+  /** `hover` (default: mouse hover, touch tap, keyboard focus), `tap` (click or tap only) or `none`. */
+  reveal?: VitrineReveal;
+}
+
+export interface PreorderGlassImageProps extends Omit<ImageShaderProps, 'effect' | 'reveal'> {
+  /** Release date, ISO 8601 (`2026-12-01` or `2026-12-01T10:00:00Z`). On and after it the photo is clear. */
+  releaseDate: string;
+  /** Start of the pre-order, ISO 8601. Optional: a window shorter than 30 days compresses the frost scale. */
+  preorderFrom?: string;
+  /** Off by default: the frost is the message. */
+  reveal?: VitrineReveal;
+}
+
+export interface LoupeImageProps extends Omit<ImageShaderProps, 'effect' | 'reveal'> {
+  /** Loupe diameter as a fraction of the image width (preset `loupe`: 0.5). */
+  loupeSize?: number;
+  /** Magnification (preset `loupe`: 2.2). */
+  zoom?: number;
+}
+
 export interface HeroShaderProps extends ShaderElementProps {
   /** Shortcut for `params.colors` (mesh-gradient takes up to 10 colours). */
   colors?: string[];
@@ -52,6 +74,8 @@ export interface VitrineShaderIntrinsicProps extends React.HTMLAttributes<HTMLEl
   preset?: string;
   params?: string;
   reveal?: VitrineReveal;
+  /** v0.2: `none` · `pointer` · `date:<to>` · `date:<from>/<to>` (ISO 8601). */
+  bind?: string;
   speed?: number | string;
   debug?: boolean | '';
   children?: ReactNode;

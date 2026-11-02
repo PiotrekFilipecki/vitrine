@@ -1,6 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
-import { CollectionHeroShader, EditorialImageShader, ProductMediaShader } from './index.js';
+import {
+  CollectionHeroShader,
+  EditorialImageShader,
+  GlassProductImage,
+  LoupeImage,
+  PreorderGlassImage,
+  ProductMediaShader,
+} from './index.js';
+import { parseBind } from 'vitrine-shaders';
 
 // React 19 emits a <link rel="preload" as="image"> hint for eager images; the element tree is what we assert.
 const strip = (html: string) => html.replace(/<link rel="preload"[^>]*\/>/g, '');
@@ -85,5 +93,64 @@ describe('server render (no DOM, no vitrine-shaders runtime)', () => {
     const html = strip(renderToString(<ProductMediaShader image={image} />));
     expect(html.startsWith('<vitrine-shader effect="dither"')).toBe(true);
     expect(html).toContain('<img src=');
+  });
+});
+
+describe('v0.2 wrappers (ADR-0003): server render', () => {
+  const photo = {
+    url: '/fixtures/products/w1000/04-chair.webp',
+    altText: 'Bar stool',
+    width: 1000,
+    height: 1250,
+  };
+
+  // TEST: the card is glass/window with hover reveal and a plain <img> inside
+  it('GlassProductImage renders <vitrine-shader effect=glass reveal=hover preset=window> with the image', () => {
+    const html = strip(renderToStaticMarkup(<GlassProductImage image={photo} />));
+    expect(html).toBe(
+      '<vitrine-shader effect="glass" reveal="hover" preset="window">' +
+        '<img src="/fixtures/products/w1000/04-chair.webp" alt="Bar stool" width="1000" height="1250"/>' +
+        '</vitrine-shader>'
+    );
+  });
+
+  // TEST: reveal="tap" passes through
+  it('GlassProductImage passes reveal="tap"', () => {
+    expect(renderToStaticMarkup(<GlassProductImage image={photo} reveal="tap" />)).toContain('reveal="tap"');
+  });
+
+  // TEST: releaseDate/preorderFrom serialise to a bind the element parses to the same dates; no reveal by default
+  it('PreorderGlassImage writes a bind the element reads back', () => {
+    const html = renderToStaticMarkup(
+      <PreorderGlassImage image={photo} releaseDate="2026-12-01" preorderFrom="2026-11-10" />
+    );
+    expect(html).toContain('effect="glass"');
+    expect(html).not.toContain('reveal=');
+    const bind = /bind="([^"]+)"/.exec(html)![1]!.replace(/&quot;/g, '"');
+    expect(parseBind(bind)).toEqual({
+      kind: 'date',
+      to: Date.UTC(2026, 11, 1),
+      from: Date.UTC(2026, 10, 10),
+    });
+    const single = renderToStaticMarkup(<PreorderGlassImage image={photo} releaseDate="2026-12-01" />);
+    const b2 = /bind="([^"]+)"/.exec(single)![1]!.replace(/&quot;/g, '"');
+    expect(parseBind(b2)).toEqual({ kind: 'date', to: Date.UTC(2026, 11, 1), from: null });
+  });
+
+  // TEST: the loupe binds the pointer and folds loupeSize/zoom into params
+  it('LoupeImage renders lens/loupe bound to the pointer, shortcuts land in params', () => {
+    const html = renderToStaticMarkup(<LoupeImage image={photo} zoom={3} />);
+    expect(html).toContain('<vitrine-shader effect="lens" bind="pointer" preset="loupe"');
+    expect(html).toContain('params="{&quot;zoom&quot;:3}"');
+    expect(html).toContain('alt="Bar stool"');
+  });
+
+  // TEST: v0.1 wrappers are unchanged by v0.2 (backwards compatibility)
+  it('keeps the v0.1 ProductMediaShader output byte-for-byte', () => {
+    expect(strip(renderToStaticMarkup(<ProductMediaShader image={photo} />))).toBe(
+      '<vitrine-shader effect="dither" reveal="hover" preset="newsprint">' +
+        '<img src="/fixtures/products/w1000/04-chair.webp" alt="Bar stool" width="1000" height="1250"/>' +
+        '</vitrine-shader>'
+    );
   });
 });
