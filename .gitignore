@@ -16,6 +16,9 @@ release/
 # GitHub Pages build (scripts/pages-site.mjs)
 _site/
 
+# Vercel CLI link (vercel link)
+.vercel
+
 # R0 proof-sheet bundle (examples/r0/build.mjs)
 examples/r0/r0.bundle.js
 

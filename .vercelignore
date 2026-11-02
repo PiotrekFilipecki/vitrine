@@ -1,0 +1,17 @@
+# Vercel CLI uploads (vercel deploy from the repo root, project Root Directory = examples/next-headless).
+# When this file exists the CLI does not read .gitignore, so the build artefacts are listed again.
+node_modules
+**/node_modules
+**/.next
+**/dist
+_site
+release
+test-results
+playwright-report
+.lighthouse
+.env
+.env.*
+!.env.example
+docs
+examples/theme-test
+AGENTS.md
