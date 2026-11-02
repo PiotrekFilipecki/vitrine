@@ -1,7 +1,7 @@
 # Demo photographs · credits and licences
 
 Twelve product photographs for the VITRINE demo (phase R0, `docs/vitrine/KIERUNEK-v2.md`). They replace the NIWWTS
-mockups on demo surfaces; the NIWWTS fixtures in `examples/spikes/fixtures/` stay only for the pixel-compatibility tests.
+mockups on demo surfaces; the old demo fixtures now live in `packages/element/e2e/fixtures/` and serve only the pixel-compatibility tests (Q1).
 
 **Licence of every file below: [Unsplash License](https://unsplash.com/license).** Free to copy, modify and distribute,
 also commercially, without asking. Not allowed: selling a photo without significant modification, and compiling Unsplash

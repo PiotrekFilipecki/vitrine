@@ -12,11 +12,11 @@ const CASES: Array<{ effect: string; preset: string; img?: string }> = [
   { effect: 'halftone', preset: 'riso' },
   { effect: 'mesh', preset: 'default' },
   { effect: 'mesh', preset: 'drop-night' },
-  { effect: 'paper', preset: 'default', img: '/examples/spikes/fixtures/piece-formation-wattstax-72.webp' },
+  { effect: 'paper', preset: 'default', img: '/packages/element/e2e/fixtures/niwwts/piece-formation-wattstax-72.webp' },
   {
     effect: 'paper',
     preset: 'folded-lookbook',
-    img: '/examples/spikes/fixtures/piece-formation-wattstax-72.webp',
+    img: '/packages/element/e2e/fixtures/niwwts/piece-formation-wattstax-72.webp',
   },
 ];
 

@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VITRINE · Paper Shaders for Shopify, demo on NIWWTS No.06</title>
+    <title>Store · a VITRINE demo: products behind reeded glass</title>
     <meta
       name="description"
-      content="Paper Shaders on a plain product grid: a print you can inspect with a loupe, dithered prints and tees that turn into the photo on hover. Static HTML, no bundler."
+      content="A made-up shop that shows VITRINE: product cards behind reeded shop-window glass, a pre-order card that frosts until its release date and a loupe on the product page. Paper Shaders in plain HTML."
     />
     <link
       rel="preload"
@@ -18,597 +18,522 @@
     <link
       rel="preload"
       as="image"
-      href="../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp"
-      imagesrcset="../spikes/fixtures/w640/piece-uptown-saturday-descent.webp 640w, ../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp 1000w, ../spikes/fixtures/piece-uptown-saturday-descent.webp 1120w"
-      imagesizes="(min-width: 901px) 60vw, 100vw"
+      href="../fixtures/products/w1000/04-chair.webp"
+      imagesrcset="../fixtures/products/w640/04-chair.webp 640w, ../fixtures/products/w1000/04-chair.webp 1000w, ../fixtures/products/04-chair.webp 1600w"
+      imagesizes="(min-width: 901px) 54vw, 100vw"
       fetchpriority="high"
     />
     <link rel="stylesheet" href="./styles.css" />
-    <script type="module">
-      // Same probe as index.html: counts ready events; `?effects=off` keeps the element out (Lighthouse comparison).
-      const stats = {
-        dclAt: 0,
-        readyCount: 0,
-        msAllCards: null,
-        cards: 0,
-        modes: {},
-        fallbacks: [],
-        ready: [],
-      };
-      window.__vitrine = stats;
-      const t0 = performance.now();
-      document.addEventListener('DOMContentLoaded', () => {
-        stats.dclAt = +(performance.now() - t0).toFixed(1);
-        stats.cards = document.querySelectorAll('.grid vitrine-shader').length;
-      });
-      let cardsReady = 0;
-      document.addEventListener('vitrine:ready', (e) => {
-        stats.readyCount += 1;
-        stats.modes[e.detail.mode] = (stats.modes[e.detail.mode] ?? 0) + 1;
-        stats.ready.push({
-          effect: e.detail.effect,
-          mode: e.detail.mode,
-          cached: e.detail.cached,
-          ms: e.detail.ms,
-          bake: e.detail.bake ?? null,
-          at: +(performance.now() - t0).toFixed(1),
-        });
-        if (e.target.closest('.grid') && ++cardsReady === stats.cards) {
-          stats.msAllCards = +(performance.now() - t0).toFixed(1);
-        }
-      });
-      document.addEventListener('vitrine:fallback', (e) => stats.fallbacks.push(e.detail));
-      // The photo first, the print after: the element is imported once the hero photo has been decoded and painted
-      // (two frames), so the LCP frame never waits for the element's JS. Q0 measurement: with an immediate import the
-      // photo painted one frame after the title and Lighthouse's simulation charged the whole module to LCP (3.7 s
-      // vs 2.8 s without the element). stress.html keeps the immediate import as the worst case.
-      if (!new URLSearchParams(location.search).has('effects')) {
-        const start = () => {
-          const hero = document.querySelector('.proof__print img');
-          const later = () =>
-            requestAnimationFrame(() =>
-              requestAnimationFrame(() => import('../../packages/element/dist/index.js'))
-            );
-          (hero ? hero.decode().catch(() => undefined) : Promise.resolve()).then(later);
-        };
-        if (document.readyState === 'complete') start();
-        else addEventListener('load', start, { once: true });
-      }
-    </script>
+    <script type="module" src="./demo.js"></script>
   </head>
   <body>
-    <a class="skip" href="#catalogue">Skip to catalogue</a>
-    <header class="masthead">
-      <p class="masthead__brand">VITRINE</p>
-      <p class="masthead__issue">
-        <span>Demo · NIWWTS edition No.06 — prints &amp; tees</span>
-        <span class="masthead__stacks">Liquid · React · HTML</span>
-      </p>
-      <p class="masthead__note">
-        Paper Shaders for Shopify themes and headless storefronts · Apache-2.0 ·
-        <a href="https://github.com/PiotrekFilipecki/vitrine">GitHub</a>
-      </p>
+    <a class="skip" href="#objects">Skip to the objects</a>
+    <header class="bar">
+      <a class="wordmark" href="./">Store</a>
+      <nav aria-label="Main">
+        <a href="#objects">Objects</a>
+        <a href="#pre-order">Pre-order</a>
+        <span class="cart" data-cart>Cart (0)</span>
+      </nav>
     </header>
 
     <main>
-      <section class="proof" aria-labelledby="hero-title">
-        <div class="proof__text">
-          <p class="proof__kicker">Proof · dither / newsprint · PC-003</p>
-          <h1 id="hero-title" class="proof__title">Print it once.</h1>
-          <p class="proof__lede">
-            VITRINE runs Paper Shaders over the product image your page already renders and prints it once.
-            The photo stays underneath, as the content.
-          </p>
-          <p class="proof__hint">
-            <span class="proof__hint--pointer"
-              >Move over the print: the loupe shows the photo. Click to lift the whole print.</span
-            >
-            <span class="proof__hint--touch">Tap the print: the loupe moves there.</span>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__head">
+          <p class="label">New in the window</p>
+          <h1 id="hero-title">Look<br />through<br />the glass.</h1>
+        </div>
+        <a class="hero__photo" href="./products/bar-stool.html">
+          <vitrine-shader class="shot" effect="glass" preset="window">
+            <img
+              src="../fixtures/products/w1000/04-chair.webp"
+              srcset="
+                ../fixtures/products/w640/04-chair.webp   640w,
+                ../fixtures/products/w1000/04-chair.webp 1000w,
+                ../fixtures/products/04-chair.webp       1600w
+              "
+              sizes="(min-width: 901px) 54vw, 100vw"
+              alt="A black shell bar stool on four oak legs against a pale grey wall."
+              width="1600"
+              height="2000"
+              fetchpriority="high"
+            />
+          </vitrine-shader>
+          <span class="visually-hidden">Bar stool, € 240</span>
+        </a>
+        <div class="hero__body">
+          <div class="product-line">
+            <span><b>Bar stool</b> · black shell, oak legs</span><span class="price">€&nbsp;240</span>
+          </div>
+          <p class="lede">One object at a time, behind reeded glass, like a shop window on a quiet street.</p>
+          <p class="hint hint--mouse">Move over the photograph and the glass slides away.</p>
+          <p class="hint hint--touch">Tap the photograph and the glass slides away.</p>
+        </div>
+      </section>
+
+      <section class="section" id="objects" aria-labelledby="objects-title">
+        <div class="section__head">
+          <h2 id="objects-title">Objects<sup>12</sup></h2>
+          <p>
+            Every card stands behind the same glass. Point at it, tap it or reach it with Tab, and the pane
+            slides out of the way.
           </p>
         </div>
-        <figure class="proof__figure">
-          <button
-            type="button"
-            class="proof__frame"
-            aria-pressed="false"
-            aria-label="UPTOWN SATURDAY DESCENT, NIWWTS print: show the photo under the dither"
-          >
-            <vitrine-shader class="proof__print" effect="dither" preset="newsprint" reveal="none">
+        <div class="catalogue">
+          <div class="catalogue__col">
+            <article class="card">
+              <a class="card__link" href="./products/over-ear-headphones.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 4 / 3">
+                  <img
+                    src="../fixtures/products/w640/08-headphones.webp"
+                    srcset="
+                      ../fixtures/products/w640/08-headphones.webp   640w,
+                      ../fixtures/products/w1000/08-headphones.webp 1000w,
+                      ../fixtures/products/08-headphones.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="1067"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Over-ear headphones</span
+                  ><span class="price">€&nbsp;190</span></span
+                >
+                <span class="card__note">closed back, black</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/ring-vase.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 3 / 4">
+                  <img
+                    src="../fixtures/products/w640/01-vase.webp"
+                    srcset="
+                      ../fixtures/products/w640/01-vase.webp   640w,
+                      ../fixtures/products/w1000/01-vase.webp 1000w,
+                      ../fixtures/products/01-vase.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="2197"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Ring vase</span><span class="price">€&nbsp;68</span></span
+                >
+                <span class="card__note">sand stoneware</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/mug.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 3 / 4">
+                  <img
+                    src="../fixtures/products/w640/09-mug.webp"
+                    srcset="
+                      ../fixtures/products/w640/09-mug.webp   640w,
+                      ../fixtures/products/w1000/09-mug.webp 1000w,
+                      ../fixtures/products/09-mug.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="2133"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Mug</span><span class="price">€&nbsp;24</span></span
+                >
+                <span class="card__note">blush stoneware</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/round-sunglasses.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 4 / 3">
+                  <img
+                    src="../fixtures/products/w640/10-sunglasses.webp"
+                    srcset="
+                      ../fixtures/products/w640/10-sunglasses.webp   640w,
+                      ../fixtures/products/w1000/10-sunglasses.webp 1000w,
+                      ../fixtures/products/10-sunglasses.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="1067"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Round sunglasses</span><span class="price">€&nbsp;120</span></span
+                >
+                <span class="card__note">tortoiseshell acetate</span>
+              </a>
+            </article>
+          </div>
+          <div class="catalogue__col">
+            <article class="card">
+              <a class="card__link" href="./products/desk-lamp.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 3 / 4">
+                  <img
+                    src="../fixtures/products/w640/05-lamp.webp"
+                    srcset="
+                      ../fixtures/products/w640/05-lamp.webp   640w,
+                      ../fixtures/products/w1000/05-lamp.webp 1000w,
+                      ../fixtures/products/05-lamp.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="2134"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Desk lamp</span><span class="price">€&nbsp;180</span></span
+                >
+                <span class="card__note">magenta lacquered steel</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/amber-candle.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 4 / 3">
+                  <img
+                    src="../fixtures/products/w640/11-candle.webp"
+                    srcset="
+                      ../fixtures/products/w640/11-candle.webp   640w,
+                      ../fixtures/products/w1000/11-candle.webp 1000w,
+                      ../fixtures/products/11-candle.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="1068"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Candle</span><span class="price">€&nbsp;32</span></span
+                >
+                <span class="card__note">soy wax, amber jar</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/court-sneaker.html">
+                <vitrine-shader
+                  class="shot"
+                  effect="glass"
+                  preset="window"
+                  bind="date:2026-11-11T10:00:00Z"
+                  data-release
+                  style="--ratio: 4 / 5"
+                >
+                  <img
+                    src="../fixtures/products/w640/03-sneaker.webp"
+                    srcset="
+                      ../fixtures/products/w640/03-sneaker.webp   640w,
+                      ../fixtures/products/w1000/03-sneaker.webp 1000w,
+                      ../fixtures/products/03-sneaker.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="2240"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Court sneaker</span><span class="price">€&nbsp;140</span></span
+                >
+                <span class="card__note">nubuck and white leather</span>
+                <span class="card__tag" data-release-label>Pre-order · ships 11 November</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/monstera.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 4 / 5">
+                  <img
+                    src="../fixtures/products/w640/12-plant.webp"
+                    srcset="
+                      ../fixtures/products/w640/12-plant.webp   640w,
+                      ../fixtures/products/w1000/12-plant.webp 1000w,
+                      ../fixtures/products/12-plant.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="2000"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Monstera</span><span class="price">€&nbsp;45</span></span
+                >
+                <span class="card__note">in a ceramic pot</span>
+              </a>
+            </article>
+          </div>
+          <div class="catalogue__col">
+            <article class="card">
+              <a class="card__link" href="./products/eau-de-parfum.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 2 / 3">
+                  <img
+                    src="../fixtures/products/w640/02-perfume.webp"
+                    srcset="
+                      ../fixtures/products/w640/02-perfume.webp   640w,
+                      ../fixtures/products/w1000/02-perfume.webp 1000w,
+                      ../fixtures/products/02-perfume.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="2400"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Eau de parfum</span><span class="price">€&nbsp;96</span></span
+                >
+                <span class="card__note">50 ml, smoked glass</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/satchel.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 4 / 3">
+                  <img
+                    src="../fixtures/products/w640/07-bag.webp"
+                    srcset="
+                      ../fixtures/products/w640/07-bag.webp   640w,
+                      ../fixtures/products/w1000/07-bag.webp 1000w,
+                      ../fixtures/products/07-bag.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="1000"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Satchel</span><span class="price">€&nbsp;260</span></span
+                >
+                <span class="card__note">grey pebbled leather</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/bar-stool.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 4 / 5">
+                  <img
+                    src="../fixtures/products/w640/04-chair.webp"
+                    srcset="
+                      ../fixtures/products/w640/04-chair.webp   640w,
+                      ../fixtures/products/w1000/04-chair.webp 1000w,
+                      ../fixtures/products/04-chair.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="2000"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Bar stool</span><span class="price">€&nbsp;240</span></span
+                >
+                <span class="card__note">black shell, oak legs</span>
+              </a>
+            </article>
+            <article class="card">
+              <a class="card__link" href="./products/dress-watch.html">
+                <vitrine-shader class="shot" effect="glass" preset="window" style="--ratio: 4 / 3">
+                  <img
+                    src="../fixtures/products/w640/06-watch.webp"
+                    srcset="
+                      ../fixtures/products/w640/06-watch.webp   640w,
+                      ../fixtures/products/w1000/06-watch.webp 1000w,
+                      ../fixtures/products/06-watch.webp       1600w
+                    "
+                    sizes="(min-width: 901px) 30vw, 48vw"
+                    alt=""
+                    width="1600"
+                    height="1200"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </vitrine-shader>
+                <span class="card__meta"
+                  ><span class="card__name">Dress watch</span><span class="price">€&nbsp;210</span></span
+                >
+                <span class="card__note">three straps, one case</span>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pre-order" aria-labelledby="preorder-title">
+        <div class="preorder">
+          <a class="preorder__card card__link" href="./products/court-sneaker.html">
+            <vitrine-shader
+              class="shot"
+              effect="glass"
+              preset="window"
+              bind="date:2026-11-11T10:00:00Z"
+              data-release
+            >
               <img
-                src="../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp"
+                src="../fixtures/products/w1000/03-sneaker.webp"
                 srcset="
-                  ../spikes/fixtures/w640/piece-uptown-saturday-descent.webp   640w,
-                  ../spikes/fixtures/w1000/piece-uptown-saturday-descent.webp 1000w,
-                  ../spikes/fixtures/piece-uptown-saturday-descent.webp       1120w
+                  ../fixtures/products/w640/03-sneaker.webp   640w,
+                  ../fixtures/products/w1000/03-sneaker.webp 1000w,
+                  ../fixtures/products/03-sneaker.webp       1600w
                 "
-                sizes="(min-width: 901px) 60vw, 100vw"
-                alt="UPTOWN SATURDAY DESCENT, an orange and black swirl, NIWWTS print, edition No.06"
-                width="1120"
-                height="1344"
-                fetchpriority="high"
+                sizes="(min-width: 901px) 46vw, 100vw"
+                alt="A pair of sand and white leather sneakers on an orange ground."
+                width="1600"
+                height="2240"
+                loading="lazy"
                 decoding="async"
               />
             </vitrine-shader>
-            <span class="proof__loupe" aria-hidden="true"></span>
-          </button>
-          <vitrine-shader
-            class="proof__mesh"
-            effect="mesh"
-            preset="drop-night"
-            aria-hidden="true"
-          ></vitrine-shader>
-          <figcaption class="proof__caption">
-            <span>UPTOWN SATURDAY DESCENT · print · 89 PLN</span>
-            <span>colour bar: mesh / drop-night, live</span>
-          </figcaption>
-        </figure>
-        <script type="module">
-          // The loupe: page code, not element API (bind arrives in Q1). Mouse and pen move it, touch places it,
-          // click / Enter / Space lift the whole print (aria-pressed). Reduced motion: no transitions, same loupe.
-          const frame = document.querySelector('.proof__frame');
-          let lastPointer = 'mouse';
-          const place = (e) => {
-            const r = frame.getBoundingClientRect();
-            frame.style.setProperty('--lx', `${Math.round(e.clientX - r.left)}px`);
-            frame.style.setProperty('--ly', `${Math.round(e.clientY - r.top)}px`);
-          };
-          frame.addEventListener('pointermove', (e) => {
-            if (e.pointerType !== 'touch') place(e);
-          });
-          frame.addEventListener('pointerdown', (e) => {
-            lastPointer = e.pointerType;
-            if (e.pointerType === 'touch') place(e);
-          });
-          frame.addEventListener('click', (e) => {
-            // A tap only moves the loupe; mouse clicks and the keyboard (detail 0) toggle the whole print.
-            if (lastPointer === 'touch' && e.detail > 0) return;
-            frame.setAttribute('aria-pressed', String(frame.getAttribute('aria-pressed') !== 'true'));
-          });
-        </script>
-      </section>
-
-      <section class="stacks" aria-labelledby="stacks-title">
-        <div class="stacks__head">
-          <h2 id="stacks-title" class="stacks__title">Three lines, three stacks</h2>
-          <p class="stacks__note">the <code>&lt;img&gt;</code> stays the content · the print is a layer</p>
-        </div>
-        <div class="stacks__columns">
-          <div class="stack stack--liquid">
-            <p class="stack__kicker">01 · Liquid (Online Store 2.0)</p>
-            <pre class="stack__code">
-{% render 'vitrine-card-media',
-  image: card_product.featured_media,
-  sizes: '(min-width: 990px) 25vw, 50vw' %}
-
-{{ 'vitrine.js' | asset_url }}   ← one module, 46 KB gzip
-sections/vitrine-hero.liquid     ← colour pickers + sliders
-sections/vitrine-editorial.liquid</pre>
-            <p class="stack__text">
-              Copy the folder, paste one settings group, wrap the card image. Merchants tune everything in the
-              theme editor.
+            <span class="visually-hidden">Court sneaker, pre-order, € 140</span>
+          </a>
+          <div class="preorder__text">
+            <p class="label">Pre-order</p>
+            <h2 id="preorder-title" class="visually-hidden">Court sneaker, pre-order</h2>
+            <p class="preorder__date" data-release-date>Ships<br />11 Nov</p>
+            <div class="product-line">
+              <span><b>Court sneaker</b> · nubuck and white leather</span
+              ><span class="price">€&nbsp;140</span>
+            </div>
+            <p class="lede">
+              The glass clears a little every day until the release. A month out you see a shape; on the day,
+              the shoe.
             </p>
-          </div>
-          <div class="stack stack--react">
-            <p class="stack__kicker">02 · React 19 / Next.js</p>
-            <pre class="stack__code">
-import { ProductMediaShader }
-  from 'vitrine-shaders/react';
-
-&lt;ProductMediaShader image={product.featuredImage}&gt;
-  &lt;Image … /&gt;
-&lt;/ProductMediaShader&gt;</pre>
-            <p class="stack__text">
-              Server HTML is a plain image. The element arrives after hydration, 860 B of wrapper.
-            </p>
-          </div>
-          <div class="stack stack--html">
-            <p class="stack__kicker">03 · Plain HTML</p>
-            <pre class="stack__code">
-&lt;script type="module"
-  src="vitrine.js"&gt;&lt;/script&gt;
-
-&lt;vitrine-shader effect="dither"
-  preset="newsprint" reveal="hover"&gt;
-  &lt;img src alt width height&gt;
-&lt;/vitrine-shader&gt;</pre>
-            <p class="stack__text">No bundler. No WebGL2, no CORS? The photo stays and nothing is logged.</p>
+            <ol class="scale" aria-label="How the glass clears">
+              <li>
+                <figure>
+                  <vitrine-shader
+                    class="shot"
+                    effect="glass"
+                    preset="window"
+                    bind="date:2026-11-11T10:00:00Z"
+                    data-days-before="30"
+                    reveal="none"
+                  >
+                    <img
+                      src="../fixtures/products/w640/03-sneaker.webp"
+                      alt=""
+                      width="1600"
+                      height="2240"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </vitrine-shader>
+                  <figcaption>30 days out</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure>
+                  <vitrine-shader
+                    class="shot"
+                    effect="glass"
+                    preset="window"
+                    bind="date:2026-11-11T10:00:00Z"
+                    data-days-before="7"
+                    reveal="none"
+                  >
+                    <img
+                      src="../fixtures/products/w640/03-sneaker.webp"
+                      alt=""
+                      width="1600"
+                      height="2240"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </vitrine-shader>
+                  <figcaption>7 days out</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure>
+                  <vitrine-shader
+                    class="shot"
+                    effect="glass"
+                    preset="window"
+                    bind="date:2026-11-11T10:00:00Z"
+                    data-days-before="1"
+                    reveal="none"
+                  >
+                    <img
+                      src="../fixtures/products/w640/03-sneaker.webp"
+                      alt=""
+                      width="1600"
+                      height="2240"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </vitrine-shader>
+                  <figcaption>1 day out</figcaption>
+                </figure>
+              </li>
+              <li>
+                <figure>
+                  <vitrine-shader
+                    class="shot"
+                    effect="glass"
+                    preset="window"
+                    bind="date:2026-11-11T10:00:00Z"
+                    data-days-before="0"
+                    reveal="none"
+                  >
+                    <img
+                      src="../fixtures/products/w640/03-sneaker.webp"
+                      alt=""
+                      width="1600"
+                      height="2240"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </vitrine-shader>
+                  <figcaption>Release day</figcaption>
+                </figure>
+              </li>
+            </ol>
           </div>
         </div>
-      </section>
-
-      <section id="catalogue" class="catalogue" aria-labelledby="catalogue-title">
-        <div class="catalogue__head">
-          <h2 id="catalogue-title" class="catalogue__title">Catalogue</h2>
-          <p class="catalogue__count">
-            12 items · dither / newsprint · printed once, 0 live WebGL contexts in the grid · hover for the
-            photo
-          </p>
-        </div>
-        <ul class="grid">
-          <li class="cell cell--lead">
-            <a class="card" href="#pc-008-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/01-tee-el-funkador.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/01-tee-el-funkador.webp   640w,
-                    ../spikes/fixtures/w1000/01-tee-el-funkador.webp 1000w,
-                    ../spikes/fixtures/01-tee-el-funkador.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 50vw, 100vw"
-                  alt="EL FUNKADOR — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-008 · Tee</span>
-                <span class="card__title">EL FUNKADOR</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-003-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/02-print-uptown-saturday-descent.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/02-print-uptown-saturday-descent.webp   640w,
-                    ../spikes/fixtures/w1000/02-print-uptown-saturday-descent.webp 1000w,
-                    ../spikes/fixtures/02-print-uptown-saturday-descent.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="UPTOWN SATURDAY DESCENT — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-003 · Print</span>
-                <span class="card__title">UPTOWN SATURDAY DESCENT</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-001-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/03-tee-molnar.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/03-tee-molnar.webp   640w,
-                    ../spikes/fixtures/w1000/03-tee-molnar.webp 1000w,
-                    ../spikes/fixtures/03-tee-molnar.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="ROTATION — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-001 · Tee</span>
-                <span class="card__title">ROTATION</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-002-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/04-print-opart_accent.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/04-print-opart_accent.webp   640w,
-                    ../spikes/fixtures/w1000/04-print-opart_accent.webp 1000w,
-                    ../spikes/fixtures/04-print-opart_accent.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="INTERFERENCE — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-002 · Print</span>
-                <span class="card__title">INTERFERENCE</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-004-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/05-tee-the-hustle-recursive.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/05-tee-the-hustle-recursive.webp   640w,
-                    ../spikes/fixtures/w1000/05-tee-the-hustle-recursive.webp 1000w,
-                    ../spikes/fixtures/05-tee-the-hustle-recursive.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="THE HUSTLE (RECURSIVE) — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-004 · Tee</span>
-                <span class="card__title">THE HUSTLE (RECURSIVE)</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-003-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/06-print-flow.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/06-print-flow.webp   640w,
-                    ../spikes/fixtures/w1000/06-print-flow.webp 1000w,
-                    ../spikes/fixtures/06-print-flow.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="FLOW — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-003 · Print</span>
-                <span class="card__title">FLOW</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-004-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/07-tee-bauhaus_accent.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/07-tee-bauhaus_accent.webp   640w,
-                    ../spikes/fixtures/w1000/07-tee-bauhaus_accent.webp 1000w,
-                    ../spikes/fixtures/07-tee-bauhaus_accent.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="STACK — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-004 · Tee</span>
-                <span class="card__title">STACK</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-001-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/08-print-faded-in-studio-54.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/08-print-faded-in-studio-54.webp   640w,
-                    ../spikes/fixtures/w1000/08-print-faded-in-studio-54.webp 1000w,
-                    ../spikes/fixtures/08-print-faded-in-studio-54.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="FADED IN STUDIO 54 — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-001 · Print</span>
-                <span class="card__title">FADED IN STUDIO 54</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-007-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/09-tee-ollie.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/09-tee-ollie.webp   640w,
-                    ../spikes/fixtures/w1000/09-tee-ollie.webp 1000w,
-                    ../spikes/fixtures/09-tee-ollie.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="OLLIE — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-007 · Tee</span>
-                <span class="card__title">OLLIE</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-007-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/10-print-kredki-warm.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/10-print-kredki-warm.webp   640w,
-                    ../spikes/fixtures/w1000/10-print-kredki-warm.webp 1000w,
-                    ../spikes/fixtures/10-print-kredki-warm.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="CRAYONS (WARM) — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-007 · Print</span>
-                <span class="card__title">CRAYONS (WARM)</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#pc-005-tee">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/11-tee-mothership-reflection.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/11-tee-mothership-reflection.webp   640w,
-                    ../spikes/fixtures/w1000/11-tee-mothership-reflection.webp 1000w,
-                    ../spikes/fixtures/11-tee-mothership-reflection.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="MOTHERSHIP REFLECTION — NIWWTS tee, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">PC-005 · Tee</span>
-                <span class="card__title">MOTHERSHIP REFLECTION</span>
-                <span class="card__price">149 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell">
-            <a class="card" href="#ar-009-print">
-              <vitrine-shader effect="dither" preset="newsprint" reveal="hover">
-                <img
-                  src="../spikes/fixtures/w640/12-print-type_accent.webp"
-                  srcset="
-                    ../spikes/fixtures/w640/12-print-type_accent.webp   640w,
-                    ../spikes/fixtures/w1000/12-print-type_accent.webp 1000w,
-                    ../spikes/fixtures/12-print-type_accent.webp       1600w
-                  "
-                  sizes="(min-width: 901px) 25vw, 50vw"
-                  alt="TYPE — NIWWTS print, edition No.06"
-                  width="1600"
-                  height="1920"
-                  loading="eager"
-                  decoding="async"
-                />
-              </vitrine-shader>
-              <span class="card__meta">
-                <span class="card__code">AR-009 · Print</span>
-                <span class="card__title">TYPE</span>
-                <span class="card__price">89 PLN</span>
-              </span>
-            </a>
-          </li>
-          <li class="cell cell--plate" aria-label="About this grid">
-            <p class="plate__text">
-              Twelve cards, printed once through one shared WebGL context, then let go of it. Hover, tap or
-              Tab.
-            </p>
-            <p class="plate__meta">
-              <span>dither · newsprint · 8×8 Bayer · 3 tones · whitePoint 0.9</span>
-              <a href="./stress.html">24 cards: stress page</a>
-            </p>
-          </li>
-        </ul>
-      </section>
-
-      <section class="editorial" aria-labelledby="editorial-title">
-        <figure class="editorial__figure">
-          <vitrine-shader effect="paper" preset="folded-lookbook" reveal="hover">
-            <img
-              src="../spikes/fixtures/w640/piece-el-funkador.webp"
-              srcset="
-                ../spikes/fixtures/w640/piece-el-funkador.webp   640w,
-                ../spikes/fixtures/w1000/piece-el-funkador.webp 1000w,
-                ../spikes/fixtures/piece-el-funkador.webp       1100w
-              "
-              sizes="(min-width: 901px) 38vw, 100vw"
-              alt="EL FUNKADOR, 2026, halftone collage still"
-              width="1100"
-              height="720"
-              loading="eager"
-              decoding="async"
-            />
-          </vitrine-shader>
-          <figcaption class="editorial__caption">paper / folded-lookbook · hover for the still</figcaption>
-        </figure>
-        <div class="editorial__text">
-          <p class="editorial__code">PC-008 · Halftone Collage · 2026</p>
-          <h2 id="editorial-title" class="editorial__title">EL<br />FUNKADOR</h2>
-          <p class="editorial__body">
-            Nº 01 of the NIWWTS Lucha Federation. An anonymous strongman, photographed in 1905, drafted
-            seventy years later into a fight he never agreed to. The mask was baked into the print before the
-            halftone pass - he has always been wearing it. Three of him dive across a scrolling wall of type
-            because the main event never books just one. Tap the floor and somebody takes the bump.
-          </p>
-        </div>
-      </section>
-      <section class="credit" aria-labelledby="credit-title">
-        <div class="credit__lead">
-          <p class="credit__kicker">Built on Paper Shaders · Apache-2.0</p>
-          <h2 id="credit-title" class="credit__title">Made with Paper.</h2>
-          <p class="credit__body">
-            The four effects are image-dithering, halftone-cmyk, mesh-gradient and paper-texture from
-            <code>@paper-design/shaders</code> 0.0.82, pinned. The page layout was designed on the Paper
-            canvas before it was coded; the proof print at the top came later, in code. The presets started as
-            frames in Paper and were picked on renders of the element; they live in
-            <code>presets/*.json</code>, the same files Liquid and React use. Pixel-compatibility tests
-            against shaders-react: 0 different pixels.
-          </p>
-        </div>
-        <dl class="credit__table">
-          <div>
-            <dt>dither · newsprint</dt>
-            <dd>product cards · baked once · 3.3 KB gzip</dd>
-          </div>
-          <div>
-            <dt>halftone · riso</dt>
-            <dd>product page · baked once · 4.1 KB gzip</dd>
-          </div>
-          <div>
-            <dt>mesh · drop-night</dt>
-            <dd>hero colour bar · the only live context · 2.3 KB gzip</dd>
-          </div>
-          <div>
-            <dt>paper · folded-lookbook</dt>
-            <dd>editorial image · baked once · 6.4 KB gzip</dd>
-          </div>
-        </dl>
       </section>
     </main>
 
-    <footer class="colophon">
-      <p>
-        VITRINE · Piotr Filipecki · Works © NIWWTS ·
-        <a href="https://shaders.paper.design">Powered by Paper Shaders</a>
+    <footer>
+      <p class="footer__credits">
+        Store is made up: names, prices and copy are invented for this demo, and the pre-order date is always
+        nine days from today. Product photographs from Unsplash: Jocelyn Morales, Benjamin Watterson, Mojtaba
+        Fahiminia, Eugene Chystiakov, Oscar Ivan Esquivel Arteaga, Jess Bailey, mostafa mahmoudi, C&nbsp;D-X,
+        Olena Bohovyk, Anton Be, Luma Candles, feey (<a
+          href="https://github.com/PiotrekFilipecki/vitrine/blob/main/examples/fixtures/CREDITS.md"
+          >credits and licences</a
+        >).
       </p>
-      <p>Static page, no bundler: the element is imported from <code>packages/element/dist</code>.</p>
+      <p class="footer__about">
+        <a href="https://github.com/PiotrekFilipecki/vitrine">VITRINE</a>, open source (Apache-2.0).
+        <a href="https://shaders.paper.design">Powered by Paper Shaders</a>.
+      </p>
     </footer>
   </body>
 </html>

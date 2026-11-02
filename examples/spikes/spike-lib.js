@@ -27,7 +27,7 @@ export const FIXTURES = [
   '11-tee-mothership-reflection',
   '12-print-type_accent',
 ];
-export const fixtureUrl = (i) => `fixtures/${FIXTURES[i % FIXTURES.length]}.webp`;
+export const fixtureUrl = (i) => `/packages/element/e2e/fixtures/niwwts/${FIXTURES[i % FIXTURES.length]}.webp`;
 
 export function loadImage(src, crossOrigin = false) {
   return new Promise((resolve, reject) => {

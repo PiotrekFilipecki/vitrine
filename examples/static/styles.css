@@ -1,8 +1,15 @@
-/* NIWWTS No.06 · VITRINE demo. Tokens follow the shop identity: paper + ink + one accent, radius 0, no shadows,
-   typographic contrast on the width axis of one family (Archivo wdth 62–125). */
-
-/* Q0: Archivo from the repo (OFL, examples/fonts/archivo) instead of Google Fonts. The third-party font arriving late
-   moved the whole <main> (Lighthouse CLS 0.329 on the P4 page); same-origin + preload removes the extra origin. */
+/*
+ * VITRINE demo "Store" (Q1). Lock from docs/vitrine/KIERUNEK-v2.md (taste-guardrail):
+ *   world      shop window: reeded glass, paper of a price tag; lineage Aesop interiors, Dieter Rams catalogue,
+ *              product photography on a plain ground
+ *   type       Archivo, self-hosted: width 62 % for headings, 100 % for text, 125 % for small labels; no mono
+ *   colour     paper #EFEBE4, ink #141312, no UI accent: colour comes only from the photographs
+ *   structure  product edge to edge (hero runs to the right and bottom edges); catalogue in three columns of
+ *              different heights (the middle one starts lower)
+ *   signature  the glass. Everything else is quiet.
+ *   knobs      variance 6 · motion 6 (one orchestrated moment: the glass) · density 3
+ *   negative   NOT a Dribbble shader gallery, a "WebGL effects" demo or a NIWWTS drop
+ */
 @font-face {
   font-family: 'Archivo';
   font-style: normal;
@@ -10,694 +17,536 @@
   font-stretch: 62% 125%;
   font-display: swap;
   src: url('../fonts/archivo/archivo-latin-wdth-wght.woff2') format('woff2');
-  unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
-    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 :root {
-  --paper: #f1ece2;
-  --ink: #151311;
-  --orange: #f2861e; /* No.06 accent: only ever a surface under ink, never text on paper */
-  --blue-rice: #3a4df0; /* the one accent allowed as text on paper (5.1:1) */
-  --rule: 2px;
-  --hair: 1px;
-  --margin: max(14px, 3.5vmin);
-  --font: 'Archivo', 'Arial Narrow', Arial, sans-serif;
-  --vitrine-reveal-duration: 320ms;
-  --vitrine-reveal-ease: cubic-bezier(0.2, 0, 0, 1);
+  --paper: #efebe4;
+  --paper-2: #e6e1d8; /* a shade under paper for empty image boxes while they load */
+  --ink: #141312; /* 15.62:1 on paper */
+  --ink-2: #57524c; /* 6.51:1 on paper */
+  --rule: rgba(20, 19, 18, 0.18);
+  --bar: 64px;
+  --gutter: clamp(16px, 3.4vw, 48px);
+  --col-gap: clamp(16px, 2.2vw, 32px);
 }
 
 * {
   box-sizing: border-box;
 }
-
 html {
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font);
-  font-size: 16px;
-  line-height: 1.4;
-  -webkit-text-size-adjust: 100%;
+  font-family: 'Archivo', sans-serif;
+  font-stretch: 100%;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
-
 body {
   margin: 0;
-  padding: var(--margin);
-  min-height: 100vh;
+  background: var(--paper);
 }
-
 a {
   color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
 }
-
-code {
-  font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 0.92em;
-}
-
-.skip {
-  position: absolute;
-  left: var(--margin);
-  top: -100px;
-  padding: 8px 12px;
-  background: var(--ink);
-  color: var(--paper);
-  text-decoration: none;
-}
-.skip:focus-visible {
-  top: var(--margin);
-  outline: 2px solid var(--paper);
-  outline-offset: -4px;
-  z-index: 10;
-}
-
 :focus-visible {
   outline: 2px solid var(--ink);
   outline-offset: 3px;
 }
+img {
+  max-width: 100%;
+}
 
-/* masthead: double rule lockup, columns that do not align on purpose */
-.masthead {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas:
-    'brand note'
-    'issue issue';
-  align-items: end;
-  gap: 0 24px;
-  border-top: var(--rule) solid var(--ink);
-  padding-top: 6px;
-  position: relative;
-}
-.masthead::after {
-  content: '';
+.skip {
   position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(var(--rule) + 2px);
-  border-top: var(--rule) solid var(--ink);
+  left: var(--gutter);
+  top: -100px;
+  z-index: 10;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 14px;
 }
-.masthead p {
+.skip:focus {
+  top: 8px;
+}
+
+/* bar */
+.bar {
+  height: var(--bar);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--gutter);
+  border-bottom: 1px solid var(--ink);
+}
+.wordmark {
+  font-stretch: 62%;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.bar nav {
+  display: flex;
+  gap: 28px;
+  font-size: 14px;
+}
+.bar nav a {
+  display: inline-block;
+  padding: 10px 0;
+  text-decoration: none;
+}
+.bar nav a:hover {
+  text-decoration: underline;
+}
+
+.label {
   margin: 0;
-}
-.masthead__brand {
-  grid-area: brand;
+  font-size: 12px;
   font-weight: 700;
   font-stretch: 125%;
-  font-size: 26px;
-  letter-spacing: 0.02em;
-  line-height: 1;
-  padding-top: 10px;
-}
-.masthead__issue {
-  grid-area: issue;
-  font-size: 12px;
-  font-weight: 500;
-  font-stretch: 100%;
-  text-transform: uppercase;
   letter-spacing: 0.1em;
-  padding: 10px 0 8px;
-  border-bottom: var(--hair) solid var(--ink);
+  text-transform: uppercase;
 }
-.masthead__note {
-  grid-area: note;
-  font-size: 12px;
-  text-align: right;
-  padding-top: 10px;
-}
-.masthead__issue {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-.masthead__stacks {
-  color: var(--blue-rice);
+.price {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
-/* three stacks: three code columns of different widths (38 / 29 / 27), ink blocks on paper */
-.stacks {
-  margin-top: 40px;
+/* Every product image: the element takes the box, the <img> covers it (the glass shader crops the same way). */
+.shot {
+  display: block;
+  background: var(--paper-2);
 }
-.stacks__head {
+.shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* hero: 46 / 54, the photograph runs to the right and bottom edges (R0). */
+.hero {
+  display: grid;
+  grid-template-columns: 46fr 54fr;
+  grid-template-rows: 1fr auto;
+  grid-template-areas:
+    'head photo'
+    'body photo';
+  min-height: calc(100svh - var(--bar));
+}
+.hero__head {
+  grid-area: head;
+  padding: clamp(32px, 6vh, 72px) var(--gutter) 0;
+}
+.hero__body {
+  grid-area: body;
+  padding: 0 var(--gutter) var(--gutter);
+}
+.hero__photo {
+  grid-area: photo;
+  display: block;
+  position: relative;
+}
+.hero__photo .shot {
+  position: absolute;
+  inset: 0;
+  /* the element sets aspect-ratio from the image; here the box is the grid cell */
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
+.hero h1 {
+  margin: 14px 0 0;
+  font-stretch: 62%;
+  font-weight: 700;
+  font-size: clamp(56px, 10.4vw, 168px);
+  line-height: 0.86;
+  letter-spacing: -0.012em;
+  text-transform: uppercase;
+}
+.product-line {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
-  flex-wrap: wrap;
-  border-top: var(--rule) solid var(--ink);
-  padding: 8px 0 18px;
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ink);
+  font-size: 15px;
 }
-.stacks__title {
-  margin: 0;
-  font-size: 42px;
-  font-weight: 700;
-  font-stretch: 62%;
-  line-height: 0.9;
-  text-transform: uppercase;
-}
-.stacks__note {
-  margin: 0;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-.stacks__columns {
-  display: grid;
-  grid-template-columns: 38fr 29fr 27fr;
-  gap: 24px;
-  align-items: start;
-}
-/* Q0: grid items default to min-width: auto, so the <pre> pushed the page 15 px (390) to 88 px (1024) wider than
-   the viewport since P4; with 0 the code scrolls inside its block as intended. */
-.stack {
-  min-width: 0;
-}
-.stack__kicker {
-  margin: 0 0 10px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--blue-rice);
-}
-.stack__code {
-  margin: 0 0 10px;
-  padding: 18px 20px;
-  background: var(--ink);
-  color: var(--paper);
-  font-family: var(--font);
-  font-size: 14px;
-  line-height: 1.5;
-  overflow-x: auto;
-  white-space: pre;
-}
-.stack__text {
-  margin: 0;
-  font-size: 14px;
-  max-width: 44ch;
-}
-
-/* credit: 38 / 62, the effect table as hairline rows */
-.credit {
-  margin-top: 68px;
-  display: grid;
-  grid-template-columns: 38fr 62fr;
-  gap: 42px;
-  align-items: end;
-}
-.credit__lead,
-.credit__table {
-  border-top: var(--rule) solid var(--ink);
-  padding-top: 12px;
-}
-.credit__kicker {
-  margin: 0 0 14px;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--blue-rice);
-}
-.credit__title {
-  margin: 0 0 14px;
-  font-size: clamp(56px, 7vw, 96px);
-  font-weight: 700;
-  font-stretch: 62%;
-  line-height: 0.88;
-  letter-spacing: -0.02em;
-}
-.credit__body {
-  margin: 0;
-  font-size: 16px;
-}
-.credit__table {
-  margin: 0;
-}
-.credit__table div {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 6px 0;
-  border-bottom: var(--hair) solid var(--ink);
-  font-size: 14px;
-}
-.credit__table dt {
+.product-line b {
   font-weight: 700;
 }
-.credit__table dd {
-  margin: 0;
-  text-align: right;
-}
-
-/* hero (Q0): a proof print under a loupe. 38 / 62, the print bleeds off the right edge; the loupe is the cursor and
-   the one signature; the mesh is the colour bar at the foot of the proof, an effect in its place, not a backdrop. */
-.proof {
-  margin-top: 24px;
-  display: grid;
-  grid-template-columns: 38fr 62fr;
-  grid-template-areas: 'text figure';
-  column-gap: 42px;
-  align-items: end;
-}
-.proof__text {
-  grid-area: text;
-  padding-bottom: 34px;
-}
-.proof__kicker {
-  margin: 0 0 18px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--blue-rice);
-}
-.proof__title {
-  margin: 0;
-  font-weight: 700;
-  font-stretch: 62%;
-  font-size: clamp(64px, 10.4vw, 150px);
-  line-height: 0.86;
-  letter-spacing: -0.02em;
-}
-.proof__lede {
-  margin: 22px 0 0;
-  max-width: 36ch;
+.lede {
+  margin: 28px 0 0;
+  max-width: 32ch;
   font-size: 17px;
-  line-height: 1.4;
+  line-height: 1.45;
+  color: var(--ink-2);
 }
-.proof__hint {
-  margin: 26px 0 0;
-  padding-top: 8px;
-  border-top: var(--hair) solid var(--ink);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  max-width: 44ch;
+.hint {
+  margin: 28px 0 0;
+  font-size: 13px;
+  color: var(--ink-2);
 }
-.proof__hint--touch {
+.hint--touch {
   display: none;
 }
 @media (hover: none) {
-  .proof__hint--pointer {
+  .hint--mouse {
     display: none;
   }
-  .proof__hint--touch {
-    display: inline;
+  .hint--touch {
+    display: block;
   }
 }
-.proof__figure {
-  grid-area: figure;
-  margin: 0 calc(-1 * var(--margin)) 0 0;
-}
-.proof__frame {
-  --lx: 31%;
-  --ly: 36%;
-  --lr: clamp(64px, 9.5vw, 148px);
-  position: relative;
-  display: block;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: var(--paper);
-  color: inherit;
-  font: inherit;
-  overflow: hidden;
-  cursor: pointer;
-  touch-action: manipulation;
-}
-@media (hover: hover) and (pointer: fine) {
-  .proof__frame {
-    cursor: none;
-  }
-}
-.proof__frame:focus-visible {
-  /* outside the print: inside it, an ink ring vanished over the dark parts of the dither (a11y-gate, 2.4.7) */
-  outline: 3px solid var(--ink);
-  outline-offset: 3px;
-}
-.proof__print {
-  /* display: block before the element is defined too: an undefined custom element is inline, the photo painted at
-     another size first and the upgrade produced a second, later LCP candidate (Q0 measurement). */
-  display: block;
-  aspect-ratio: 4 / 3;
-}
-.proof__print img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-/* The baked print is masked by a hard-edged circle: inside it, the content <img> shows through. */
-.proof__print > .vitrine-layer {
-  -webkit-mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), transparent 100%, #000 100%);
-  mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), transparent 100%, #000 100%);
-}
-.proof__loupe {
-  position: absolute;
-  left: var(--lx);
-  top: var(--ly);
-  width: calc(2 * var(--lr));
-  height: calc(2 * var(--lr));
-  transform: translate(-50%, -50%);
-  border: 2px solid var(--ink);
-  outline: 2px solid var(--paper);
-  border-radius: 50%;
-  pointer-events: none;
-}
-.proof__frame[aria-pressed='true'] .proof__loupe,
-.proof__print:not([data-vitrine-state='baked']) + .proof__loupe {
-  /* no print yet (loading, ?effects=off, no WebGL2): nothing for the loupe to look through */
-  display: none;
-}
-.proof__frame[aria-pressed='true'] .vitrine-layer {
-  opacity: 0;
-}
-.proof__caption {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  margin-right: var(--margin);
-  padding-top: 8px;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
-}
-/* the colour bar along the foot of the proof, like the control strip on a press sheet */
-.proof__mesh {
-  display: block;
-  height: 28px;
-  background: var(--ink);
-}
 
-/* stress page: the live mesh as a band above the grid */
-.stress-band {
-  margin-top: 24px;
+/* section heads */
+.section {
+  padding: clamp(72px, 12vh, 140px) var(--gutter) clamp(56px, 9vh, 112px);
+  border-top: 1px solid var(--ink);
 }
-.stress-band__mesh {
-  display: block;
-  height: 120px;
-  background: var(--ink);
+.section__head {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--col-gap);
+  align-items: end;
+  margin-bottom: clamp(32px, 6vh, 64px);
 }
-.stress-band__label {
-  margin: 8px 0 0;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-/* catalogue: hairline grid like a contact sheet; first cell is the lead (2 columns) */
-.catalogue {
-  margin-top: 42px;
-}
-.catalogue__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  flex-wrap: wrap;
-  border-top: var(--rule) solid var(--ink);
-  padding: 8px 0 16px;
-}
-.catalogue__title {
+.section__head h2 {
+  grid-column: 1 / span 5;
   margin: 0;
-  font-size: 42px;
-  font-weight: 700;
   font-stretch: 62%;
+  font-weight: 700;
+  font-size: clamp(44px, 5.6vw, 88px);
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+.section__head h2 sup {
+  font-size: 0.32em;
+  font-stretch: 100%;
+  vertical-align: top;
+  margin-left: 0.2em;
+  letter-spacing: 0;
+}
+.section__head p {
+  grid-column: 9 / span 4;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+/* catalogue: three columns, the middle one starts lower, the third a little lower (different heights) */
+.catalogue {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: var(--col-gap);
+  align-items: start;
+}
+.catalogue__col {
+  display: grid;
+  row-gap: clamp(40px, 6vh, 72px);
+}
+.catalogue__col:nth-child(2) {
+  padding-top: clamp(80px, 22vh, 240px);
+}
+.catalogue__col:nth-child(3) {
+  padding-top: clamp(32px, 8vh, 96px);
+}
+.card {
+  margin: 0;
+}
+.card__link {
+  display: block;
+  text-decoration: none;
+}
+.card .shot {
+  aspect-ratio: var(--ratio, 4 / 5);
+}
+.card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  font-size: 15px;
+}
+.card__name {
+  font-weight: 700;
+}
+.card__note {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.card__link:hover .card__name,
+.card__link:focus-visible .card__name {
+  text-decoration: underline;
+}
+.card__tag {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+}
+
+/* pre-order: one product, the date, and the frost scale */
+.preorder {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--col-gap);
+  align-items: end;
+}
+.preorder__card {
+  grid-column: 1 / span 6;
+}
+.preorder__card .shot {
+  aspect-ratio: 4 / 5;
+}
+.preorder__text {
+  grid-column: 8 / span 5;
+}
+.preorder__date {
+  margin: 10px 0 0;
+  font-stretch: 62%;
+  font-weight: 700;
+  font-size: clamp(48px, 6.4vw, 104px);
   line-height: 0.9;
   text-transform: uppercase;
 }
-.catalogue__count {
-  margin: 0;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+.preorder__text p.lede {
+  margin-top: 24px;
 }
-.grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.scale {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--hair);
-  background: var(--ink);
-  border: var(--hair) solid var(--ink);
+  gap: 10px;
+  margin: 40px 0 0;
+  padding: 0;
+  list-style: none;
 }
-.cell {
-  background: var(--paper);
-  min-width: 0;
+.scale .shot {
+  aspect-ratio: 4 / 5;
 }
-/* Q0: the lead card spans 2 × 2. Its card is taken out of flow, so the two rows are as tall as their other cards and
-   the lead fills them: no empty band under the neighbours (v0.1: lead 2 × 1 next to cards of half its height). */
-.cell--lead {
-  grid-column: span 2;
-  grid-row: span 2;
-  position: relative;
-}
-.cell--lead .card {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-}
-.cell--lead vitrine-shader {
-  flex: 1 1 auto;
-  min-height: 0;
-  aspect-ratio: auto;
-}
-.cell--lead vitrine-shader img {
-  height: 100%;
-  object-fit: cover;
-}
-.card {
-  display: block;
-  color: inherit;
-  text-decoration: none;
-  height: 100%;
-}
-.card:focus-visible {
-  outline: 3px solid var(--ink);
-  outline-offset: -3px;
-}
-.card vitrine-shader {
-  display: block;
-  background: var(--paper);
-}
-.card img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.card__meta {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas:
-    'code price'
-    'title title';
-  gap: 2px 12px;
-  padding: 10px 12px 12px;
-  border-top: var(--hair) solid var(--ink);
-}
-.card__code {
-  grid-area: code;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
-}
-.card__price {
-  grid-area: price;
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-}
-.card__title {
-  grid-area: title;
-  font-size: 15px;
-  font-weight: 700;
-  font-stretch: 125%;
-  text-transform: uppercase;
-  line-height: 1.1;
-  overflow-wrap: anywhere;
-}
-
-/* closing plate: ink cell that completes the sheet. 4 columns: lead 4 units + 11 cards + plate 1 = 16 = 4 rows;
-   2 columns: lead 2 + 11 + 1 = 14 = 7 rows. The stress page has no plate: 24 cards = 6 or 12 full rows. */
-.cell--plate {
-  /* Q0: the plate takes the height of its row instead of setting it (390 px: its text made the row 20 % taller
-     than the TYPE card next to it). */
-  contain: size;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 20px 22px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 26px;
-}
-.plate__text {
-  margin: 0;
-  max-width: 44ch;
-  font-size: clamp(15px, 2vw, 26px);
-  font-weight: 500;
-  font-stretch: 100%;
-  line-height: 1.25;
-}
-.plate__meta a {
-  color: inherit;
-}
-.plate__meta {
-  margin: 0;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-/* editorial: 38 / 62 split, text column pushed to the far edge */
-.editorial {
-  margin-top: 68px;
-  display: grid;
-  grid-template-columns: 38fr 62fr;
-  gap: 42px;
-  border-top: var(--rule) solid var(--ink);
-  padding-top: 26px;
-}
-.editorial__figure {
-  margin: 0;
-}
-.editorial__figure vitrine-shader {
-  display: block;
-}
-.editorial__figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.editorial__caption {
+.scale figcaption {
   margin-top: 8px;
   font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  color: var(--ink-2);
 }
-.editorial__text {
-  align-self: end;
-  max-width: 54ch;
-  justify-self: end;
-}
-.editorial__code {
-  margin: 0 0 12px;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--blue-rice);
-}
-.editorial__title {
-  margin: 0 0 20px;
-  font-size: clamp(42px, 6vw, 110px);
-  font-weight: 700;
-  font-stretch: 62%;
-  line-height: 0.88;
-}
-.editorial__body {
+.scale figure {
   margin: 0;
-  font-size: 16px;
 }
 
-.colophon {
-  margin-top: 68px;
-  border-top: var(--rule) solid var(--ink);
-  padding-top: 10px;
+/* footer */
+footer {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--col-gap);
+  row-gap: 16px;
+  padding: 28px var(--gutter) 36px;
+  border-top: 1px solid var(--ink);
   font-size: 12px;
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
+  line-height: 1.55;
+  color: var(--ink-2);
 }
-.colophon p {
+footer p {
   margin: 0;
+}
+.footer__credits {
+  grid-column: 1 / span 7;
+}
+.footer__about {
+  grid-column: 9 / span 4;
+}
+.footer__about a,
+.footer__credits a {
+  display: inline-block;
+  padding: 2px 0;
+}
+
+/* product page */
+.pdp {
+  display: grid;
+  grid-template-columns: 58fr 42fr;
+  min-height: calc(100svh - var(--bar));
+}
+.pdp__media {
+  position: relative;
+  border-right: 1px solid var(--ink);
+}
+.pdp__media .shot {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: calc(100svh - var(--bar));
+  /* the photo fills the column (cover, like the shader); the element's own aspect-ratio would leave a paper band */
+  aspect-ratio: auto;
+}
+.pdp__info {
+  padding: clamp(32px, 6vh, 72px) var(--gutter) var(--gutter);
+  display: flex;
+  flex-direction: column;
+}
+.crumbs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.crumbs li + li::before {
+  content: '/';
+  margin-right: 8px;
+}
+.pdp h1 {
+  margin: 28px 0 0;
+  font-stretch: 62%;
+  font-weight: 700;
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+.pdp__desc {
+  margin: 24px 0 0;
+  max-width: 36ch;
+  font-size: 17px;
+  line-height: 1.45;
+}
+.pdp__spec {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--ink-2);
+}
+.buy {
+  margin-top: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 52px;
+  padding: 0 20px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  border-radius: 0;
+}
+.buy:hover {
+  background: #2a2826;
+}
+.pdp__hint {
+  margin-top: auto;
+  padding-top: 32px;
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.pdp__more {
+  margin-top: 16px;
+  font-size: 14px;
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 @media (max-width: 900px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
+  .bar nav {
+    gap: 18px;
   }
-  .cell--lead {
-    grid-row: auto;
+  .bar nav .hide-s {
+    display: none;
   }
-  .cell--plate {
-    padding: 14px;
-    gap: 14px;
-  }
-  .cell--lead .card {
-    position: static;
-    display: block;
-  }
-  .cell--lead vitrine-shader {
-    aspect-ratio: var(--vitrine-aspect, 5 / 6);
-  }
-  .cell--lead vitrine-shader img {
-    height: auto;
-  }
-  .proof {
+  .hero {
     grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
     grid-template-areas:
-      'text'
-      'figure';
+      'head'
+      'photo'
+      'body';
+    min-height: 0;
   }
-  .proof__text {
-    padding-bottom: 22px;
+  .hero__head {
+    padding: 24px var(--gutter) 20px;
   }
-  .proof__figure {
-    margin: 0 calc(-1 * var(--margin));
+  .hero__photo {
+    height: min(118vw, 72svh);
   }
-  .proof__print {
-    aspect-ratio: 4 / 5;
-  }
-  .proof__caption {
-    margin: 0 var(--margin);
-  }
-  .proof__caption {
-    flex-direction: column;
-    gap: 2px;
-  }
-  .editorial,
-  .credit,
-  .stacks__columns {
-    grid-template-columns: 1fr;
-    gap: 26px;
-  }
-  .credit__table dd {
-    text-align: left;
-  }
-  .credit__table div {
-    flex-direction: column;
-    gap: 2px;
-  }
-  .proof__title {
-    font-size: clamp(64px, 24vw, 120px);
-  }
-  .editorial__text {
-    justify-self: start;
-  }
-  .masthead {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'brand'
-      'note'
-      'issue';
-  }
-  .masthead__note {
-    text-align: left;
+  .hero__body {
     padding-top: 4px;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
+  .hero__body .product-line {
+    margin-top: 0;
+    border-top: 0;
+    padding-top: 12px;
   }
+  .lede {
+    margin-top: 20px;
+  }
+  .hint {
+    margin-top: 16px;
+  }
+  .section__head h2 {
+    grid-column: 1 / -1;
+  }
+  .section__head p {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+  }
+  /* two columns on a phone, still of different heights: the cards flow down column by column */
+  .catalogue {
+    display: block;
+    columns: 2;
+    column-gap: 12px;
+  }
+  .catalogue__col {
+    display: contents;
+  }
+  .card {
+    break-inside: avoid;
+    margin-bottom: 28px;
+  }
+  .card__meta {
+    flex-direction: column;
+    gap: 0;
+    font-size: 14px;
+  }
+  .preorder__card,
+  .preorder__text {
+    grid-column: 1 / -1;
+  }
+  .preorder__text {
+    margin-top: 28px;
+  }
+  .footer__credits,
+  .footer__about {
+    grid-column: 1 / -1;
+  }
+  .pdp {
+    grid-template-columns: 1fr;
+  }
+  .pdp__media {
+    border-right: 0;
+  }
+  .pdp__media .shot {
+    position: relative;
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+}
+.cart {
+  display: inline-block;
+  padding: 10px 0;
 }

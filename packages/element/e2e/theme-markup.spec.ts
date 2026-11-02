@@ -2,11 +2,11 @@ import { expect, test, type Page } from '@playwright/test';
 import { collectConsole, MEDIA, saveJson } from './shared';
 
 /**
- * P2 · examples/static/theme-markup.html = the HTML the Liquid sections and the card snippet render
+ * P2 · packages/element/e2e/pages/theme-markup.html = the HTML the Liquid sections and the card snippet render
  * (Horizon card DOM, one <script type=module src=vitrine.js> per section and per card).
  * Same assertions as P1's grid, plus: the module is fetched once however many tags point at it.
  */
-const URL_ = '/examples/static/theme-markup.html';
+const URL_ = '/packages/element/e2e/pages/theme-markup.html';
 
 async function scrollThrough(page: Page) {
   await page.evaluate(async () => {

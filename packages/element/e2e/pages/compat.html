@@ -68,7 +68,7 @@
       const q = new URLSearchParams(location.search);
       const effect = q.get('effect') ?? 'dither';
       const preset = q.get('preset') ?? 'default';
-      const image = q.get('img') ?? '/examples/spikes/fixtures/01-tee-el-funkador.webp';
+      const image = q.get('img') ?? '/packages/element/e2e/fixtures/niwwts/01-tee-el-funkador.webp';
       // Q0: VITRINE-only options (not React props) are stripped from the reference and switched off on the element,
       // so the comparison stays upstream shader vs upstream shader. They have their own tests (whitepoint.spec.ts).
       const VITRINE_ONLY = { whitePoint: 1 };

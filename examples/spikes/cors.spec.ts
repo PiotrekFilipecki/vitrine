@@ -47,7 +47,7 @@ test.describe('Spike C · CORS', () => {
     // Playwright's route.fulfill() re-adds CORS headers in Chromium, so the no-CORS origin is a second local
     // instance of scripts/serve.mjs on :4174 (different port = different origin, no ACAO header at all).
     const errors = collectErrors(page);
-    await page.goto(pageFor('http://localhost:4174/examples/spikes/fixtures/01-tee-el-funkador.webp'));
+    await page.goto(pageFor('http://localhost:4174/packages/element/e2e/fixtures/niwwts/01-tee-el-funkador.webp'));
     const r = await waitForSpike(page);
     saveEvidence('cors-blocked', testInfo, { ...r, consoleErrors: errors });
     expect(r.plainImg.loaded).toBe(true);

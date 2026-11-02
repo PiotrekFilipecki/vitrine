@@ -5,7 +5,7 @@ test-results
 playwright-report
 docs/media
 docs/vitrine
-examples/spikes/fixtures
+packages/element/e2e/fixtures/niwwts
 third_party
 LICENSE
 NOTICE

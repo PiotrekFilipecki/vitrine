@@ -1,5 +1,5 @@
 // Q0 · B7: assembles the GitHub Pages site for the static demo into _site/ (run after `pnpm build`).
-// The demo imports the element as ../../packages/element/dist/index.js and the fixtures as ../spikes/fixtures/…, so the
+// The demo imports the element as ../../packages/element/dist/index.js and the photos as ../fixtures/products/…, so the
 // site keeps the repo paths instead of rewriting HTML: what is tested locally is what gets published.
 // Usage: node scripts/pages-site.mjs [outDir=_site]
 import { cpSync, existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -20,11 +20,10 @@ const copy = (rel, filter = () => true) => {
   });
 };
 
-copy('examples/static', (f) => /\.(html|css)$/.test(f));
-copy('examples/spikes/fixtures', (f) => /\.(webp|json)$/.test(f));
+copy('examples/static', (f) => /\.(html|css|js)$/.test(f) && !f.endsWith('r0-hero.html'));
+copy('examples/fixtures', (f) => /\.(webp|json|md)$/.test(f));
 copy('examples/fonts');
 copy('packages/element/dist', (f) => f.endsWith('.js')); // no source maps, no .d.ts
-copy('shopify-theme/assets'); // theme-markup.html loads the single-file theme asset and its CSS
 copy('presets'); // presets/README.md is harmless; the JSON is what Liquid and React read
 copy('third_party/paper-shaders'); // LICENSE + NOTICE travel with every redistribution (CLAUDE.md)
 copy('LICENSE');
@@ -41,7 +40,7 @@ writeFileSync(
     <link rel="canonical" href="examples/static/" />
   </head>
   <body>
-    <p><a href="examples/static/">VITRINE demo: Paper Shaders on a product grid</a></p>
+    <p><a href="examples/static/">Store, a VITRINE demo: products behind reeded glass</a></p>
   </body>
 </html>
 `
