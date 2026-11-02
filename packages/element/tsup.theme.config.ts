@@ -14,7 +14,7 @@ const notice = readFileSync(new URL('../../third_party/paper-shaders/NOTICE', im
 
 const banner = `/*!
  * vitrine.js · VITRINE for Shopify themes · Apache-2.0 · Copyright 2026 Piotr Filipecki
- * https://github.com/PiotrekFilipecki/vitrine · <vitrine-shader> effect="dither|halftone|mesh|paper"
+ * https://github.com/PiotrekFilipecki/vitrine · <vitrine-shader> effect="dither|halftone|mesh|paper|glass|lens"
  * Powered by Paper Shaders (https://shaders.paper.design), @paper-design/shaders 0.0.82, Apache-2.0.
  * NOTICE of Paper Shaders, reproduced as required by its licence:
 ${notice}

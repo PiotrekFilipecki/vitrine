@@ -1,0 +1,59 @@
+{%- doc -%}
+  VITRINE v0.2 · product page image with a loupe under the pointer (lens-distortion, preset "loupe", ADR-0003).
+  Mouse or pen over the image, or a touch held still for a moment, shows a round loupe that magnifies 2.2× where the
+  shopper looks; nothing (and no WebGL context) otherwise. Decoration only: the <img> keeps its alt, the loupe is
+  aria-hidden and never takes focus. Use a large source: the loupe magnifies the file the browser picked.
+
+  @param {object} image - Image object (product.featured_media, media.preview_image…)
+  @param {string} [widths] - image_tag widths, default '640, 1000, 1600, 2000'
+  @param {string} [sizes] - image_tag sizes
+  @param {string} [loading] - 'eager' (default: the main product image is usually the LCP) or 'lazy'
+  @param {string} [fetchpriority] - 'high' (default) or 'auto'
+  @param {string} [class] - extra class(es) for the <img>
+  @param {string} [alt] - alt override; defaults to image.alt
+  @param {number} [zoom] - magnification, default 2.2
+  @param {number} [loupe_size] - loupe diameter as a fraction of the image width, default 0.5
+
+  @example
+  {% render 'vitrine-loupe-media', image: product.featured_media, sizes: '(min-width: 990px) 50vw, 100vw' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign widths = widths | default: '640, 1000, 1600, 2000'
+  assign loading = loading | default: 'eager'
+  assign fetchpriority = fetchpriority | default: 'high'
+  assign alt = alt | default: image.alt | default: ''
+  assign params = ''
+  if zoom != blank or loupe_size != blank
+    assign params = '{'
+    if zoom != blank
+      assign params = params | append: '"zoom":' | append: zoom
+    endif
+    if loupe_size != blank
+      if zoom != blank
+        assign params = params | append: ','
+      endif
+      assign params = params | append: '"loupeSize":' | append: loupe_size
+    endif
+    assign params = params | append: '}'
+  endif
+-%}
+
+{%- if image != blank -%}
+  <vitrine-shader
+    effect="lens"
+    preset="loupe"
+    bind="pointer"
+    class="vitrine-loupe-media"
+    {%- if params != blank %}
+      params="{{ params | escape }}"
+    {%- endif -%}
+  >
+    {{-
+      image
+      | image_url: width: 2000
+      | image_tag: widths: widths, sizes: sizes, loading: loading, fetchpriority: fetchpriority, alt: alt, class: class
+    -}}
+  </vitrine-shader>
+  {%- render 'vitrine-script' -%}
+{%- endif -%}

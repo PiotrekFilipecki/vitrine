@@ -1,0 +1,58 @@
+{%- doc -%}
+  VITRINE v0.2 · pre-order card: reeded glass frosted by the days left to the release date (30 → 7 → 1 day → clear,
+  the values approved at the R0 gate, ADR-0003). The frost is computed once in the browser when the card mounts and
+  baked: no clock runs on the page. On and after the release date the photo is clear.
+
+  Release date: product metafield custom.release_date (type "Date" or "Date and time"; create it in
+  Settings → Custom data → Products). Optional custom.preorder_from (same types): a pre-order shorter than 30 days
+  starts fully frosted. Both can be passed in instead, when the theme keeps them elsewhere.
+
+  @param {object} product - The product (for the metafields)
+  @param {object} [image] - Image object, defaults to product.featured_image
+  @param {string} [release_date] - ISO date, overrides product.metafields.custom.release_date
+  @param {string} [preorder_from] - ISO date, overrides product.metafields.custom.preorder_from
+  @param {string} [widths] - image_tag widths, default '240, 352, 640, 832, 1200'
+  @param {string} [sizes] - image_tag sizes
+  @param {string} [loading] - 'lazy' (default) or 'eager'
+  @param {string} [class] - extra class(es) for the <img>
+  @param {string} [alt] - alt override; defaults to image.alt
+  @param {string} [reveal] - 'none' (default: the frost is the message), 'hover' or 'tap'
+
+  @example
+  {% render 'vitrine-preorder-card', product: card_product, sizes: '(min-width: 990px) 33vw, 100vw' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign image = image | default: product.featured_image
+  assign widths = widths | default: '240, 352, 640, 832, 1200'
+  assign loading = loading | default: 'lazy'
+  assign alt = alt | default: image.alt | default: ''
+  assign reveal = reveal | default: 'none'
+  assign release = release_date | default: product.metafields.custom.release_date.value
+  assign opens = preorder_from | default: product.metafields.custom.preorder_from.value
+  assign bind = ''
+  if release != blank
+    assign to = release | date: '%Y-%m-%dT%H:%M:%S%z'
+    assign bind = 'date:' | append: to
+    if opens != blank
+      assign from = opens | date: '%Y-%m-%dT%H:%M:%S%z'
+      assign bind = 'date:' | append: from | append: '/' | append: to
+    endif
+  endif
+-%}
+
+{%- if image == blank -%}
+  {%- comment -%} No image: nothing to frost. {%- endcomment -%}
+{%- elsif bind == blank -%}
+  {%- comment -%} No release date: a plain image, the theme's own pre-order label still applies. {%- endcomment -%}
+  {{ image | image_url: width: 1200 | image_tag: widths: widths, sizes: sizes, loading: loading, alt: alt, class: class }}
+{%- else -%}
+  <vitrine-shader effect="glass" preset="window" bind="{{ bind }}" reveal="{{ reveal }}" class="vitrine-preorder-card">
+    {{-
+      image
+      | image_url: width: 1200
+      | image_tag: widths: widths, sizes: sizes, loading: loading, alt: alt, class: class
+    -}}
+  </vitrine-shader>
+  {%- render 'vitrine-script' -%}
+{%- endif -%}

@@ -11,13 +11,38 @@ Tested on **Horizon 4.3.0** (Shopify's current first-party theme, 29.10.2026). D
 
 | File                                 | What it does                                                                                                                                                   |
 | ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `assets/vitrine.js`                  | the `<vitrine-shader>` element, one ES module (105.0 KB, 46.1 KB gzip), all four effects inside; licence + Paper NOTICE in the header                          |
+| `assets/vitrine.js`                  | the `<vitrine-shader>` element, one ES module (140.5 KB, 55.5 KB gzip, Q1 build), all six effects inside; licence + Paper NOTICE in the header                 |
 | `assets/vitrine-theme.css`           | styles for the two sections and the card wrapper (radius 0, no shadows; typography inherits from the theme)                                                    |
 | `sections/vitrine-hero.liquid`       | mesh gradient surface + ink plate; colour pickers ×4, speed / distortion / swirl / grain / scale sliders, height, plate colours; blocks: heading, text, button |
 | `sections/vitrine-editorial.liquid`  | paper texture on an `image_picker` image + text column; folds / crumples / grain / fibre / light angle / seed sliders; blocks: kicker, heading, text, button   |
 | `snippets/vitrine-card-media.liquid` | wraps a card image in `<vitrine-shader effect="dither\|halftone" reveal="hover">`; reads the theme settings below                                              |
 | `snippets/vitrine-script.liquid`     | the `<script type="module">` tag; rendered by the sections and the card snippet only                                                                           |
 | `settings_schema.fragment.json`      | the "VITRINE" settings group to paste into `config/settings_schema.json` (effect on cards on/off, dither/halftone, preset, reveal)                             |
+
+## v0.2: glass card, pre-order glass, loupe (ADR-0003)
+
+Three snippets, one per shop moment. Each renders `<vitrine-shader>` around the theme's own `image_tag`, so the
+photo stays the content (LCP, alt, fallback without WebGL2), and loads `assets/vitrine.js` through `vitrine-script`.
+
+| Snippet                                 | Where                              | What the shopper sees                                                                                                                       |
+| --------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `snippets/vitrine-glass-card.liquid`    | product card image                 | the photo behind reeded glass; hover, tap or keyboard focus slides the glass away (first tap on a phone opens, the second follows the link) |
+| `snippets/vitrine-preorder-card.liquid` | card of a product not released yet | the glass frosted by the days left: 30 days → 7 → 1 → clear on the release date                                                             |
+| `snippets/vitrine-loupe-media.liquid`   | main image on the product page     | a round loupe (2.2×) under the mouse, or under a finger held still                                                                          |
+
+```liquid
+{% render 'vitrine-glass-card', image: card_product.featured_media, sizes: '(min-width: 990px) 33vw, 100vw' %}
+{% render 'vitrine-preorder-card', product: card_product, sizes: '(min-width: 990px) 33vw, 100vw' %}
+{% render 'vitrine-loupe-media', image: product.featured_media, sizes: '(min-width: 990px) 50vw, 100vw' %}
+```
+
+**Release date (pre-order):** create a product metafield definition in **Settings → Custom data → Products**:
+namespace and key `custom.release_date`, type _Date_ or _Date and time_. Optional `custom.preorder_from` (same types):
+a pre-order shorter than 30 days then starts fully frosted. Fill the date on each pre-order product. Without a date
+the snippet prints the plain image. The frost is computed once in the shopper's browser and baked; nothing ticks.
+
+In Horizon, put `vitrine-glass-card` (or `vitrine-preorder-card` when `card_product.metafields.custom.release_date`
+is set) where the v0.1 instructions below put `vitrine-card-media`, and keep `data-vitrine-card` on the card root.
 
 ## Install in 10 minutes
 

@@ -1,0 +1,43 @@
+{%- doc -%}
+  VITRINE v0.2 · product card behind reeded glass (fluted-glass, preset "window", ADR-0003). At rest the glass is a
+  baked image (no WebGL context); hover, tap or keyboard focus on the card slides it away on one short-lived context.
+  The <img> stays the content (LCP, alt, fallback without WebGL2). On a phone the first tap opens the glass and the
+  second follows the link. Mark the card root with data-vitrine-card when the image is not inside the card's link
+  (Horizon: snippets/product-card.liquid, see shopify-theme/README.md).
+
+  @param {object} image - Image object (product.featured_image, media.preview_image, card_product.featured_media…)
+  @param {string} [widths] - image_tag widths, default '240, 352, 640, 832, 1200'
+  @param {string} [sizes] - image_tag sizes
+  @param {string} [loading] - 'lazy' (default) or 'eager'
+  @param {string} [fetchpriority] - 'auto' (default) or 'high' for the first row
+  @param {string} [class] - extra class(es) for the <img>
+  @param {string} [style] - inline style for the <img>
+  @param {string} [alt] - alt override; defaults to image.alt
+  @param {string} [reveal] - 'hover' (default: hover, tap, focus), 'tap' (click or tap only) or 'none'
+  @param {string} [preset] - glass preset, default 'window'
+
+  @example
+  {% render 'vitrine-glass-card', image: card_product.featured_media, sizes: '(min-width: 990px) 33vw, 100vw' %}
+{%- enddoc -%}
+
+{%- liquid
+  assign widths = widths | default: '240, 352, 640, 832, 1200'
+  assign loading = loading | default: 'lazy'
+  assign fetchpriority = fetchpriority | default: 'auto'
+  assign alt = alt | default: image.alt | default: ''
+  assign reveal = reveal | default: 'hover'
+  assign preset = preset | default: 'window'
+-%}
+
+{%- if image == blank -%}
+  {%- comment -%} No image: nothing to put behind the glass. {%- endcomment -%}
+{%- else -%}
+  <vitrine-shader effect="glass" preset="{{ preset }}" reveal="{{ reveal }}" class="vitrine-glass-card">
+    {{-
+      image
+      | image_url: width: 1200
+      | image_tag: widths: widths, sizes: sizes, loading: loading, fetchpriority: fetchpriority, alt: alt, class: class, style: style
+    -}}
+  </vitrine-shader>
+  {%- render 'vitrine-script' -%}
+{%- endif -%}
