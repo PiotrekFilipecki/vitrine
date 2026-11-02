@@ -20,6 +20,7 @@
     "check:theme": "shopify theme check --path shopify-theme --fail-level error"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@eslint/js": "10.0.1",
     "@paper-design/shaders": "0.0.82",
     "@paper-design/shaders-react": "0.0.82",

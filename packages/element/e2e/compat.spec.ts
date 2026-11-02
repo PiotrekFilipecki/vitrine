@@ -3,8 +3,11 @@ import { collectConsole, MEDIA, saveJson, savePngFromDataUrl, waitForDone } from
 
 /**
  * PLAN §5 gate: element vs @paper-design/shaders-react on the same params → ≤ 1 % differing pixels.
- * 4 effects × 2 presets (upstream Default + the VITRINE draft). Static (speed 0, frame 0) on both sides.
+ * 4 effects × 2 presets (upstream Default + the VITRINE draft), plus glass × 3 and lens × 2 since Q1. Static
+ * (speed 0, frame 0) on both sides; the lens is compared full-frame (`bind="none"`), the pointer loupe has its own test.
  */
+const Q1_IMG = '/examples/fixtures/products/w1000/04-chair.webp';
+
 const CASES: Array<{ effect: string; preset: string; img?: string }> = [
   { effect: 'dither', preset: 'default' },
   { effect: 'dither', preset: 'newsprint' },
@@ -12,12 +15,22 @@ const CASES: Array<{ effect: string; preset: string; img?: string }> = [
   { effect: 'halftone', preset: 'riso' },
   { effect: 'mesh', preset: 'default' },
   { effect: 'mesh', preset: 'drop-night' },
-  { effect: 'paper', preset: 'default', img: '/packages/element/e2e/fixtures/niwwts/piece-formation-wattstax-72.webp' },
+  {
+    effect: 'paper',
+    preset: 'default',
+    img: '/packages/element/e2e/fixtures/niwwts/piece-formation-wattstax-72.webp',
+  },
   {
     effect: 'paper',
     preset: 'folded-lookbook',
     img: '/packages/element/e2e/fixtures/niwwts/piece-formation-wattstax-72.webp',
   },
+  // Q1 (ADR-0003): the two new shaders on the demo photographs, upstream Default + the R0 presets.
+  { effect: 'glass', preset: 'default', img: Q1_IMG },
+  { effect: 'glass', preset: 'window', img: Q1_IMG },
+  { effect: 'glass', preset: 'preorder-30', img: '/examples/fixtures/products/w1000/03-sneaker.webp' },
+  { effect: 'lens', preset: 'default', img: Q1_IMG },
+  { effect: 'lens', preset: 'loupe', img: '/examples/fixtures/products/w1000/07-bag.webp' },
 ];
 
 test.describe('P1 · pixel compatibility with shaders-react', () => {

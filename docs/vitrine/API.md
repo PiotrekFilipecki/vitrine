@@ -32,10 +32,11 @@ Pinned to `@paper-design/shaders` 0.0.82 (`PAPER_SHADERS_VERSION`).
 
 | Attribute | Values | Default | Notes |
 | --- | --- | --- | --- |
-| `effect` | `dither` · `halftone` · `mesh` · `paper` | required | image-dithering, halftone-cmyk, mesh-gradient, paper-texture |
+| `effect` | `dither` · `halftone` · `mesh` · `paper` · `glass` · `lens` | required | image-dithering, halftone-cmyk, mesh-gradient, paper-texture; v0.2: fluted-glass, lens-distortion |
 | `preset` | key from `presets/<effect>.json` | `default` | `default` = upstream Default preset 1:1; unknown names fall back to `default` |
 | `params` | JSON object | `{}` | overrides on top of the preset, same names as `@paper-design/shaders-react` props |
-| `reveal` | `hover` · `none` | `none` | `hover`: pointer over, tap on, or focus inside the surface reveals the photo. Surface = nearest `[data-vitrine-card]` ancestor if there is one (explicit wins), else the nearest `a`, else the element |
+| `reveal` | `hover` · `tap` · `none` | `none` (glass: `hover`) | `hover`: pointer over, tap on, or focus inside the surface reveals the photo. `tap` (v0.2): click or tap toggles, hover and focus do nothing. Both: Enter/Space toggle on a focusable surface that is not a link. Surface = nearest `[data-vitrine-card]` ancestor if there is one (explicit wins), else the nearest `a`, else the element. A date-bound glass defaults to `none` |
+| `bind` | `none` · `pointer` · `date:<to>` · `date:<from>/<to>` | glass `none`, lens `pointer` | v0.2. What drives the effect besides its preset (see "v0.2" below). Dates are ISO 8601; the JSON form `{"date":{"from":"…","to":"…"}}` is accepted too |
 | `speed` | number | preset value | `0` = static: baked once to an `<img>`, no live context; `≠ 0` = animated, pooled |
 | `debug` | boolean attribute | off | `console.warn` on fallbacks and bad attributes |
 
@@ -88,7 +89,9 @@ the dither grid. State is exposed as `data-vitrine-revealed` on the element; red
   encode: 'worker' | 'main', pixels }`; `main` is the main-thread share.
 - `vitrine:fallback` — `detail: { reason: 'no-webgl2' | 'cors' | 'error', message }`; the `<img>` stays, nothing is logged unless `debug`.
 
-`data-vitrine-state` on the element: `loading` · `baked` · `live` · `fallback`.
+`data-vitrine-state` on the element: `loading` · `baked` · `live` · `fallback`, and since v0.2 `clear` (a pre-order
+glass on or after its release: the plain photo, no layer) and `interactive` (a pointer loupe at rest: the plain photo,
+no context). `vitrine:ready` reports the same as `mode`. A glass that is fully open carries `data-vitrine-open`.
 
 ## JavaScript
 
@@ -96,7 +99,7 @@ the dither grid. State is exposed as `data-vitrine-revealed` on the element; red
 import { VitrineShader, define, EFFECTS } from 'vitrine-shaders';
 
 VitrineShader.config({ maxLive: 4, debug: false, bakeIdleMs: 1500, minPixelRatio: 2, maxPixelCount: undefined });
-VitrineShader.stats(); // { liveMounts, bakerContexts, bakedCached }
+VitrineShader.stats(); // { liveMounts, bakerContexts, bakedCached, interactionMounts (v0.2, at most 1) }
 ```
 
 `<html data-vitrine-max-live="4" data-vitrine-debug>` sets the same without JS (read once at first use).
@@ -129,7 +132,116 @@ import { ProductMediaShader, CollectionHeroShader, EditorialImageShader } from '
   the browser with `import('vitrine-shaders')` after hydration (`registerVitrine()` if you want to call it yourself).
 - JSX types for `<vitrine-shader>` are declared by the package. Example app: `examples/next-headless`.
 
+## v0.2: glass, pre-order glass, loupe (ADR-0003)
+
+Three shop moments, approved at the R0 gate. Presets come 1:1 from the R0 proof sheets (`examples/r0/effects.js`,
+checked by `q1.test.ts`); the pixel-compatibility test covers `glass/default`, `glass/window`, `glass/preorder-30`,
+`lens/default` and `lens/loupe` against `@paper-design/shaders-react` 0.0.82.
+
+| Moment | Markup | At rest | On interaction |
+| --- | --- | --- | --- |
+| Card behind glass | `effect="glass" preset="window"` | baked frame, 0 contexts | hover, tap or focus: the pane slides right (`marginLeft` 0 → 1, 520 ms; back 380 ms; ease-out cubic, no overshoot) on 1 context, dropped 400 ms after the move; fully open = the `<img>` itself |
+| Pre-order | `effect="glass" bind="date:2026-12-01"` | baked once with the frost of today: 30 days out → 7 → 1 → clear on the date | none by default (the frost is the message) |
+| Product page loupe | `effect="lens" preset="loupe"` (`bind="pointer"` is the default) | nothing, 0 contexts | mouse/pen over the photo, or a touch held still 350 ms: a round loupe (½ of the width, 2.2×) grows in 350 ms, follows the pointer, shrinks in 250 ms |
+
+All interactions share **one** slot: a second one takes it over and the first jumps to its end state. With reduced
+motion the glass opens and closes at once, without a context.
+
+### HTML
+
+```html
+<script type="module">
+  import 'vitrine-shaders';
+</script>
+
+<!-- card -->
+<a href="/products/bar-stool">
+  <vitrine-shader effect="glass" preset="window">
+    <img src="/stool-640.webp" srcset="/stool-640.webp 640w, /stool-1000.webp 1000w" sizes="30vw" alt="" width="1600" height="2000" />
+  </vitrine-shader>
+  Bar stool · € 240
+</a>
+
+<!-- pre-order: frost by days left; with from/to a shorter pre-order still starts fully frosted -->
+<vitrine-shader effect="glass" preset="window" bind="date:2026-11-20T10:00:00Z/2026-12-01T10:00:00Z">
+  <img src="/sneaker.webp" alt="Court sneaker" width="1600" height="2240" />
+</vitrine-shader>
+
+<!-- product page -->
+<vitrine-shader effect="lens" preset="loupe" params='{"zoom":2.5}'>
+  <img src="/satchel-1600.webp" alt="Grey pebbled leather satchel" width="1600" height="1000" fetchpriority="high" />
+</vitrine-shader>
+```
+
+Image under the glass: the `<img>` must fill the element like `object-fit: cover` (centred), which is how the shader
+crops. `window` has `scale` 1.06 (the reeds never sample past the photo edge), so the element scales the `<img>` by the
+same factor (`--vitrine-image-scale`, a transform, no layout shift) and clips with `overflow: hidden`.
+
+### Parameters and CSS
+
+| Name | Where | Default | What it does |
+| --- | --- | --- | --- |
+| `loupeSize` | `params` of `lens` | `0.5` (preset `loupe`) | VITRINE-only: loupe diameter as a fraction of the element width |
+| `zoom` | `params` of `lens` | `2.2` (preset `loupe`) | VITRINE-only: magnification |
+| `--vitrine-glass-open` | CSS, element or ancestor | `520ms` | glass opening time |
+| `--vitrine-glass-close` | CSS, element or ancestor | `380ms` | glass closing time |
+
+Pre-order curve (`dateFrost`, exported): piecewise linear in days left through the anchors `preorder-30`,
+`preorder-7`, `preorder-1` (it moves `distortion`, `blur`, `stretch`, `highlights`, `shadows`, `grainOverlay`), then to
+zero over the last day; ≥ 30 days or before `from` = the 30-day frost; with `from`, the anchors are multiplied by
+(window ÷ 30) when the window is shorter than 30 days. Computed once at mount; nothing ticks on the page.
+Helpers: `parseBind(attr)`, `formatDateBind(to, from?)`, `dateFrost(bind, presets, now)`, `DATE_ANCHORS`.
+
+On a link, the touch tap that opens the glass does not navigate; the next tap does. With `reveal="tap"` the same is
+true for a mouse click.
+
+### React
+
+```tsx
+import { GlassProductImage, PreorderGlassImage, LoupeImage } from 'vitrine-shaders/react';
+
+<Link href={`/products/${p.handle}`}>
+  <GlassProductImage image={p.featuredImage} className="shot">
+    <Image src={p.featuredImage.url} alt="" width={1600} height={2000} sizes="30vw" />
+  </GlassProductImage>
+</Link>
+
+<PreorderGlassImage image={p.featuredImage} releaseDate={p.releaseDate} preorderFrom={p.preorderFrom} />
+
+<LoupeImage image={p.featuredImage} zoom={2.5} />
+```
+
+| Wrapper | Element | Props on top of the v0.1 image props |
+| --- | --- | --- |
+| `GlassProductImage` | `glass` / `window`, reveal `hover` | `reveal` (`hover` · `tap` · `none`) |
+| `PreorderGlassImage` | `glass` / `window`, `bind` from the dates | `releaseDate` (ISO, required), `preorderFrom` (ISO), `reveal` (off by default) |
+| `LoupeImage` | `lens` / `loupe`, `bind="pointer"` | `loupeSize`, `zoom` |
+
+Names follow the shop moment and what they render (a product image), not the technique (ADR-0003 §6). The v0.1
+wrappers are unchanged.
+
+### Liquid
+
+```liquid
+{% render 'vitrine-glass-card', image: card_product.featured_media, sizes: '(min-width: 990px) 33vw, 100vw' %}
+{% render 'vitrine-preorder-card', product: card_product, sizes: '(min-width: 990px) 33vw, 100vw' %}
+{% render 'vitrine-loupe-media', image: product.featured_media, sizes: '(min-width: 990px) 50vw, 100vw' %}
+```
+
+The pre-order snippet reads the release date from the product metafield **`custom.release_date`** (type *Date* or
+*Date and time*) and the optional start from `custom.preorder_from`; both can be passed as `release_date:` /
+`preorder_from:`. Without a date it prints the plain image. Full parameter lists: the `{% doc %}` block of each
+snippet and `shopify-theme/README.md`.
+
+### Backwards compatibility with v0.1
+
+`dither`, `halftone`, `mesh`, `paper`, their presets and the v0.1 React wrappers are unchanged (tests:
+`index.test.ts`, `shaders.test.tsx` "keeps the v0.1 ProductMediaShader output byte-for-byte", the v0.1 pixel cases in
+`compat.spec.ts`, `grid.spec.ts`, `theme-markup.spec.ts`). Additive changes only: new `effect` values, `reveal="tap"`,
+`bind`, two `mode` values, one `stats()` field. A TypeScript `switch` over `VitrineMode` or `VitrineEffect` needs the
+new cases.
+
 ## Bundle
 
-ESM with code splitting: `index.js` (element, baker, bake queue, readback, encoder, pool, ShaderMount) plus one chunk
-per effect loaded on first use. Sizes: P1 devlog, updated in the Q0 devlog (core 16.4 KB gzip, dither 3.3 KB).
+ESM with code splitting: `index.js` (element, baker, bake queue, readback, encoder, pool, interactions, ShaderMount)
+plus one chunk per effect loaded on first use. Sizes: P1 devlog, updated in the Q0 and Q1 devlogs.

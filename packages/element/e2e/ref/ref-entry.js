@@ -2,13 +2,22 @@
 // bundled by scripts/e2e-setup.mjs into ref.bundle.js (gitignored). Never a runtime dependency (ADR-0001).
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HalftoneCmyk, ImageDithering, MeshGradient, PaperTexture } from '@paper-design/shaders-react';
+import {
+  FlutedGlass,
+  HalftoneCmyk,
+  ImageDithering,
+  LensDistortion,
+  MeshGradient,
+  PaperTexture,
+} from '@paper-design/shaders-react';
 
 const COMPONENTS = {
   dither: ImageDithering,
   halftone: HalftoneCmyk,
   mesh: MeshGradient,
   paper: PaperTexture,
+  glass: FlutedGlass,
+  lens: LensDistortion,
 };
 
 /** Mount the React reference with the same preset params, speed 0 and frame 0. Resolves with the vanilla mount. */

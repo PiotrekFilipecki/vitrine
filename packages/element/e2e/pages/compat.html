@@ -71,7 +71,7 @@
       const image = q.get('img') ?? '/packages/element/e2e/fixtures/niwwts/01-tee-el-funkador.webp';
       // Q0: VITRINE-only options (not React props) are stripped from the reference and switched off on the element,
       // so the comparison stays upstream shader vs upstream shader. They have their own tests (whitepoint.spec.ts).
-      const VITRINE_ONLY = { whitePoint: 1 };
+      const VITRINE_ONLY = { whitePoint: 1, loupeSize: 0.5, zoom: 2.2 };
       const useImage = effect !== 'mesh';
       document.getElementById('title').textContent = `compat · ${effect} / ${preset}`;
       const result = {
@@ -103,6 +103,8 @@
         vit.setAttribute('preset', preset);
         vit.setAttribute('speed', '0');
         if (Object.keys(vitrineOnly).length) vit.setAttribute('params', JSON.stringify(vitrineOnly));
+        // Q1: the lens compared full-frame (baked), not as the pointer loupe.
+        if (effect === 'lens') vit.setAttribute('bind', 'none');
         vit.style.width = '300px';
         vit.style.height = '400px';
         if (useImage) {

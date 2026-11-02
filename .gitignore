@@ -22,3 +22,7 @@ examples/r0/r0.bundle.js
 # R0 proof media: full-size PNG and GIF stay local; git keeps .webp (≤ 400 KB), .json and .mp4 (bramka R0)
 docs/media/r0-*.png
 docs/media/r0-*.gif
+
+# Q1 media: same rule as R0 (WebP, MP4 and JSON in git; full PNG and GIF local)
+docs/media/q1-*.png
+docs/media/q1-*.gif

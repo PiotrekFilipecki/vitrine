@@ -46,6 +46,22 @@
       <div class="grid" id="cards"></div>
     </section>
     <section>
+      <h2>Focusable card that is not a link (Enter / Space)</h2>
+      <div
+        class="card"
+        id="button-card"
+        data-vitrine-card
+        tabindex="0"
+        role="button"
+        aria-pressed="false"
+        aria-label="Show the product"
+      >
+        <vitrine-shader effect="glass" preset="window" reveal="tap">
+          <img src="/examples/fixtures/products/w640/09-mug.webp" alt="Mug" width="640" height="854" />
+        </vitrine-shader>
+      </div>
+    </section>
+    <section>
       <h2>Pre-order</h2>
       <div class="grid" id="pre"></div>
     </section>
