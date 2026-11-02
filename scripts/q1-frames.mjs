@@ -1,6 +1,7 @@
 // Q1 · frame time while the glass opens (Chrome, CPU ×4 through CDP), and live contexts after load.
 // Opens the hero glass (the largest one on the page) and a catalogue card, 3 runs each, and records every
-// requestAnimationFrame interval from the first live frame to the end of the 520 ms opening. Median of 3 runs.
+// requestAnimationFrame interval: the start (context creation, behind the baked frame) and the motion (pane moving →
+// open) separately. Median of 3 runs.
 // Usage: node scripts/q1-frames.mjs   (needs `pnpm build` and `pnpm serve` on :4173). Writes docs/media/q1-frames.json.
 import { chromium } from '@playwright/test';
 import { writeFileSync } from 'node:fs';
@@ -27,46 +28,57 @@ for (let run = 0; run < RUNS; run++) {
       timeout: 60_000,
     }
   );
-  await page.waitForTimeout(2200); // baker idle
+  // Contexts after load: wait for the bake queue (cards near the viewport) and the baker idle timeout (1.5 s).
+  await page.waitForTimeout(5000);
   const atRest = await page.evaluate(async () => {
     const { VitrineShader } = await import('/packages/element/dist/index.js');
     return { ...VitrineShader.stats(), canvases: document.querySelectorAll('canvas').length };
   });
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
   const measure = async (sel) => {
+    // Timeline of one opening: rAF timestamps, plus the moments the live host appears (context created), the baked
+    // frame is hidden (the pane starts to move) and the glass reports open.
     await page.evaluate((sel) => {
       const el = document.querySelector(sel);
-      const r = (window.__frames = { deltas: [], liveAt: null, openAt: null, t0: performance.now() });
-      let last = 0;
+      const r = (window.__frames = { t: [], created: null, moving: null, open: null, t0: performance.now() });
+      new MutationObserver(() => {
+        const now = performance.now();
+        if (r.created === null && el.querySelector('.vitrine-live')) r.created = now;
+        if (r.moving === null && el.querySelector('.vitrine-baked')?.style.visibility === 'hidden')
+          r.moving = now;
+        if (r.open === null && el.hasAttribute('data-vitrine-open')) r.open = now;
+      }).observe(el, { subtree: true, childList: true, attributes: true });
       const tick = (t) => {
-        if (
-          r.liveAt === null &&
-          el.querySelector('.vitrine-live canvas') &&
-          el.querySelector('.vitrine-live').style.visibility === ''
-        )
-          r.liveAt = t;
-        if (r.liveAt !== null && r.openAt === null && last) r.deltas.push(t - last);
-        if (el.hasAttribute('data-vitrine-open') && r.openAt === null) r.openAt = t;
-        last = t;
-        if (r.openAt === null && t - r.t0 < 5000) requestAnimationFrame(tick);
+        r.t.push(t);
+        if (r.open === null && t - r.t0 < 5000) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
     }, sel);
-    const b = await page.locator(sel).boundingBox();
+    const b = await page.locator(sel).first().boundingBox();
     await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 2 });
     await page.waitForFunction(
-      () => window.__frames.openAt !== null || performance.now() - window.__frames.t0 > 5000
+      () => window.__frames.open !== null || performance.now() - window.__frames.t0 > 5000
     );
     const f = await page.evaluate(() => window.__frames);
     await page.mouse.move(2, 2);
     await page.waitForTimeout(1500);
+    const deltas = (from, to) => {
+      const out = [];
+      for (let i = 1; i < f.t.length; i++) if (f.t[i] > from && f.t[i] <= to) out.push(f.t[i] - f.t[i - 1]);
+      return out;
+    };
+    const prep = deltas(f.created, f.moving);
+    const move = deltas(f.moving, f.open);
     return {
-      startMs: +(f.liveAt - f.t0).toFixed(1), // pointer → first live frame (context + shader + texture)
-      openMs: +(f.openAt - f.liveAt).toFixed(1),
-      frames: f.deltas.length,
-      medianFrameMs: +median(f.deltas).toFixed(1),
-      p95FrameMs: +pct(f.deltas, 0.95).toFixed(1),
-      maxFrameMs: +Math.max(...f.deltas).toFixed(1),
+      // hover → context created → pane moving (what the shopper waits for) → open
+      createdMs: +(f.created - f.t0).toFixed(1),
+      startMs: +(f.moving - f.t0).toFixed(1),
+      openMs: +(f.open - f.moving).toFixed(1),
+      prepMaxFrameMs: +Math.max(...prep).toFixed(1),
+      frames: move.length,
+      medianFrameMs: +median(move).toFixed(1),
+      p95FrameMs: +pct(move, 0.95).toFixed(1),
+      maxFrameMs: +Math.max(...move).toFixed(1),
     };
   };
   const hero = await measure('.hero__photo vitrine-shader');
@@ -84,7 +96,10 @@ out.median = Object.fromEntries(
   ['hero', 'card'].map((k) => [
     k,
     Object.fromEntries(
-      ['startMs', 'medianFrameMs', 'p95FrameMs', 'maxFrameMs', 'frames'].map((f) => [f, pick(k, f)])
+      ['startMs', 'prepMaxFrameMs', 'medianFrameMs', 'p95FrameMs', 'maxFrameMs', 'frames'].map((f) => [
+        f,
+        pick(k, f),
+      ])
     ),
   ])
 );

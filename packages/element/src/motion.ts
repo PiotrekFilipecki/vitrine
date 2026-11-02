@@ -184,8 +184,10 @@ export class GlassMotion {
   #createLive(): void {
     const host = this.#o.el.ownerDocument.createElement('div');
     host.className = 'vitrine-live';
-    host.style.visibility = 'hidden';
-    this.#o.layer.appendChild(host);
+    // Under the baked frame, not hidden: the first composite of a fresh WebGL canvas is the expensive frame (Q1
+    // measurement: one 180–230 ms frame at CPU ×4). It happens here, behind the identical baked picture, and the
+    // pane only starts to move once the canvas is already on screen.
+    this.#o.layer.insertBefore(host, this.#o.baked);
     this.#host = host;
     this.#o.layer.style.visibility = '';
     let mount: ShaderMount;
@@ -204,15 +206,19 @@ export class GlassMotion {
       if (this.#mount === mount) this.#jump(this.#target);
     });
     // First render happens in ShaderMount's ResizeObserver callback (P0 finding): wait, then swap.
-    void twoFrames().then(() => {
-      if (this.#mount !== mount || this.#disposed) return;
-      this.#painted = true;
-      mount.setUniforms({ u_marginLeft: this.#tween.value });
-      host.style.visibility = '';
-      this.#o.baked.style.visibility = 'hidden';
-      // The target may have flipped while the context was starting: animate towards the latest one.
-      this.#tween.to(this.#target, this.#durationFor(this.#target));
-    });
+    void twoFrames()
+      .then(() => {
+        if (this.#mount !== mount || this.#disposed) return;
+        mount.setUniforms({ u_marginLeft: this.#tween.value });
+        return twoFrames();
+      })
+      .then(() => {
+        if (this.#mount !== mount || this.#disposed) return;
+        this.#painted = true;
+        this.#o.baked.style.visibility = 'hidden';
+        // The target may have flipped while the context was starting: animate towards the latest one.
+        this.#tween.to(this.#target, this.#durationFor(this.#target));
+      });
   }
 
   #render(v: number): void {
