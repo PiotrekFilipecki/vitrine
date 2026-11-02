@@ -1,6 +1,8 @@
 # VITRINE · STATUS
 
-Aktualizacja: 30.10.2026, R0 (reset kierunku) na gałęzi `r0-kierunek` od `main` (`85b9349`, z Q0). Commit R0 powstał po wstępnym przeglądzie Cowork; pełna weryfikacja Cowork zakończyła się 30.10.2026 ok. 01:20 werdyktem „gotowe” (`docs/vitrine/raport-weryfikacji-R0.md`, skopiowany w Q1). Decyzja: `docs/adr/0002-kierunek-v2.md` + `docs/vitrine/KIERUNEK-v2.md` (zastępuje PLAN D13 i domyślny dither). PROMPTY-v02 Q1–Q4 wstrzymane do bramki R0. Devlog: `docs/vitrine/devlog/R0-kierunek.md`.
+Aktualizacja: 03.11.2026, koniec Q1 (v0.2: szyba, szyba przedsprzedaży, lupa) na gałęzi `q1-trzy-efekty` od `r0-kierunek` (`923e5b0`; R0 nie było w `main`). Decyzja: `docs/adr/0003-v02-trzy-efekty.md`. Prompt: `docs/vitrine/PROMPT-Q1.md`. Devlog: `docs/vitrine/devlog/Q1-trzy-efekty.md`. Nic nie wypchnięte, nic nie zmergowane.
+
+Wcześniej: 30.10.2026, R0 (reset kierunku) na gałęzi `r0-kierunek` od `main` (`85b9349`, z Q0). Commit R0 powstał po wstępnym przeglądzie Cowork; pełna weryfikacja Cowork zakończyła się 30.10.2026 ok. 01:20 werdyktem „gotowe” (`docs/vitrine/raport-weryfikacji-R0.md`, skopiowany w Q1). Decyzja: `docs/adr/0002-kierunek-v2.md` + `docs/vitrine/KIERUNEK-v2.md` (zastępuje PLAN D13 i domyślny dither). PROMPTY-v02 Q1–Q4 wstrzymane do bramki R0. Devlog: `docs/vitrine/devlog/R0-kierunek.md`.
 
 Wcześniej: 29.10.2026, koniec Q0 (v0.2) na gałęzi `q0-blokery` od `main` (= v0.1.0 + docs). Prompty v0.2: `docs/vitrine/PROMPTY-v02.md`, devlog: `docs/vitrine/devlog/Q0-blokery.md`. Niżej historia P0–P5 bez zmian.
 
@@ -18,6 +20,7 @@ Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-
 | P5 przegląd, wydanie, zgłoszenie | **w toku** na `p5-wydanie` (od p4): wersje 0.1.0, subpath `vitrine-shaders/react` składany do paczki, `npm publish --dry-run` 26 plików / 135,8 kB, zip motywu, CHANGELOG, ROADMAP, submission.md; skan sekretów grepem po drzewie i historii: czysty (gitleaks nie zainstalowany). Czeka na: review (W1), presety z P4. | checklista niżej |
 | Q0 blokery zgłoszenia + porządki | **zrobione** na `q0-blokery`, czeka na bramkę | B1 grep czysty; B2 raster na kremowym tle 23,6 % → 0 % (`whitePoint`), zgodność 16/16; B3 12 unikalnych kart, siatka bez pustych pasów 390/768/1024/1440 (test); B4 Lighthouse mobile demo 96 vs 96, TBT 63 ms, ΔLCP 0, CLS 0 (było 70, TBT 525, CLS 0,329); B5 hero z lupą; B6 Next buduje się bez sieci; B7 workflow Pages; B8 checklista niżej. Otwarte: Next TBT 236 vs 148 ms w v0.1.0 (Commit kompozytora). **Bramka (Piotrek, telefon): katalog jak druk, nie brud; hero od razu pokazuje, co robi.** |
 | R0 reset kierunku wizualnego | **zrobione** na `r0-kierunek` (commit lokalny, niewypchnięty); bramka Cowork 30.10.2026: raport `docs/vitrine/raport-weryfikacji-R0.md` (werdykt „gotowe”, 4 drobne niezgodności, poprawione w Q1 · G0) | 12 zdjęć produktów (Unsplash License, `examples/fixtures/CREDITS.md`), 10 arkuszy `docs/media/r0-*.webp` (+ `.json`), przejścia szyby, lupy i wody (pasek + MP4), makieta `examples/static/r0-hero.html` (wazon w hero, krzesło w karcie, na 390 px zdjęcie od 266,5 px). **Na Q1: szyba (karta), szyba pre-order z datą, lupa.** Na później: water, grain-gradient. Odpada: paper-texture, liquid-metal, pulsing-border, image-dithering, halftone-cmyk. Pełne PNG/GIF lokalnie (gitignore). |
+| Q1 trzy efekty (v0.2) | **zrobione** na `q1-trzy-efekty`, czeka na bramkę | G0 poprawki raportu R0 (zegarek i słuchawki bez znaków, STATUS, fallback fontu); ADR-0003; `effect="glass"` + `lens`, `bind` (pointer, data), `reveal="tap"`, slot interakcji (max 1 kontekst); React `GlassProductImage` / `PreorderGlassImage` / `LoupeImage`; Liquid 3 snippety (`custom.release_date`); demo „Store” (static + Next), NIWWTS poza `examples/`. Zgodność pikseli glass/lens: 10/10 ≤ 1 % (Chromium + WebKit); e2e Chromium + WebKit 109 passed, 9 skipped; Firefox nie startuje. Lighthouse mobile static 99, TBT 29 ms, CLS 0; ramka w ruchu szyby (CPU ×4): karta 16,7 ms, hero mediana 24,9 ms; konteksty po załadowaniu 0. **Bramka (Piotrek, telefon): karta za szybą, tap → szyba się rozsuwa; lupa na PDP; przedsprzedaż matowieje do daty. Chwalisz się tym?** |
 
 ## Nazwy (29.10.2026)
 
@@ -50,6 +53,13 @@ Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-
 ## Gdzie co jest
 
 - Plan: `docs/vitrine/PLAN.md` · prompty: `docs/vitrine/PROMPTY.md` · ADR: `docs/adr/0001-architektura.md` · API: `docs/vitrine/API.md` · devlogi: `docs/vitrine/devlog/P0-spiki.md`, `P1-element.md`, `P2-liquid.md`, `P3-headless.md` · dowody: `docs/media/p0-*`, `p1-*`, `p2-*`, `p3-*` · motyw: `shopify-theme/` (build `pnpm --filter vitrine-shaders exec tsup --config tsup.theme.config.ts`) · CSV: `examples/niwwts-products.csv` · test motywu: `examples/theme-test/README.md` · spiki: `examples/spikes/` · element: `packages/element/` · wrappery React: `packages/react/` · demo: `examples/static/` · headless: `examples/next-headless/` · Lighthouse: `node scripts/lighthouse.mjs static|next`.
+
+## Bramka Q1 (Piotrek, telefon)
+
+1. [ ] `pnpm build && pnpm serve` → `http://<ip-maca>:4173/examples/static/`: tap na kartę (szyba się rozsuwa, drugi tap otwiera produkt), przytrzymanie palca na zdjęciu PDP (lupa), sekcja Pre-order (szyba matowa 9 dni przed premierą, skala 30/7/1/dzień premiery). Next: `pnpm --filter next-headless start` → `:3000`.
+2. [ ] Merge: `r0-kierunek` → `main`, potem `q1-trzy-efekty` → `main` (fast-forward, gałąź Q1 zawiera R0).
+3. [ ] Firefox poza sesją: `pnpm exec playwright test --project=firefox`.
+4. [ ] Przed upublicznieniem: README główne i GIF-y nadal z v0.1 (dither); wersja npm 0.2.0 + CHANGELOG; motyw testowy na sklepie z v0.2.
 
 ## Bramka R0 (Cowork, potem Piotrek)
 
