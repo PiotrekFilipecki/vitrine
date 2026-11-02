@@ -1,0 +1,14 @@
+{
+  "cards": 12,
+  "columns": 2,
+  "tops": [
+    1411,
+    1411
+  ],
+  "bottoms": [
+    4098,
+    4294
+  ],
+  "scrollWidth": 768,
+  "clientWidth": 768
+}

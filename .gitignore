@@ -26,3 +26,6 @@ docs/media/r0-*.gif
 # Q1 media: same rule as R0 (WebP, MP4 and JSON in git; full PNG and GIF local)
 docs/media/q1-*.png
 docs/media/q1-*.gif
+# Q1 compat cases: the JSON (diff numbers) is the evidence; page screenshots stay local
+docs/media/p1-compat-glass-*.png
+docs/media/p1-compat-lens-*.png

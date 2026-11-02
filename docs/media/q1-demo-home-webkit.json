@@ -1,0 +1,13 @@
+{
+  "modes": {
+    "clear": 1,
+    "baked": 17
+  },
+  "contexts": {
+    "liveMounts": 0,
+    "bakerContexts": 0,
+    "bakedCached": 17,
+    "interactionMounts": 0,
+    "canvases": 0
+  }
+}

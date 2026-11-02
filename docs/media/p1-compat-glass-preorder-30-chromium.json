@@ -1,0 +1,66 @@
+{
+  "page": "compat",
+  "effect": "glass",
+  "preset": "preorder-30",
+  "image": "/examples/fixtures/products/w1000/03-sneaker.webp",
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "vitrineOnlyOff": {},
+  "ref": {
+    "canvas": "600x800",
+    "ms": 1021.3,
+    "stats": {
+      "minLuma": 5.6,
+      "maxLuma": 240.3,
+      "meanLuma": 156.2,
+      "opaquePct": 99.51
+    }
+  },
+  "vitrine": {
+    "ready": {
+      "effect": "glass",
+      "preset": "preorder-30",
+      "mode": "baked",
+      "cached": false,
+      "ms": 1819,
+      "bake": {
+        "total": 787,
+        "wait": 20,
+        "render": 749,
+        "blob": 18,
+        "main": 27,
+        "upload": 0,
+        "read": 27,
+        "gpu": 722,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "600x800"
+      }
+    },
+    "baked": "600x800",
+    "stats": {
+      "minLuma": 0,
+      "maxLuma": 240.3,
+      "meanLuma": 156.2,
+      "opaquePct": 99.51
+    },
+    "canvasesInElement": 0
+  },
+  "diff": {
+    "differentPixels": 0,
+    "pct": 0,
+    "meanDelta": 0.01,
+    "threshold": 8
+  },
+  "stats": {
+    "liveMounts": 0,
+    "bakerContexts": 1,
+    "bakedCached": 1,
+    "interactionMounts": 0
+  },
+  "console": []
+}

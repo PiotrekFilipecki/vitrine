@@ -1,0 +1,66 @@
+{
+  "page": "compat",
+  "effect": "glass",
+  "preset": "window",
+  "image": "/examples/fixtures/products/w1000/04-chair.webp",
+  "env": {
+    "ua": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+    "dpr": 1,
+    "hwc": 8
+  },
+  "done": true,
+  "vitrineOnlyOff": {},
+  "ref": {
+    "canvas": "600x800",
+    "ms": 246.3,
+    "stats": {
+      "minLuma": 14.3,
+      "maxLuma": 223.4,
+      "meanLuma": 194.3,
+      "opaquePct": 100
+    }
+  },
+  "vitrine": {
+    "ready": {
+      "effect": "glass",
+      "preset": "window",
+      "mode": "baked",
+      "cached": false,
+      "ms": 471,
+      "bake": {
+        "total": 275,
+        "wait": 71,
+        "render": 196,
+        "blob": 9,
+        "main": 29,
+        "upload": 0,
+        "read": 29,
+        "gpu": 166,
+        "readback": "async",
+        "encode": "worker",
+        "pixels": "600x800"
+      }
+    },
+    "baked": "600x800",
+    "stats": {
+      "minLuma": 14.3,
+      "maxLuma": 223.4,
+      "meanLuma": 194.3,
+      "opaquePct": 100
+    },
+    "canvasesInElement": 0
+  },
+  "diff": {
+    "differentPixels": 0,
+    "pct": 0,
+    "meanDelta": 0,
+    "threshold": 8
+  },
+  "stats": {
+    "liveMounts": 0,
+    "bakerContexts": 1,
+    "bakedCached": 1,
+    "interactionMounts": 0
+  },
+  "console": []
+}
