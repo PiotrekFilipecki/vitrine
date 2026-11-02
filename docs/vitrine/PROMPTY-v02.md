@@ -1,3 +1,5 @@
+> Q1–Q4 zastąpione przez PROMPT-Q1.md i ADR-0003
+
 # VITRINE v0.2 · prompty dla Claude Code (Q0–Q4)
 
 **Repo:** `~/Desktop/Projects/vitrine` (gałąź bazowa `main`, stan 29.10.2026 20:16 = v0.1.0).
