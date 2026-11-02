@@ -1,6 +1,30 @@
 # Changelog
 
-## Unreleased (v0.2, Q0)
+## 0.2.0 (2026-11-03)
+
+Three shop moments approved at the R0 gate (ADR-0003). Additive: every v0.1 attribute, preset and wrapper works as
+before.
+
+- `effect="glass"` (fluted-glass): the card behind reeded glass. At rest a baked frame (no live context); hover, tap or
+  keyboard focus slide the pane away (520 ms, back 380 ms, ease-out cubic) on one context dropped after the move.
+  Presets `window` and `preorder-30/7/1` from the R0 sheets, plus the upstream `default`.
+- `effect="lens"` (lens-distortion): the product-page loupe under the mouse or a finger held still; no context at
+  rest. Preset `loupe` (VITRINE-only `loupeSize`, `zoom`).
+- `bind` attribute: `pointer`, `date:<to>`, `date:<from>/<to>` (ISO 8601) or JSON. A date-bound glass frosts by the
+  days left (30 → 7 → 1 → clear on the release), computed once and baked.
+- `reveal="tap"`; Enter/Space on a focusable non-link surface; on a link the touch tap that opens the glass does not
+  navigate.
+- One interaction slot for glass transitions and loupes: at most 1 live context while something moves.
+  `VitrineShader.stats().interactionMounts`, modes `clear` and `interactive`.
+- React: `GlassProductImage`, `PreorderGlassImage`, `LoupeImage`. Exported helpers: `parseBind`, `formatDateBind`,
+  `dateFrost`, `DATE_ANCHORS`.
+- Liquid: `vitrine-glass-card`, `vitrine-preorder-card` (metafield `custom.release_date`), `vitrine-loupe-media`.
+- Demo "Store" (static HTML + Next.js) with twelve Unsplash product photographs; the NIWWTS demo is retired (its
+  fixtures serve the pixel-compatibility tests only).
+- Measured: Lighthouse mobile static demo 99 (TBT 29 ms), 0 live contexts after load, pixel compatibility 13 cases
+  ≤ 0.0067 %.
+
+### Also in 0.2.0 (Q0)
 
 - `whitePoint` on `dither` (VITRINE-only, off by default): a levels step before the dither, so a light mockup
   background prints as clean paper. `newsprint` ships with `0.9`; background raster on the 12 NIWWTS mockups
@@ -15,7 +39,7 @@
 - `examples/next-headless`: Archivo through `next/font/local`, so the build needs no network.
 - GitHub Pages workflow for the static demo (`.github/workflows/pages.yml`, runs once the repo is public).
 
-## 0.1.0 (unreleased, 2026-10-29)
+## 0.1.0 (2026-10-29)
 
 First release.
 

@@ -1,7 +1,7 @@
 # Roadmap
 
-v1 (0.1.x) is open source for developers: the element, the React wrappers, the theme folder. What comes after, in
-the order it would be worth doing.
+0.2 is open source for developers: the element with the glass, the pre-order glass and the loupe, the React wrappers,
+the theme folder. What comes after, in the order it would be worth doing.
 
 ## v2 · Shopify app with a Theme App Extension
 
@@ -11,15 +11,17 @@ card effect in an app would need a script that targets the theme's own card sele
 themes. Plan: app blocks for the sections, a documented snippet for cards, a paid tier for the hosted version
 (free core stays Apache-2.0).
 
-## More effects
+## More effects (after the R0 bar)
 
-Paper Shaders has thirty; v1 ships four. Candidates that make sense on a product image: `liquid-metal` (metal
-finishes), `water`, `lens-distortion`, `heatmap`. Each one is a module in `packages/element/src/effects/` with a
-preset file and a pixel-compatibility test; the bake/pool runtime needs no change.
+Every new effect has to pass the bar from ADR-0002: the product reads better, or is more interesting, than without it.
+Deferred at the R0 gate: `water` (one ripple from the add-to-cart click; needs its own wave-origin uniform) and
+`grain-gradient` (section background from the photo's own colour). The two-pane "doors" for the hero (one context,
+needs a hole in the glass from one uniform) is the glass follow-up. Each effect is a module in
+`packages/element/src/effects/` with a preset file and a pixel-compatibility test.
 
 ## Chunked `vitrine.js` for themes
 
-Today the theme asset is one 46 KB gzip file. Split chunks in a flat `assets/` folder would cut a dither-only page to
+Today the theme asset is one 55.5 KB gzip file. Split chunks in a flat `assets/` folder would cut a dither-only page to
 about 20 KB; the dynamic import next to `asset_url`'s `?v=` needs verifying on a store first.
 
 ## Svelte, Vue, Astro
