@@ -17,9 +17,9 @@ const archivo = localFont({
 });
 
 export const metadata: Metadata = {
-  title: { default: 'NIWWTS No.06 · VITRINE headless demo', template: '%s · NIWWTS No.06' },
+  title: { default: 'Store · a VITRINE headless demo', template: '%s · Store' },
   description:
-    'Paper Shaders on a headless Shopify storefront: Next.js 16 App Router, Storefront API, <vitrine-shader> via vitrine-shaders/react. The server sends plain images; the print arrives after hydration.',
+    'A made-up shop on Next.js 16: product cards behind reeded glass, a pre-order card that frosts until its release date and a loupe on the product page. vitrine-shaders/react over the Storefront API or repo fixtures.',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -30,25 +30,28 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <header className="masthead">
-          <Link className="masthead__brand" href="/">
-            NIWWTS
+        <header className="bar">
+          <Link className="wordmark" href="/">
+            Store
           </Link>
-          <p className="masthead__issue">Edition No.06 — Prints &amp; Tees</p>
-          <p className="masthead__note">
-            VITRINE demo · <code>vitrine-shaders/react</code> on Next.js 16
-          </p>
+          <nav aria-label="Main">
+            <Link href="/#objects">Objects</Link>
+            <Link href="/#pre-order">Pre-order</Link>
+            <span className="cart">Cart (0)</span>
+          </nav>
         </header>
         <main id="main">{children}</main>
-        <footer className="colophon">
-          <p>
-            VITRINE · Apache-2.0 · <a href="https://shaders.paper.design">Powered by Paper Shaders</a>
-          </p>
-          <p>
-            Works © Piotr Filipecki / NIWWTS ·{' '}
+        <footer>
+          <p className="footer__credits">
+            Store is made up: names, prices and copy are invented for this demo, and the pre-order date is
+            always nine days from today.{' '}
             {source === 'storefront'
               ? 'Catalogue from the Storefront API of the dev store, revalidated every 5 minutes.'
-              : 'Catalogue from repo fixtures: no store configured (see .env.example).'}
+              : 'Catalogue and photographs from the repo (Unsplash License, examples/fixtures/CREDITS.md).'}
+          </p>
+          <p className="footer__about">
+            <a href="https://github.com/PiotrekFilipecki/vitrine">VITRINE</a>, open source (Apache-2.0).{' '}
+            <a href="https://shaders.paper.design">Powered by Paper Shaders</a>.
           </p>
         </footer>
       </body>

@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ProductMediaShader } from '@vitrine/react';
-import { displayTitle, formatPrice, getProduct } from '@/lib/catalog';
+import { LoupeImage } from '@vitrine/react';
+import { formatPrice, getProduct, getProducts, releaseLabel } from '@/lib/catalog';
 
 export const revalidate = 300;
 
@@ -11,7 +11,7 @@ type Params = Promise<{ handle: string }>;
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const product = await getProduct((await params).handle);
-  return { title: product ? displayTitle(product.title) : 'Not found' };
+  return { title: product ? product.title : 'Not found' };
 }
 
 export default async function ProductPage({
@@ -22,48 +22,72 @@ export default async function ProductPage({
   searchParams: Promise<{ vitrine?: string }>;
 }) {
   const [{ handle }, { vitrine }] = await Promise.all([params, searchParams]);
-  const product = await getProduct(handle);
+  const [product, all] = await Promise.all([getProduct(handle), getProducts(12)]);
   if (!product) notFound();
   const effects = vitrine !== 'off';
   const { image } = product;
+  const next = all[(all.findIndex((p) => p.handle === product.handle) + 1) % all.length];
   const img = (
     <Image
       src={image.url}
       alt={image.altText ?? ''}
       width={image.width ?? 1600}
-      height={image.height ?? 1920}
-      sizes="(max-width: 900px) 100vw, 62vw"
+      height={image.height ?? 2000}
+      sizes="(min-width: 901px) 58vw, 100vw"
+      quality={85}
       priority
     />
   );
 
   return (
-    <article className="product" aria-labelledby="product-title">
-      <figure className="product__media">
+    <div className="pdp">
+      <div className="pdp__media">
         {effects ? (
-          <ProductMediaShader image={image} effect="halftone" preset="riso" reveal="hover">
+          <LoupeImage image={image} className="shot">
             {img}
-          </ProductMediaShader>
+          </LoupeImage>
         ) : (
-          <span className="product__plain">{img}</span>
+          <span className="shot">{img}</span>
         )}
-        <figcaption className="product__caption">
-          halftone / riso · hover, tap or focus for the photo
-        </figcaption>
-      </figure>
-      <div className="product__text" data-vitrine-card>
-        <p className="product__code">
-          {product.code ?? '—'} · {product.productType}
-        </p>
-        <h1 id="product-title" className="product__title">
-          {displayTitle(product.title)}
-        </h1>
-        <p className="product__price">{formatPrice(product.price)}</p>
-        <p className="product__body">{product.description}</p>
-        <Link className="product__back" href="/#catalogue">
-          Back to the catalogue
-        </Link>
       </div>
-    </article>
+      <div className="pdp__info">
+        <nav aria-label="Breadcrumb">
+          <ol className="crumbs">
+            <li>
+              <Link href="/">Store</Link>
+            </li>
+            <li>
+              <Link href="/#objects">Objects</Link>
+            </li>
+            <li aria-current="page">{product.title}</li>
+          </ol>
+        </nav>
+        <h1>{product.title}</h1>
+        <div className="product-line">
+          <span>{product.note}</span>
+          <span className="price">{formatPrice(product.price)}</span>
+        </div>
+        <p className="pdp__desc">{product.description}</p>
+        {product.spec ? <p className="pdp__spec">{product.spec}</p> : null}
+        {product.releaseDate ? (
+          <p className="pdp__spec">Pre-order · ships {releaseLabel(product.releaseDate)}</p>
+        ) : null}
+        <div>
+          <button className="buy" type="button">
+            {product.releaseDate ? 'Pre-order' : 'Add to cart'}{' '}
+            <span className="price">{formatPrice(product.price)}</span>
+          </button>
+        </div>
+        <p className="pdp__hint">
+          <span className="hint--mouse">Move over the photograph to look closer.</span>
+          <span className="hint--touch">Hold a finger on the photograph to look closer.</span>
+        </p>
+        {next ? (
+          <p className="pdp__more">
+            Next: <Link href={`/products/${next.handle}`}>{next.title}</Link>
+          </p>
+        ) : null}
+      </div>
+    </div>
   );
 }

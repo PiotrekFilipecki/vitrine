@@ -10,18 +10,19 @@ const REVALIDATE = 300;
 
 const IMAGE = `featuredImage { url altText width height }`;
 const PRODUCT = `
-  handle title productType description
-  code: metafield(namespace: "custom", key: "code") { value }
+  id handle title productType description
+  releaseDate: metafield(namespace: "custom", key: "release_date") { value }
   priceRange { minVariantPrice { amount currencyCode } }
   ${IMAGE}
 `;
 
 interface StorefrontProduct {
+  id: string;
   handle: string;
   title: string;
   productType: string;
   description: string;
-  code: { value: string } | null;
+  releaseDate: { value: string } | null;
   priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
   featuredImage: Product['image'] | null;
 }
@@ -52,11 +53,14 @@ async function storefront<T>(query: string, variables: Record<string, unknown>):
 
 function toProduct(p: StorefrontProduct): Product {
   return {
+    id: p.id,
     handle: p.handle,
     title: p.title,
-    code: p.code?.value ?? null,
-    productType: p.productType,
+    note: p.productType,
     description: p.description,
+    spec: null,
+    // ADR-0003: the release date of a pre-order lives in the custom.release_date metafield (Date or Date and time).
+    releaseDate: p.releaseDate?.value ?? null,
     price: p.priceRange.minVariantPrice,
     image: p.featuredImage ?? { url: '', altText: null, width: null, height: null },
   };

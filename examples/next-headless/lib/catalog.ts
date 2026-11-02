@@ -10,13 +10,17 @@ export interface ProductImage {
 }
 
 export interface Product {
+  /** Fixture id (photo file name) or the store handle. */
+  id: string;
   handle: string;
   title: string;
-  /** Catalogue code (NIWWTS: PC-008, AR-001…). From the `custom.code` metafield on a store, from fixtures otherwise. */
-  code: string | null;
-  productType: string;
+  /** One line under the name: material or variant. From fixtures, or the product type on a store. */
+  note: string;
   description: string;
+  spec: string | null;
   price: { amount: string; currencyCode: string };
+  /** ISO date of the release for a pre-order product (`custom.release_date` metafield on a store), else null. */
+  releaseDate: string | null;
   image: ProductImage;
 }
 
@@ -26,13 +30,9 @@ export function catalogSource(): CatalogSource {
   return storefrontConfigured() ? 'storefront' : 'fixtures';
 }
 
-export async function getProducts(first = 24): Promise<Product[]> {
+export async function getProducts(first = 12): Promise<Product[]> {
   if (catalogSource() === 'storefront') return storefrontProducts(first);
-  const items = fixtureProducts();
-  // 24 cards from 12 fixtures, like examples/static: the grid is the test, the catalogue is the content.
-  const out: Product[] = [];
-  while (out.length < first && items.length) out.push(items[out.length % items.length]!);
-  return out;
+  return fixtureProducts().slice(0, first);
 }
 
 export async function getProduct(handle: string): Promise<Product | null> {
@@ -44,10 +44,10 @@ export async function getProduct(handle: string): Promise<Product | null> {
 export function formatPrice(p: Product['price']): string {
   const n = Number(p.amount);
   const amount = Number.isInteger(n) ? String(n) : n.toFixed(2);
-  return `${amount} ${p.currencyCode}`;
+  return p.currencyCode === 'EUR' ? `€ ${amount}` : `${amount} ${p.currencyCode}`;
 }
 
-/** Artwork titles are written with underscores in the NIWWTS catalogue; cards show them with spaces, like the shop does. */
-export function displayTitle(title: string): string {
-  return title.replace(/_/g, ' ');
+export function releaseLabel(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getUTCDate()} ${d.toLocaleString('en-GB', { month: 'long', timeZone: 'UTC' })}`;
 }

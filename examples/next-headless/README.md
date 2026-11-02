@@ -1,8 +1,10 @@
 # examples/next-headless
 
-NIWWTS No.06 as a headless storefront: Next.js 16 App Router + `vitrine-shaders/react`. The server renders plain
-`<img>` tags (`next/image`), the `<vitrine-shader>` element loads after hydration and prints the catalogue in
-dithering; hover, tap or Tab reveals the photo. Powered by Paper Shaders.
+"Store", the same made-up shop as `examples/static`, as a headless storefront: Next.js 16 App Router +
+`vitrine-shaders/react` (Q1, ADR-0003). The server renders plain `<img>` tags (`next/image`); after hydration the
+`<vitrine-shader>` element puts the cards behind reeded glass (`GlassProductImage`), frosts the pre-order card by the
+days left to its release (`PreorderGlassImage`) and adds a loupe on the product page (`LoupeImage`). Powered by Paper
+Shaders.
 
 ## Run
 
@@ -12,8 +14,9 @@ pnpm --filter next-headless start   # http://localhost:3000
 pnpm --filter next-headless dev     # development
 ```
 
-Without environment variables the catalogue comes from `examples/spikes/fixtures` (copied into `public/fixtures/`
-by `scripts/sync-fixtures.mjs` on `dev`/`build`; the footer says so).
+Without environment variables the catalogue comes from `examples/fixtures/catalog.json` and the photographs from
+`examples/fixtures/products` (Unsplash License, `examples/fixtures/CREDITS.md`), copied into `public/fixtures/` by
+`scripts/sync-fixtures.mjs` on `dev`/`build`; the footer says so. The demo pre-order ships nine days from today.
 
 ## Storefront API mode
 
@@ -25,7 +28,8 @@ Copy `.env.example` to `.env.local` and fill in:
 | `SHOPIFY_STOREFRONT_PUBLIC_TOKEN` | Headless channel → Storefront API → **public** access token |
 | `SHOPIFY_API_VERSION`             | `2026-10`                                                   |
 
-Products: first 24 by title with a featured image; `custom.code` metafield shows as the catalogue code. Fetches
+Products: first 12 by title with a featured image. A product with the `custom.release_date` metafield (type _Date_ or
+_Date and time_, with Storefront access enabled on the definition) is a pre-order: its card gets the frosted glass. Fetches
 run in Server Components (`server-only`), cached by Next for 300 s. Product images are served through
 `/_next/image`, so the shader texture is same-origin and CORS never comes into play.
 

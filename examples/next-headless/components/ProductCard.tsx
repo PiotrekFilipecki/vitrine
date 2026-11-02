@@ -1,55 +1,58 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ProductMediaShader } from '@vitrine/react';
-import { displayTitle, formatPrice, type Product } from '@/lib/catalog';
+import { GlassProductImage, PreorderGlassImage } from '@vitrine/react';
+import { formatPrice, releaseLabel, type Product } from '@/lib/catalog';
 
-const SIZES = '(max-width: 900px) 50vw, 25vw';
-const LEAD_SIZES = '(max-width: 900px) 100vw, 50vw';
+const SIZES = '(min-width: 901px) 30vw, 48vw';
+
+/** Card crop per photo, as in examples/static (portrait shots 3:4 to 2:3, landscape shots 4:3). */
+export function ratioOf(p: Product): string {
+  const w = p.image.width ?? 4;
+  const h = p.image.height ?? 5;
+  const r = w / h;
+  if (r >= 1.2) return '4 / 3';
+  if (r <= 0.7) return '2 / 3';
+  if (r <= 0.76) return '3 / 4';
+  return '4 / 5';
+}
 
 /**
- * Server Component. The only client code here is the wrapper around the image: the link, the meta and
- * `next/image` itself are server-rendered, so a card costs no JS beyond the element.
+ * Server Component. The only client code is the wrapper around the image: link, meta and `next/image` are
+ * server-rendered. A pre-order product (release date set) gets the frosted glass; everything else the card glass.
  */
-export function ProductCard({
-  product,
-  lead = false,
-  priority = false,
-  effects = true,
-}: {
-  product: Product;
-  lead?: boolean;
-  priority?: boolean;
-  effects?: boolean;
-}) {
+export function ProductCard({ product, effects = true }: { product: Product; effects?: boolean }) {
   const { image } = product;
+  // The name next to the image says what it is: alt="" avoids reading it twice inside the link.
   const img = (
-    <Image
-      src={image.url}
-      alt={image.altText ?? ''}
-      width={image.width ?? 1600}
-      height={image.height ?? 1920}
-      sizes={lead ? LEAD_SIZES : SIZES}
-      priority={priority}
-    />
+    <Image src={image.url} alt="" width={image.width ?? 1600} height={image.height ?? 2000} sizes={SIZES} />
+  );
+  const style = { '--ratio': ratioOf(product) } as React.CSSProperties;
+  const media = !effects ? (
+    <span className="shot" style={style}>
+      {img}
+    </span>
+  ) : product.releaseDate ? (
+    <PreorderGlassImage image={image} releaseDate={product.releaseDate} className="shot" style={style}>
+      {img}
+    </PreorderGlassImage>
+  ) : (
+    <GlassProductImage image={image} className="shot" style={style}>
+      {img}
+    </GlassProductImage>
   );
   return (
-    <li className={lead ? 'cell cell--lead' : 'cell'}>
-      <Link className="card" href={`/products/${product.handle}`}>
-        {effects ? (
-          <ProductMediaShader image={image} effect="dither" preset="newsprint" reveal="hover">
-            {img}
-          </ProductMediaShader>
-        ) : (
-          <span className="card__media">{img}</span>
-        )}
+    <article className="card">
+      <Link className="card__link" href={`/products/${product.handle}`}>
+        {media}
         <span className="card__meta">
-          <span className="card__code">
-            {product.code ?? '—'} · {product.productType}
-          </span>
-          <span className="card__title">{displayTitle(product.title)}</span>
-          <span className="card__price">{formatPrice(product.price)}</span>
+          <span className="card__name">{product.title}</span>
+          <span className="price">{formatPrice(product.price)}</span>
         </span>
+        <span className="card__note">{product.note}</span>
+        {product.releaseDate ? (
+          <span className="card__tag">Pre-order · ships {releaseLabel(product.releaseDate)}</span>
+        ) : null}
       </Link>
-    </li>
+    </article>
   );
 }
