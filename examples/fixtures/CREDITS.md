@@ -10,7 +10,7 @@ not grant trademark rights, so the set avoids visible brand logos (see "Checks")
 
 Each photo was checked one by one on its Unsplash page on 29.10.2026: the page shows "Free to use under the Unsplash
 License" (no Unsplash+ badge), and the page does not tag or list it as a 3D render or AI image. Downloaded on this Mac on
-2026-10-29T21:49Z (`08-headphones`: 21:57Z, see "Checks") from `images.unsplash.com/photo-<id>?w=2400&q=90&fm=jpg`, encoded with `cwebp` (no metadata copied).
+2026-10-29T21:49Z (`06-watch` and `08-headphones`: replaced in Q1, 2026-11-02T22:19Z, see "Checks") from `images.unsplash.com/photo-<id>?w=2400&q=90&fm=jpg`, encoded with `cwebp` (no metadata copied).
 
 | File            | Product              | Photographer                                                                                                      | Unsplash page                                          | Published  | Camera (from the page) |
 | --------------- | -------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | ---------- | ---------------------- |
@@ -19,16 +19,16 @@ License" (no Unsplash+ badge), and the page does not tag or list it as a 3D rend
 | `03-sneaker`    | sneaker              | [Mojtaba Fahiminia](https://unsplash.com/@fahiminia)                                                              | [t4g1gctAaKk](https://unsplash.com/photos/t4g1gctAaKk) | 2020-10-27 | Canon EOS 5D Mark III  |
 | `04-chair`      | chair (bar stool)    | [Eugene Chystiakov](https://unsplash.com/@eugenechystiakov)                                                       | [3neSwyntbQ8](https://unsplash.com/photos/3neSwyntbQ8) | 2020-02-12 | Sony ILCE-7M2          |
 | `05-lamp`       | desk lamp            | [Oscar Ivan Esquivel Arteaga](https://unsplash.com/@oscaresquivel)                                                | [at5-1nW3UCY](https://unsplash.com/photos/at5-1nW3UCY) | 2021-05-19 | Canon EOS 6D Mark II   |
-| `06-watch`      | wristwatch           | [Saif71.com](https://unsplash.com/@saif71)                                                                        | [bBTWoeep1vw](https://unsplash.com/photos/bBTWoeep1vw) | 2021-06-18 | Canon EOS 250D         |
+| `06-watch`      | wristwatches (three) | [Jess Bailey](https://unsplash.com/@jessbaileydesigns)                                                            | [DXd6X3wuRA0](https://unsplash.com/photos/DXd6X3wuRA0) | 2018-08-28 | not shown              |
 | `07-bag`        | leather satchel      | [mostafa mahmoudi](https://unsplash.com/@mostafa_mahmoudi24)                                                      | [J4DnKxz_3sA](https://unsplash.com/photos/J4DnKxz_3sA) | 2020-11-18 | Canon EOS 80D          |
-| `08-headphones` | headphones           | [Sam Grozyan](https://unsplash.com/@ijeunes)                                                                      | [P7KF3cTRKcE](https://unsplash.com/photos/P7KF3cTRKcE) | 2021-08-04 | SIGMA sd Quattro       |
+| `08-headphones` | headphones           | [C D-X](https://unsplash.com/@cdx2)                                                                               | [dBwadhWa-lI](https://unsplash.com/photos/dBwadhWa-lI) | 2017-09-18 | not shown              |
 | `09-mug`        | ceramic mug          | [Olena Bohovyk](https://unsplash.com/@olenkasergienko)                                                            | [InlMkMNlrhY](https://unsplash.com/photos/InlMkMNlrhY) | 2019-04-16 | Sony ILCE-7M2          |
 | `10-sunglasses` | sunglasses           | [Anton Be](https://unsplash.com/@antonbe21)                                                                       | [ODhxNCO8XHY](https://unsplash.com/photos/ODhxNCO8XHY) | 2020-04-19 | not shown              |
 | `11-candle`     | candle               | [Luma Candles](https://unsplash.com/@candlesbyluma), photo by Perry Graham Photography (per the page description) | [B0G8xzwTVWc](https://unsplash.com/photos/B0G8xzwTVWc) | 2020-10-13 | not shown              |
 | `12-plant`      | potted plant         | [feey](https://unsplash.com/@feeypflanzen)                                                                        | [2cuzrhnuIeE](https://unsplash.com/photos/2cuzrhnuIeE) | 2023-11-17 | not shown              |
 
 Suggested credit line (README, demo footer): "Product photographs from Unsplash: Jocelyn Morales, Benjamin Watterson,
-Mojtaba Fahiminia, Eugene Chystiakov, Oscar Ivan Esquivel Arteaga, Saif71.com, mostafa mahmoudi, Sam Grozyan, Olena
+Mojtaba Fahiminia, Eugene Chystiakov, Oscar Ivan Esquivel Arteaga, Jess Bailey, mostafa mahmoudi, C D-X, Olena
 Bohovyk, Anton Be, Luma Candles, feey."
 
 ## Files
@@ -45,9 +45,18 @@ Bohovyk, Anton Be, Luma Candles, feey."
 - Replaced after the first sheet: the first `08-headphones` (Luke Peterson, `lUMj2Zv5HUE`) shows the maker's name on
   both ear cups, readable at card size. The replacement has no visible mark; its Unsplash description names the model,
   the frame shows no logo.
-- Left in with a small mark, checked on 2400 px crops: `06-watch` has a maker's wordmark on the dial, unreadable at
-  card size (the R0 loupe is aimed at the date window and the bracelet, so it never magnifies it); `11-candle` has the
-  plain label of the maker who uploaded the photo. Neither is the subject of the frame.
+- Replaced in Q1 (2026-11-02, R0 verification report §4): the R0 `06-watch` (Saif71.com, `bBTWoeep1vw`) had the
+  maker's wordmark readable in the loupe clip at 480 px; the R0 `08-headphones` (Sam Grozyan, `P7KF3cTRKcE`) had no
+  logo, but its Unsplash description names the model and the shape is a recognisable design. Replacements, checked on
+  2400 px crops: `06-watch` (Jess Bailey) shows three watches with plain dials, indices and hands only, no text; its
+  Unsplash page lists it under "Non-copyrighted images". `08-headphones` (C D-X) shows generic over-ear headphones on
+  a yellow ground, no mark on cups, band or sliders; the page names no product. Rejected on the way, each for a
+  readable maker's name on a 2400 px crop or a known design: Faraz Fayaz (`3weffxf3mdk`, wordmark on the dial),
+  Salvador Escalante (`EfjlkpoGjs4`, wordmark), Yarenci Hdz (`Tt_TIhVpYoM`, maker's logo on the cup), Faizur Rehman
+  (`SrJA7t3Tsmc`, wordmark on the band), Stefan Riedl (`r2uugFQvAZ0`, recognisable design), Andrey Matveev
+  (`UgM8JMcU9K8`, recognisable design), plus results whose alt text already names a brand.
+- Left in with a small mark: `11-candle` has the plain label of the maker who uploaded the photo; it is not the subject
+  of the frame.
 - No client store, no AI-generated image, no photo of an identifiable person.
 - First choice sources tried and why not: Wikimedia Commons CC0 (official API) had almost no product shots on plain
   backgrounds; Pexels and the Unsplash API need an API key, which this session does not have.
