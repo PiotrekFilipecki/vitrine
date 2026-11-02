@@ -452,3 +452,25 @@ Bramka Q1 (Piotrek, telefon); merge `r0-kierunek` → `q1-trzy-efekty` → `main
 3. Szyba zaczyna ruch 245 ms (karta) / 342 ms (hero) po wskaźniku przy CPU ×4; w ruchu karta 60 fps, hero mediana 24,9 ms.
 4. Blokuje upublicznienie: bramka Q1, merge R0 i Q1 do `main`, README/GIF-y z v0.1, wersja npm.
 5. Media do bramki: `docs/media/q1-*.webp`, `q1-glass.mp4`, `q1-loupe.mp4`; pełne PNG i GIF lokalnie.
+
+## Domknięcie (03.11.2026, polecenie Piotrka: „rób wszystko do końca wraz z zadaniami niby dla mnie”)
+
+Zrobione:
+
+- Merge fast-forward `q1-trzy-efekty` (zawiera `r0-kierunek`) → lokalny `main`, tag `v0.2.0`.
+- README główne na v0.2 (hero, przedsprzedaż, katalog, GIF-y szyby i lupy z materiału Q1; stare media NIWWTS usunięte), CHANGELOG 0.2.0, wersje paczek 0.2.0, README paczki npm, ROADMAP, teksty zgłoszeń.
+- Lighthouse mobile dla Next (do README; mediana z 3, `docs/media/q1-lighthouse-next.json`): z VITRINE 96, LCP 2 782 ms, TBT 45 ms; bez 99, 2 031 ms, 10 ms. Rozrzut LCP między przebiegami duży (z: 2 031–3 262 ms, bez: 1 808–2 856 ms), więc ΔLCP +751 ms nie jest jeszcze pewną liczbą.
+- Konfiguracja Vercela Piotrka (`.vercelignore`, `examples/next-headless/vercel.json`, `.vercel` w `.gitignore`) zacommitowana; projekt `vitrine` na Vercelu ma Root Directory `examples/next-headless`.
+- `npm publish --dry-run`: `vitrine-shaders@0.2.0`, 32 pliki, 183,0 kB (po `repository.url` = `git+https://…`). Zip motywu 0.2.0: 71,8 kB. Strona Pages złożona lokalnie: 83 pliki, 1 747,6 KB.
+- Motyw testowy (lokalna kopia Horizon w `examples/theme-test/live`): karty przez `vitrine-glass-card` albo `vitrine-preorder-card` (gdy produkt ma `custom.release_date`), główne zdjęcie PDP przez `vitrine-loupe-media`; theme check: 0 błędów w plikach VITRINE.
+
+Nie dało się w tej sesji (każde z dokładnym powodem):
+
+- `git push`: GitHub odrzucił wszystkie referencje: `refusing to allow an OAuth App to create or update workflow .github/workflows/pages.yml without workflow scope` (token `gh` ma zakresy `gist, read:org, repo`). Dodanie zakresu to logowanie w przeglądarce. Upublicznienie i Pages czekają na push (publiczne repo bez pusha pokazałoby stare demo NIWWTS).
+- `vercel deploy --prod`: odrzucone przez klasyfikator uprawnień sesji (Production Deploy). Nie obchodziłem tego.
+- `npm publish`: `npm whoami` → `ENEEDAUTH`.
+- `shopify theme push`: CLI: „Looks like you don't have access to this dev store” (sesja wygasła, logowanie interaktywne).
+- Firefox: dalej „Could not find profile folder” (także z `HOME`/`TMPDIR` w katalogu sesji); obejście sandboxa odrzucone przez klasyfikator.
+- Zgłoszenia (Codrops, X, Discord): Twoje konta i Twój głos; teksty gotowe w `submission.md`.
+
+Wszystko z tej listy robi `bash scripts/release-0.2.sh` (Terminal.app), krok po kroku, z zatrzymaniem na błędzie.
