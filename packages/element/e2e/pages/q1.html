@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Q1 · glass, pre-order glass, loupe</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 16px;
+        background: #efebe4;
+        color: #141312;
+        font: 14px/1.4 sans-serif;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, 200px);
+        gap: 16px;
+      }
+      .grid a {
+        display: block;
+        color: inherit;
+      }
+      vitrine-shader img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .card vitrine-shader {
+        width: 200px;
+        height: 250px;
+      }
+      #pdp vitrine-shader {
+        width: 360px;
+        height: 450px;
+      }
+      section {
+        margin-bottom: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <section>
+      <h2>Cards (glass, window)</h2>
+      <div class="grid" id="cards"></div>
+    </section>
+    <section>
+      <h2>Pre-order</h2>
+      <div class="grid" id="pre"></div>
+    </section>
+    <section id="pdp">
+      <h2>Product page loupe</h2>
+      <vitrine-shader effect="lens" preset="loupe" id="lens">
+        <img src="/examples/fixtures/products/07-bag.webp" alt="Leather satchel" width="1600" height="1000" />
+      </vitrine-shader>
+    </section>
+    <script type="module">
+      import { VitrineShader } from '/packages/element/dist/index.js';
+      const q = new URLSearchParams(location.search);
+      const n = Number(q.get('n') ?? 4);
+      const reveal = q.get('reveal');
+      const photos = [
+        '04-chair',
+        '01-vase',
+        '05-lamp',
+        '12-plant',
+        '09-mug',
+        '02-perfume',
+        '10-sunglasses',
+        '11-candle',
+      ];
+      const cards = document.getElementById('cards');
+      for (let i = 0; i < n; i++) {
+        const p = photos[i % photos.length];
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = `#product-${i}`;
+        a.innerHTML = `<vitrine-shader effect="glass" preset="window"${reveal ? ` reveal="${reveal}"` : ''}><img src="/examples/fixtures/products/w640/${p}.webp" alt="Product ${i}" width="640" height="800"></vitrine-shader><span>Product ${i}</span>`;
+        cards.appendChild(a);
+      }
+      // Pre-order: release in 30, 7, 1 and -1 days (frozen clock via ?now=)
+      const now = Number(q.get('now') ?? Date.now());
+      const pre = document.getElementById('pre');
+      for (const days of [30, 7, 1, -1]) {
+        const to = new Date(now + days * 86400000).toISOString();
+        const d = document.createElement('div');
+        d.className = 'card';
+        d.innerHTML = `<vitrine-shader effect="glass" preset="window" bind="date:${to}" data-days="${days}"><img src="/examples/fixtures/products/w640/03-sneaker.webp" alt="Sneaker, ${days} days" width="640" height="896"></vitrine-shader>`;
+        pre.appendChild(d);
+      }
+      const r = { ready: [], fallback: [], maxInteraction: 0, samples: 0, done: false };
+      window.__spike = r;
+      document.addEventListener('vitrine:ready', (e) =>
+        r.ready.push({ id: e.target.id || e.target.getAttribute('data-days'), ...e.detail })
+      );
+      document.addEventListener('vitrine:fallback', (e) => r.fallback.push(e.detail));
+      // Sample the interaction slot every frame: the budget is 1.
+      const tick = () => {
+        const s = VitrineShader.stats();
+        r.maxInteraction = Math.max(r.maxInteraction, s.interactionMounts);
+        r.canvases = document.querySelectorAll('vitrine-shader canvas').length;
+        r.maxCanvases = Math.max(r.maxCanvases ?? 0, r.canvases);
+        r.samples++;
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      r.done = true;
+    </script>
+  </body>
+</html>

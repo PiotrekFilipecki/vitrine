@@ -1,9 +1,17 @@
-/** Effects shipped in v1 (PLAN D2). Names map to Paper Shaders: dither=image-dithering, halftone=halftone-cmyk, mesh=mesh-gradient, paper=paper-texture. */
-export type VitrineEffect = 'dither' | 'halftone' | 'mesh' | 'paper';
+/**
+ * Effects. v0.1 (PLAN D2): dither=image-dithering, halftone=halftone-cmyk, mesh=mesh-gradient, paper=paper-texture.
+ * v0.2 (ADR-0003): glass=fluted-glass (card glass, pre-order glass), lens=lens-distortion (product page loupe).
+ */
+export type VitrineEffect = 'dither' | 'halftone' | 'mesh' | 'paper' | 'glass' | 'lens';
 
-export type VitrineReveal = 'hover' | 'none';
+/** `tap` is new in v0.2: click or tap toggles, hover and focus do nothing. */
+export type VitrineReveal = 'hover' | 'tap' | 'none';
 
-export type VitrineMode = 'baked' | 'live';
+/**
+ * `clear` (v0.2): a date-bound glass on or after its release date, the plain photo, no layer.
+ * `interactive` (v0.2): a pointer-bound lens at rest, the plain photo until a pointer arrives.
+ */
+export type VitrineMode = 'baked' | 'live' | 'clear' | 'interactive';
 
 export type VitrineFallbackReason = 'no-webgl2' | 'cors' | 'error';
 
@@ -75,4 +83,6 @@ export interface VitrineStats {
   liveMounts: number;
   bakerContexts: number;
   bakedCached: number;
+  /** v0.2: live contexts held by an interaction (glass transition or loupe), at most 1. */
+  interactionMounts: number;
 }

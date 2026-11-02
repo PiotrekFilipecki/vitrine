@@ -6,9 +6,12 @@ describe('vitrine-shaders package surface', () => {
     expect(PAPER_SHADERS_VERSION).toBe('0.0.82');
   });
 
-  it('should expose the four v1 effects (PLAN D2) under a hyphenated tag', () => {
+  it('should keep the four v1 effects first (PLAN D2) and add glass and lens (ADR-0003)', () => {
     expect(VITRINE_TAG).toBe('vitrine-shader');
-    expect([...EFFECTS]).toEqual(['dither', 'halftone', 'mesh', 'paper']);
+    // Backwards compatibility: v0.1 names unchanged and in the same order.
+    expect([...EFFECTS].slice(0, 4)).toEqual(['dither', 'halftone', 'mesh', 'paper']);
+    expect([...EFFECTS]).toEqual(['dither', 'halftone', 'mesh', 'paper', 'glass', 'lens']);
+    expect(isEffect('glass')).toBe(true);
     expect(isEffect('dither')).toBe(true);
     expect(isEffect('liquid-metal')).toBe(false);
   });
