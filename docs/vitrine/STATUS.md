@@ -63,9 +63,9 @@ Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-
 5. [x] `bash scripts/release-0.2.sh` (Piotrek, 03.11.2026): push `main` + gałęzie + tag, repo **publiczne**, GitHub Pages (workflow „Pages (static demo)” success, https://piotrekfilipecki.github.io/vitrine/examples/static/ → 200), Release v0.2.0 z `vitrine-shopify-theme-0.2.0.zip`, Vercel prod (https://vitrine-hazel-three.vercel.app/ = „Store · a VITRINE headless demo”).
 6. [x] npm: `vitrine-shaders@0.2.0` opublikowane (`latest`, 36 plików, shasum `ed85d40f…` = lokalny tarball). npm wymaga dziś 2FA kluczem bezpieczeństwa (TOTP nie da się już dodać) i pierwszą publikację przepuszcza przez staged publishing: zostaje publiczny placeholder `0.0.0-stage`; można go oznaczyć `npm deprecate vitrine-shaders@0.0.0-stage "staged-publishing placeholder"` (wymaga 2FA).
 7. [x] Motyw testowy na sklepie (03.11.2026): karty za szybą działają; na PDP poprawiona lupa pod przyciskiem zoomu Horizona (0.2.1, devlog Q1 „Sklep testowy i 0.2.1”). Podgląd: https://niwwts.myshopify.com?preview_theme_id=193335820605
-7a. [ ] npm 0.2.1: `cd packages/element && npm publish --auth-type=web` (Touch ID).
-8. [ ] Firefox: `pnpm exec playwright test --project=firefox`.
-9. [ ] Telefon: `https://piotrekfilipecki.github.io/vitrine/examples/static/` i `https://vitrine-hazel-three.vercel.app/` (tap na kartę, przytrzymanie palca w PDP, sekcja Pre-order). Chwalisz się tym? Jeśli nie, Q1.1.
+7a. [x] npm `vitrine-shaders@0.2.1` = `latest`, GitHub Release v0.2.1 z `vitrine-shopify-theme-0.2.1.zip` (Piotrek, 03.11.2026).
+8. [ ] Firefox: `pnpm exec playwright test --project=firefox` (odłożone przez Piotrka).
+9. [~] Telefon (Piotrek, iPhone Safari, 03.11.2026): efekty widoczne, „bez animacji”; do sprawdzenia, czy w iOS jest włączone Ustawienia → Dostępność → Ruch → Ogranicz ruch (wtedy szyba celowo otwiera się bez animacji). Link: `https://piotrekfilipecki.github.io/vitrine/examples/static/` i `https://vitrine-hazel-three.vercel.app/` (tap na kartę, przytrzymanie palca w PDP, sekcja Pre-order). Chwalisz się tym? Jeśli nie, Q1.1.
 10. [ ] Zgłoszenia z `docs/vitrine/submission.md` (Codrops → komentarz → X → Discord Papera) dopiero po bramce z punktu 6: to Twoje konta i Twój głos, nie wysyłam ich za Ciebie.
 
 ## Bramka R0 (Cowork, potem Piotrek)
