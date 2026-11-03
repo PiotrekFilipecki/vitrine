@@ -59,10 +59,18 @@ for (const width of [1440, 390]) {
   const hero = page.locator('.hero__photo vitrine-shader');
   if (mobile) await hero.tap();
   else await hero.hover();
-  await page.waitForFunction(() =>
-    document.querySelector('.hero__photo vitrine-shader').hasAttribute('data-vitrine-open')
+  // Hero doors: a mouse peeks (the panes part at the cursor, never "open"); a tap opens fully.
+  await page.waitForFunction(
+    (mobile) => {
+      const el = document.querySelector('.hero__photo vitrine-shader');
+      return mobile
+        ? el.hasAttribute('data-vitrine-open')
+        : el.querySelector('.vitrine-baked')?.style.visibility === 'hidden';
+    },
+    mobile,
+    { timeout: 30_000 }
   );
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(mobile ? 300 : 800);
   await still(page, `q1-hero-${width}-open`);
   if (mobile) await page.locator('.bar').tap();
   else await page.mouse.move(2, 2);

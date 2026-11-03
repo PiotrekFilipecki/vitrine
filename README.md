@@ -111,6 +111,9 @@ Storefront API or repo fixtures: [`examples/next-headless`](examples/next-headle
 - **Zero live contexts at rest.** Browsers evict WebGL contexts after about sixteen. The glass at rest and the frosted
   pre-order card are rendered once through one shared off-screen context and cached; the loupe does not exist until a
   pointer arrives. A page of cards ends with 0 live contexts.
+- **The hero's doors.** With `params='{"doors":true}'` two panes part where the cursor points and open fully on a tap,
+  on the same single context: a small patch on the upstream shader cuts the gap, and the resting frame still comes
+  from the unpatched shader.
 - **One context while something moves.** The glass transition and the loupe share a single slot: a second interaction
   takes it over and the first jumps to its end state. The fresh context paints under the identical baked frame
   before the pane starts to move, so its start-up frame never lands in the motion.
@@ -136,14 +139,15 @@ without the element.
 | Static demo "Store", 18 elements (`examples/static`) | 99 · LCP 2 103 ms · TBT 29 ms | 98 · 2 478 ms · 0 ms  |
 | Next.js 16 "Store" (`examples/next-headless`)        | 96 · LCP 2 782 ms · TBT 45 ms | 99 · 2 031 ms · 10 ms |
 
-CLS is 0 on both. The Next LCP spread between runs is wide (with: 2 031–3 262 ms, without: 1 808–2 856 ms), so the
-median delta (+751 ms) is not yet a reliable number. While the glass opens (Chrome, CPU ×4, 1440 px at 2×): a card renders at 16.7 ms per frame, the
-full-height hero at a 24.9 ms median; the context start-up is one 167–217 ms frame before the pane moves. Live WebGL
-contexts after load: 0.
+CLS is 0 on both. LCP is the same hero `<img>` with and without the element, so the deltas are Lighthouse's run-to-run
+spread, not a gain (Next, with: 2 031–3 262 ms, without: 1 808–2 856 ms). While the glass moves (Chrome, CPU ×4, 1440
+px at 2×): a card renders at 16.7 ms per frame; the full-height hero doors at a 33.3 ms median. A fresh context
+starts with one long frame (167–400 ms) before anything moves, under the identical baked picture. Live WebGL contexts
+after load: 0.
 
 Pixel compatibility with `@paper-design/shaders-react` 0.0.82: 13 effect/preset cases, at most 0.0067 % different
-pixels (Chromium, WebKit). Bundle, gzip: core 22.1 KB, glass 4.4 KB, lens 3.9 KB; React wrappers under 1 KB;
-single-file theme asset 55.5 KB. Every number, with the method, is in [`docs/vitrine/devlog`](docs/vitrine/devlog).
+pixels (Chromium, WebKit). Bundle, gzip: core 22.6 KB (index + static chunks), interactions 4.4 KB (only with glass or
+lens), glass 5.0 KB, lens 3.9 KB; React wrappers under 1 KB; single-file theme asset 56.6 KB. Every number, with the method, is in [`docs/vitrine/devlog`](docs/vitrine/devlog).
 
 ## API in short
 

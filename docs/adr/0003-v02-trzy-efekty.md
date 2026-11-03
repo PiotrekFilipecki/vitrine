@@ -32,7 +32,7 @@ Pozytywne: trzy efekty z R0 działają w Liquid, HTML i React z jednego elementu
 
 Negatywne i dług:
 
-- Hero z makiety R0 miał **dwie szyby rozchodzące się od kursora** (dwa żywe konteksty, odstęp 420/640 ms). Przy budżecie „max 1” hero dostaje tę samą jedną szybę co karta (odjeżdża w prawo, 520/380 ms). Przed/po w devlogu Q1. Powrót do drzwi dwuskrzydłowych wymagałby łatki shadera (otwór w środku szyby jednym uniformem), poza zakresem.
+- Hero z makiety R0 miał **dwie szyby rozchodzące się od kursora** (dwa żywe konteksty, odstęp 420/640 ms). W Q1 hero dostał jedną szybę jak karta; w Q1.1 drzwi wróciły na jednym kontekście (łatka shadera, „Uzupełnienie Q1.1” niżej).
 - Pierwsza klatka przejścia czeka na nowy kontekst (kompilacja shadera + wgranie tekstury z mipmapami); do tego czasu widać wypaloną klatkę, więc nic nie mruga, ale start jest opóźniony o czas zmierzony w devlogu.
 - `reveal="tap"` na linku zmienia zachowanie pierwszego kliknięcia (nie nawiguje). To świadome i opisane w API.md; kto chce nawigacji od razu, zostaje przy `hover`.
 - Wartości VITRINE-only w presecie `loupe` (`loupeSize`, `zoom`) nie są propsami Papera; test zgodności je zdejmuje (jak `whitePoint`).
@@ -44,3 +44,17 @@ Negatywne i dług:
 - **Sześć efektów z PROMPTY-v02 Q2** (galeria efektów w demo): negatyw z Locka („NIE może wyglądać jak galeria shaderów z Dribbble”) i wynik R0 (liquid-metal, pulsing-border, halftone, paper-texture odpadły; water, grain-gradient odłożone). Mniej efektów, ale pięknych.
 - **Szyba animowana stale (live w spoczynku):** 24 karty × kontekst przekracza limit 16; bez sensu, skoro szyba w spoczynku się nie rusza.
 - **Zegar na stronie dla przedsprzedaży** (szyba przeciera się na żywo): zero wartości dla kupującego w skali minut, koszt kontekstu; wartość liczona raz przy montażu wystarcza.
+
+## Uzupełnienie Q1.1 (03.11.2026)
+
+- **Drzwi w hero na jednym kontekście (dług z „Negatywne” spłacony).** Parametr VITRINE-only `doors` na `glass`: łatka
+  shadera (`patchDoors`, jeden uniform `u_vitrineGap` = otwór od–do w osi x płótna) dzieli szybę na dwa skrzydła,
+  każde z maską marginesów upstreamu, więc cięte krawędzie mają te same refleksy co brzegi. Ruch z makiety R0:
+  szczelina 0,2 pod kursorem na hover (520 ms, kursor śledzony 160 ms), pełne otwarcie na tap/klik/fokus/Enter
+  (640 ms), zamknięcie 380/420 ms. Łatka działa tylko w żywej interakcji (`EffectModule.interactionShader`);
+  klatka spoczynku piecze się shaderem upstreamu (otwór 0 = maski upstreamu), więc testy zgodności pikseli dalej
+  dotyczą shadera Papera. Łatka rzuca wyjątek, gdy upstream przesunie linie kotwiczące (jak `whitePoint`).
+- **Kod interakcji jako osobny chunk** (`motion.ts`): strona tylko z efektami v0.1 go nie pobiera. Rdzeń
+  (indeks + statyczne chunki, gzip): 24 442 → 22 569 B.
+- **Motyw:** `vitrine-card-media` i fragment ustawień motywu dostają `glass` jako domyślny efekt kart (preset
+  `window`); instalacje v0.1 zachowują zapisane wartości, bo ustawienia motywu są w danych sklepu.

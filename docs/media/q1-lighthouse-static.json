@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-02T23:04:44.292Z",
+  "date": "2026-11-02T23:47:22.301Z",
   "target": "static",
   "page": null,
   "runs": 3,
@@ -8,45 +8,45 @@
       "runs": [
         {
           "score": 99,
-          "lcpMs": 1954,
+          "lcpMs": 1878,
           "cls": 0,
-          "tbtMs": 0,
-          "fcpMs": 904,
+          "tbtMs": 1,
+          "fcpMs": 1109,
           "lcpElement": null
         },
         {
-          "score": 95,
-          "lcpMs": 2929,
+          "score": 100,
+          "lcpMs": 1878,
           "cls": 0,
-          "tbtMs": 31,
-          "fcpMs": 903,
+          "tbtMs": 29,
+          "fcpMs": 1061,
           "lcpElement": null
         },
         {
           "score": 99,
-          "lcpMs": 2103,
+          "lcpMs": 2253,
           "cls": 0,
-          "tbtMs": 29,
+          "tbtMs": 32,
           "fcpMs": 903,
           "lcpElement": null
         }
       ],
       "median": {
         "score": 99,
-        "lcpMs": 2103,
+        "lcpMs": 1878,
         "cls": 0,
         "tbtMs": 29,
-        "fcpMs": 903
+        "fcpMs": 1061
       }
     },
     "noEffects": {
       "runs": [
         {
           "score": 98,
-          "lcpMs": 2479,
+          "lcpMs": 2478,
           "cls": 0,
           "tbtMs": 0,
-          "fcpMs": 904,
+          "fcpMs": 903,
           "lcpElement": null
         },
         {
@@ -75,5 +75,5 @@
       }
     }
   },
-  "deltaLcpMs": -375
+  "deltaLcpMs": -600
 }

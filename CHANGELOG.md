@@ -21,8 +21,12 @@ before.
 - Liquid: `vitrine-glass-card`, `vitrine-preorder-card` (metafield `custom.release_date`), `vitrine-loupe-media`.
 - Demo "Store" (static HTML + Next.js) with twelve Unsplash product photographs; the NIWWTS demo is retired (its
   fixtures serve the pixel-compatibility tests only).
-- Measured: Lighthouse mobile static demo 99 (TBT 29 ms), 0 live contexts after load, pixel compatibility 13 cases
-  ≤ 0.0067 %.
+- `params: { doors: true }` on glass: two panes part at the pointer (the hero), still one context; the rest frame is
+  the upstream render.
+- The interaction code (glass, doors, loupe) is its own chunk; pages with only v0.1 effects do not load it.
+- Theme settings: the card effect gets `glass` (new default, preset `window`); dither and halftone stay selectable.
+- Measured: Lighthouse mobile static demo 99 (TBT 29 ms), 0 live contexts after load, pixel compatibility
+  13 cases ≤ 0.0067 %.
 
 ### Also in 0.2.0 (Q0)
 

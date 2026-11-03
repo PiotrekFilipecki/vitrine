@@ -87,18 +87,22 @@ test.describe('Q1 · Store demo', () => {
     });
   }
 
-  test('hero: hover slides the glass away on one context; product page: the loupe, no context at rest', async ({
+  test('hero: the doors peek on hover on one context and open on focus; product page: the loupe, no context at rest', async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await loadAll(page, '/examples/static/');
     await page.waitForTimeout(1800);
-    await page.locator('.hero__photo vitrine-shader').hover();
+    // Hero doors: the mouse peeks (the panes part at the cursor on one context), keyboard focus opens fully.
+    const hero = page.locator('.hero__photo vitrine-shader');
+    await hero.hover();
+    await expect.poll(async () => (await contexts(page)).interactionMounts).toBe(1);
     await expect
-      .poll(() =>
-        page.locator('.hero__photo vitrine-shader').evaluate((e) => e.hasAttribute('data-vitrine-open'))
-      )
-      .toBe(true);
+      .poll(() => hero.locator('.vitrine-baked').evaluate((e) => (e as HTMLElement).style.visibility))
+      .toBe('hidden');
+    await page.mouse.move(2, 2);
+    await page.locator('.hero__photo').focus();
+    await expect.poll(() => hero.evaluate((e) => e.hasAttribute('data-vitrine-open'))).toBe(true);
     await page.goto('/examples/static/products/satchel.html');
     await page.waitForFunction(
       () => document.querySelector('vitrine-shader')?.getAttribute('data-vitrine-state') === 'interactive'

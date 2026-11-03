@@ -167,6 +167,13 @@ motion the glass opens and closes at once, without a context.
   <img src="/sneaker.webp" alt="Court sneaker" width="1600" height="2240" />
 </vitrine-shader>
 
+<!-- hero: two panes part at the pointer (the R0 hero) -->
+<a href="/products/bar-stool">
+  <vitrine-shader effect="glass" preset="window" params='{"doors":true}'>
+    <img src="/stool-1600.webp" alt="Bar stool" width="1600" height="2000" fetchpriority="high" />
+  </vitrine-shader>
+</a>
+
 <!-- product page -->
 <vitrine-shader effect="lens" preset="loupe" params='{"zoom":2.5}'>
   <img src="/satchel-1600.webp" alt="Grey pebbled leather satchel" width="1600" height="1000" fetchpriority="high" />
@@ -181,10 +188,13 @@ same factor (`--vitrine-image-scale`, a transform, no layout shift) and clips wi
 
 | Name | Where | Default | What it does |
 | --- | --- | --- | --- |
+| `doors` | `params` of `glass` | off | VITRINE-only (Q1.1): two panes part at the pointer instead of one pane sliding right. Hover peeks (gap 0.2, follows the cursor), tap/click/focus/Enter open fully. One context; the rest frame is the upstream render |
 | `loupeSize` | `params` of `lens` | `0.5` (preset `loupe`) | VITRINE-only: loupe diameter as a fraction of the element width |
 | `zoom` | `params` of `lens` | `2.2` (preset `loupe`) | VITRINE-only: magnification |
 | `--vitrine-glass-open` | CSS, element or ancestor | `520ms` | glass opening time |
-| `--vitrine-glass-close` | CSS, element or ancestor | `380ms` | glass closing time |
+| `--vitrine-glass-close` | CSS, element or ancestor | `380ms` | glass closing time (doors: closing from fully open, `420ms`) |
+| `--vitrine-glass-peek` | CSS, element or ancestor | `520ms` | doors: the hover peek |
+| `--vitrine-glass-close-peek` | CSS, element or ancestor | `380ms` | doors: closing from a peek |
 
 Pre-order curve (`dateFrost`, exported): piecewise linear in days left through the anchors `preorder-30`,
 `preorder-7`, `preorder-1` (it moves `distortion`, `blur`, `stretch`, `highlights`, `shadows`, `grainOverlay`), then to
@@ -243,5 +253,6 @@ new cases.
 
 ## Bundle
 
-ESM with code splitting: `index.js` (element, baker, bake queue, readback, encoder, pool, interactions, ShaderMount)
-plus one chunk per effect loaded on first use. Sizes: P1 devlog, updated in the Q0 and Q1 devlogs.
+ESM with code splitting: `index.js` (element, baker, bake queue, readback, encoder, pool, ShaderMount) plus one chunk
+per effect and one for the interactions (glass transition, doors, loupe), each loaded on first use. Core (index +
+static chunks) 22.6 KB gzip, interactions 4.4 KB, glass 5.0 KB, lens 3.9 KB (Q1.1). Sizes: P1 devlog, updated in the Q0 and Q1 devlogs.

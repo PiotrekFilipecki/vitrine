@@ -50,7 +50,7 @@ for (let run = 0; run < RUNS; run++) {
       }).observe(el, { subtree: true, childList: true, attributes: true });
       const tick = (t) => {
         r.t.push(t);
-        if (r.open === null && t - r.t0 < 5000) requestAnimationFrame(tick);
+        if (t - r.t0 < 3500) requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
     }, sel);
@@ -67,13 +67,15 @@ for (let run = 0; run < RUNS; run++) {
       for (let i = 1; i < f.t.length; i++) if (f.t[i] > from && f.t[i] <= to) out.push(f.t[i] - f.t[i - 1]);
       return out;
     };
+    if (f.moving === null) throw new Error(`no motion recorded on ${sel}`);
+    f.end = f.open ?? f.moving + 520;
     const prep = deltas(f.created, f.moving);
-    const move = deltas(f.moving, f.open);
+    const move = deltas(f.moving, f.end);
     return {
       // hover → context created → pane moving (what the shopper waits for) → open
       createdMs: +(f.created - f.t0).toFixed(1),
       startMs: +(f.moving - f.t0).toFixed(1),
-      openMs: +(f.open - f.moving).toFixed(1),
+      openMs: +(f.end - f.moving).toFixed(1),
       prepMaxFrameMs: +Math.max(...prep).toFixed(1),
       frames: move.length,
       medianFrameMs: +median(move).toFixed(1),

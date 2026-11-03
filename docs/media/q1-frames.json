@@ -11,100 +11,100 @@
         "canvases": 0
       },
       "hero": {
-        "createdMs": 145.3,
-        "startMs": 425.9,
-        "openMs": 540.7,
-        "prepMaxFrameMs": 283.3,
-        "frames": 14,
+        "createdMs": 140.7,
+        "startMs": 472.5,
+        "openMs": 520,
+        "prepMaxFrameMs": 333.4,
+        "frames": 17,
+        "medianFrameMs": 33.3,
+        "p95FrameMs": 66.6,
+        "maxFrameMs": 66.6
+      },
+      "card": {
+        "createdMs": 61.1,
+        "startMs": 389.5,
+        "openMs": 533.8,
+        "prepMaxFrameMs": 316.7,
+        "frames": 32,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.7,
+        "maxFrameMs": 16.8
+      }
+    },
+    {
+      "atRest": {
+        "liveMounts": 0,
+        "bakerContexts": 0,
+        "bakedCached": 14,
+        "interactionMounts": 0,
+        "canvases": 0
+      },
+      "hero": {
+        "createdMs": 137.3,
+        "startMs": 542.8,
+        "openMs": 520,
+        "prepMaxFrameMs": 399.9,
+        "frames": 17,
+        "medianFrameMs": 33.3,
+        "p95FrameMs": 49.9,
+        "maxFrameMs": 49.9
+      },
+      "card": {
+        "createdMs": 58.9,
+        "startMs": 236.9,
+        "openMs": 534,
+        "prepMaxFrameMs": 166.6,
+        "frames": 31,
+        "medianFrameMs": 16.7,
+        "p95FrameMs": 16.8,
+        "maxFrameMs": 33.3
+      }
+    },
+    {
+      "atRest": {
+        "liveMounts": 0,
+        "bakerContexts": 0,
+        "bakedCached": 14,
+        "interactionMounts": 0,
+        "canvases": 0
+      },
+      "hero": {
+        "createdMs": 148.9,
+        "startMs": 558.5,
+        "openMs": 520,
+        "prepMaxFrameMs": 399.9,
+        "frames": 12,
         "medianFrameMs": 33.4,
         "p95FrameMs": 66.7,
         "maxFrameMs": 66.7
       },
       "card": {
-        "createdMs": 49.6,
-        "startMs": 293.4,
-        "openMs": 532.6,
-        "prepMaxFrameMs": 216.7,
+        "createdMs": 62.7,
+        "startMs": 323.5,
+        "openMs": 533,
+        "prepMaxFrameMs": 233.3,
         "frames": 32,
         "medianFrameMs": 16.7,
-        "p95FrameMs": 16.7,
-        "maxFrameMs": 16.7
-      }
-    },
-    {
-      "atRest": {
-        "liveMounts": 0,
-        "bakerContexts": 0,
-        "bakedCached": 14,
-        "interactionMounts": 0,
-        "canvases": 0
-      },
-      "hero": {
-        "createdMs": 118.1,
-        "startMs": 342.3,
-        "openMs": 556,
-        "prepMaxFrameMs": 216.7,
-        "frames": 22,
-        "medianFrameMs": 24.9,
-        "p95FrameMs": 33.4,
-        "maxFrameMs": 33.4
-      },
-      "card": {
-        "createdMs": 50.8,
-        "startMs": 245.4,
-        "openMs": 532.8,
-        "prepMaxFrameMs": 183.3,
-        "frames": 32,
-        "medianFrameMs": 16.7,
-        "p95FrameMs": 16.7,
-        "maxFrameMs": 16.7
-      }
-    },
-    {
-      "atRest": {
-        "liveMounts": 0,
-        "bakerContexts": 0,
-        "bakedCached": 14,
-        "interactionMounts": 0,
-        "canvases": 0
-      },
-      "hero": {
-        "createdMs": 116.6,
-        "startMs": 341.7,
-        "openMs": 549.9,
-        "prepMaxFrameMs": 216.7,
-        "frames": 25,
-        "medianFrameMs": 16.7,
-        "p95FrameMs": 33.4,
-        "maxFrameMs": 33.4
-      },
-      "card": {
-        "createdMs": 47.8,
-        "startMs": 228.3,
-        "openMs": 533.5,
-        "prepMaxFrameMs": 166.7,
-        "frames": 32,
-        "medianFrameMs": 16.7,
-        "p95FrameMs": 16.7,
+        "p95FrameMs": 16.8,
         "maxFrameMs": 16.8
       }
     }
   ],
   "median": {
     "hero": {
-      "startMs": 342.3,
-      "prepMaxFrameMs": 216.7,
-      "medianFrameMs": 24.9,
-      "p95FrameMs": 33.4,
-      "maxFrameMs": 33.4,
-      "frames": 22
+      "startMs": 542.8,
+      "prepMaxFrameMs": 399.9,
+      "medianFrameMs": 33.3,
+      "p95FrameMs": 66.6,
+      "maxFrameMs": 66.6,
+      "frames": 17
     },
     "card": {
-      "startMs": 245.4,
-      "prepMaxFrameMs": 183.3,
+      "startMs": 323.5,
+      "prepMaxFrameMs": 233.3,
       "medianFrameMs": 16.7,
-      "p95FrameMs": 16.7,
-      "maxFrameMs": 16.7,
+      "p95FrameMs": 16.8,
+      "maxFrameMs": 16.8,
       "frames": 32
     },
     "contextsAtRest": 0

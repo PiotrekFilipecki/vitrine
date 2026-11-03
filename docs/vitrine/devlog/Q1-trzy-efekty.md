@@ -474,3 +474,57 @@ Nie dało się w tej sesji (każde z dokładnym powodem):
 - Zgłoszenia (Codrops, X, Discord): Twoje konta i Twój głos; teksty gotowe w `submission.md`.
 
 Wszystko z tej listy robi `bash scripts/release-0.2.sh` (Terminal.app), krok po kroku, z zatrzymaniem na błędzie.
+
+## Q1.1 · dalej, bez logowań (03.11.2026, polecenie Piotrka: „rób teraz dalej wszystko co możesz”)
+
+Z listy „po stronie aplikacji”:
+
+| Punkt | Zrobione | Dowód |
+| --- | --- | --- |
+| Drzwi dwuskrzydłowe w hero | parametr `doors` na `glass`: łatka `u_vitrineGap` (`patchDoors`), kontroler `GlassDoors` z ruchem R0 (szczelina 0,2 na hover 520 ms, śledzenie kursora 160 ms, pełne otwarcie 640 ms, zamknięcie 380/420 ms), jeden kontekst; spoczynek piecze shader upstreamu | `q1.test.ts` (3 testy łatki), `q1.spec.ts` „hero doors” (Chromium + WebKit), `docs/media/q1-hero-1440-open.webp`, `q1-glass.mp4` |
+| Lżejszy rdzeń | `motion.ts` jako osobny chunk (dynamic import, ładowany równolegle z wypalaniem tylko dla `glass`/`lens`) | rdzeń (indeks + statyczne chunki, gzip -9): 24 442 B (commit przed zmianą, zbudowany w osobnym worktree) → 22 569 B; chunk interakcji 4 430 B |
+| Błąd znaleziony przy okazji | ponowne najechanie w ciągu 400 ms łaski animowało ukryte płótno (oba kontrolery) | `#showLive()` przed ruchem; test „10 fast hovers” dalej zielony |
+| Etykieta przedsprzedaży na 390 px | na kartach „Pre-order · 11 Nov” (jedna linia), na PDP pełna forma | `demo.js`, `ProductCard.tsx` |
+| Szyba w ustawieniach motywu | `vitrine-card-media` + fragment ustawień: `glass` domyślnie (preset `window`), dither/halftone dalej do wyboru, preset innego efektu wraca do własnego | `shopify theme check`: 0 błędów (4 × `OrphanedSnippet`) |
+| Szablon v0.2 motywu | `theme-markup-v02.html`: markup trzech snippetów v0.2 na jednoplikowym `assets/vitrine.js` (bez chunków), 10 tagów skryptu | `theme-markup-v02.spec.ts`: 1 żądanie assetu, 7 kart + przedsprzedaż wypalone, lupa, hover otwiera, 0 kontekstów po (Chromium + WebKit) |
+| Kopia motywu testowego | `examples/theme-test/live` dostał nowe snippety i asset | wypchnięcie na sklep: `scripts/release-0.2.sh`, krok 7 |
+
+Ramki po zmianie (CPU ×4, 1440 @2×, mediana z 3, `docs/media/q1-frames.json`; hero mierzony w oknie 520 ms zajrzenia, bo na hover drzwi się nie otwierają do końca):
+
+```
+run 1 {"atRest":{"liveMounts":0,"bakerContexts":0,"bakedCached":14,"interactionMounts":0,"canvases":0},"hero":{"createdMs":140.7,"startMs":472.5,"openMs":520,"prepMaxFrameMs":333.4,"frames":17,"medianFrameMs":33.3,"p95FrameMs":66.6,"maxFrameMs":66.6},"card":{"createdMs":61.1,"startMs":389.5,"openMs":533.8,"prepMaxFrameMs":316.7,"frames":32,"medianFrameMs":16.7,"p95FrameMs":16.7,"maxFrameMs":16.8}}
+run 2 {"atRest":{"liveMounts":0,"bakerContexts":0,"bakedCached":14,"interactionMounts":0,"canvases":0},"hero":{"createdMs":137.3,"startMs":542.8,"openMs":520,"prepMaxFrameMs":399.9,"frames":17,"medianFrameMs":33.3,"p95FrameMs":49.9,"maxFrameMs":49.9},"card":{"createdMs":58.9,"startMs":236.9,"openMs":534,"prepMaxFrameMs":166.6,"frames":31,"medianFrameMs":16.7,"p95FrameMs":16.8,"maxFrameMs":33.3}}
+run 3 {"atRest":{"liveMounts":0,"bakerContexts":0,"bakedCached":14,"interactionMounts":0,"canvases":0},"hero":{"createdMs":148.9,"startMs":558.5,"openMs":520,"prepMaxFrameMs":399.9,"frames":12,"medianFrameMs":33.4,"p95FrameMs":66.7,"maxFrameMs":66.7},"card":{"createdMs":62.7,"startMs":323.5,"openMs":533,"prepMaxFrameMs":233.3,"frames":32,"medianFrameMs":16.7,"p95FrameMs":16.8,"maxFrameMs":16.8}}
+median {"hero":{"startMs":542.8,"prepMaxFrameMs":399.9,"medianFrameMs":33.3,"p95FrameMs":66.6,"maxFrameMs":66.6,"frames":17},"card":{"startMs":323.5,"prepMaxFrameMs":233.3,"medianFrameMs":16.7,"p95FrameMs":16.8,"maxFrameMs":16.8,"frames":32},"contextsAtRest":0}
+```
+
+Czytanie: karta w ruchu bez zmian (16,7 ms). Hero z drzwiami jest droższy niż hero z jedną szybą w Q1 (mediana 33,3 vs 24,9 ms w ruchu, start 543 vs 342 ms, klatka startu do 400 ms): łatka dokłada dwa wywołania maski na piksel, a płótno hero ma 1556×1672 px. Przy CPU ×1 nie mierzone. Pomiar skryptem po zmianie liczy okno ruchu po stronie Node (start ruchu + 520 ms albo „open”), bo przy drzwiach `open` na hover nie przychodzi; dwa pierwsze przebiegi nowego skryptu przerwał błąd samego skryptu (pętla rAF kończyła się przed zamknięciem okna), nie elementu.
+
+Media odświeżone (`node scripts/q1-media.mjs`, hero z drzwiami): wszystkie WebP ≤ 400 kB, `q1-glass.mp4` 0,11 MB (GIF 0,58 MB), `q1-loupe.mp4` 0,21 MB (GIF 1,58 MB), 0 błędów strony. README dostał nowe kadry i GIF-y.
+
+Lighthouse mobile, static, po Q1.1 (mediana z 3, `docs/media/q1-lighthouse-static.json`):
+
+```
+effects   [(99, 1878, 1, 0), (100, 1878, 29, 0), (99, 2253, 32, 0)]   (score, LCP ms, TBT ms, CLS)
+          median {'score': 99, 'lcpMs': 1878, 'cls': 0, 'tbtMs': 29, 'fcpMs': 1061}
+noEffects [(98, 2478, 0, 0), (98, 2478, 0, 0), (98, 2478, 0, 0)]
+          median {'score': 98, 'lcpMs': 2478, 'cls': 0, 'tbtMs': 0, 'fcpMs': 903}
+delta -600
+```
+
+Cel ≥ 95 i TBT < 200 ms dalej spełniony. ΔLCP to znowu rozrzut symulacji (ten sam `<img>` hero w obu wariantach). Asset motywu po Q1.1: 149 966 B, 56 626 B gzip.
+
+Kontrola po Q1.1:
+
+```
+$ pnpm build        → exit 0
+$ pnpm typecheck    → exit 0
+$ pnpm lint         → All matched files use Prettier code style!
+$ pnpm test         → Tests  82 passed (82)
+$ pnpm test:e2e --project=chromium --project=webkit
+  9 skipped
+  113 passed (5.0m)
+exit 0
+```
+
+Pierwszy pełny przebieg po zmianach: 111 passed, 2 failed (mój test demo oczekiwał pełnego otwarcia hero na hover, a hero ma teraz drzwi, które na hover się uchylają); test poprawiony (hover = uchylenie na 1 kontekście, fokus = pełne otwarcie), potem przebieg wyżej. Firefox: bez zmian (nie startuje w sesji, krok 8 skryptu wydania).
