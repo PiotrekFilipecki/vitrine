@@ -1,6 +1,6 @@
 # VITRINE · STATUS
 
-Aktualizacja: 03.11.2026, Q1 domknięte na polecenie Piotrka („rób wszystko do końca”): `r0-kierunek` i `q1-trzy-efekty` zmergowane fast-forward do lokalnego `main`, tag `v0.2.0`, wersje paczek 0.2.0, README/CHANGELOG/ROADMAP/submission na v0.2, motyw testowy (lokalna kopia `examples/theme-test/live`) przepięty na snippety v0.2. **Niewypchnięte:** push odrzucony przez GitHub (token `gh` bez zakresu `workflow`), deploy Vercel prod zablokowany przez uprawnienia sesji, npm i Shopify CLI wymagają logowania. Wszystko, co zostało, robi jeden skrypt: `bash scripts/release-0.2.sh` (Terminal.app). Decyzja: `docs/adr/0003-v02-trzy-efekty.md`. Devlog: `docs/vitrine/devlog/Q1-trzy-efekty.md`.
+Aktualizacja: 03.11.2026, Q1 domknięte na polecenie Piotrka („rób wszystko do końca”): `r0-kierunek` i `q1-trzy-efekty` zmergowane fast-forward do lokalnego `main`, tag `v0.2.0`, wersje paczek 0.2.0, README/CHANGELOG/ROADMAP/submission na v0.2, motyw testowy (lokalna kopia `examples/theme-test/live`) przepięty na snippety v0.2. Wydanie 0.2.0 opublikowane 03.11.2026 przez Piotrka skryptem `scripts/release-0.2.sh`: repo publiczne, Pages, Vercel, Release, npm. Zostały: motyw testowy na sklepie, Firefox, bramka telefonu, zgłoszenia (lista niżej). Decyzja: `docs/adr/0003-v02-trzy-efekty.md`. Devlog: `docs/vitrine/devlog/Q1-trzy-efekty.md`.
 
 Wcześniej: 30.10.2026, R0 (reset kierunku) na gałęzi `r0-kierunek` od `main` (`85b9349`, z Q0). Commit R0 powstał po wstępnym przeglądzie Cowork; pełna weryfikacja Cowork zakończyła się 30.10.2026 ok. 01:20 werdyktem „gotowe” (`docs/vitrine/raport-weryfikacji-R0.md`, skopiowany w Q1). Decyzja: `docs/adr/0002-kierunek-v2.md` + `docs/vitrine/KIERUNEK-v2.md` (zastępuje PLAN D13 i domyślny dither). PROMPTY-v02 Q1–Q4 wstrzymane do bramki R0. Devlog: `docs/vitrine/devlog/R0-kierunek.md`.
 
@@ -60,9 +60,12 @@ Wcześniej: 29.10.2026, koniec P2 (wykonane po P3). `main` = P0. Gałęzie: `p1-
 2. [x] README, CHANGELOG 0.2.0, `packages/*/package.json` 0.2.0, README paczki npm, ROADMAP, `submission.md` na v0.2; media README z Q1 (stare NIWWTS usunięte).
 3. [x] `npm publish --dry-run`: `vitrine-shaders@0.2.0`, 32 pliki, 183,0 kB; zip motywu `release/vitrine-shopify-theme-0.2.0.zip` (71,8 kB); strona Pages złożona lokalnie (`scripts/pages-site.mjs`: 83 pliki, 1 747,6 KB).
 4. [x] Motyw testowy: `examples/theme-test/live` (gitignored) z `vitrine-glass-card` / `vitrine-preorder-card` na kartach i `vitrine-loupe-media` na głównym zdjęciu PDP; theme check: 0 błędów w plikach VITRINE (2 błędy w plikach Horizonu: filtr `applicable_disclosures` nieznany theme-check 4.9.4).
-5. [ ] **`bash scripts/release-0.2.sh` w Terminal.app** (wymaga Twoich logowań): zakres `workflow` dla `gh` + push, repo publiczne, GitHub Pages, GitHub Release z zipem, `vercel deploy --prod`, `npm publish`, `shopify theme push` na motyw testowy, Firefox.
-6. [ ] Telefon: `https://piotrekfilipecki.github.io/vitrine/examples/static/` i `https://vitrine-hazel-three.vercel.app/` (tap na kartę, przytrzymanie palca w PDP, sekcja Pre-order). Chwalisz się tym? Jeśli nie, Q1.1.
-7. [ ] Zgłoszenia z `docs/vitrine/submission.md` (Codrops → komentarz → X → Discord Papera) dopiero po bramce z punktu 6: to Twoje konta i Twój głos, nie wysyłam ich za Ciebie.
+5. [x] `bash scripts/release-0.2.sh` (Piotrek, 03.11.2026): push `main` + gałęzie + tag, repo **publiczne**, GitHub Pages (workflow „Pages (static demo)” success, https://piotrekfilipecki.github.io/vitrine/examples/static/ → 200), Release v0.2.0 z `vitrine-shopify-theme-0.2.0.zip`, Vercel prod (https://vitrine-hazel-three.vercel.app/ = „Store · a VITRINE headless demo”).
+6. [x] npm: `vitrine-shaders@0.2.0` opublikowane (`latest`, 36 plików, shasum `ed85d40f…` = lokalny tarball). npm wymaga dziś 2FA kluczem bezpieczeństwa (TOTP nie da się już dodać) i pierwszą publikację przepuszcza przez staged publishing: zostaje publiczny placeholder `0.0.0-stage`; można go oznaczyć `npm deprecate vitrine-shaders@0.0.0-stage "staged-publishing placeholder"` (wymaga 2FA).
+7. [ ] Motyw testowy na sklepie: `shopify theme push --store niwwts.myshopify.com --path examples/theme-test/live --theme 193335820605 --nodelete`.
+8. [ ] Firefox: `pnpm exec playwright test --project=firefox`.
+9. [ ] Telefon: `https://piotrekfilipecki.github.io/vitrine/examples/static/` i `https://vitrine-hazel-three.vercel.app/` (tap na kartę, przytrzymanie palca w PDP, sekcja Pre-order). Chwalisz się tym? Jeśli nie, Q1.1.
+10. [ ] Zgłoszenia z `docs/vitrine/submission.md` (Codrops → komentarz → X → Discord Papera) dopiero po bramce z punktu 6: to Twoje konta i Twój głos, nie wysyłam ich za Ciebie.
 
 ## Bramka R0 (Cowork, potem Piotrek)
 
