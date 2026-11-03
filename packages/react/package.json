@@ -1,6 +1,6 @@
 {
   "name": "@vitrine/react",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "React 19 wrappers for <vitrine-shader> (published as the vitrine-shaders/react subpath, see ADR-0001)",
   "license": "Apache-2.0",

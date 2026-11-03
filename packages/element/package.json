@@ -1,6 +1,6 @@
 {
   "name": "vitrine-shaders",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Paper Shaders for Shopify themes and headless storefronts: the <vitrine-shader> custom element (product glass, pre-order glass, loupe)",
   "license": "Apache-2.0",
   "author": "Piotr Filipecki",

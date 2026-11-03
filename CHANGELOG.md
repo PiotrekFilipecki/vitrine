@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1 (2026-11-03)
+
+- Loupe: listens on the nearest `[data-vitrine-card]` ancestor when there is one, so a theme overlay on top of the
+  product image (Horizon's transparent zoom button) no longer blocks it; clicks still reach the overlay. Found on the
+  dev store with the Horizon 4.3.0 product page.
+- Theme notes for Horizon's product page (`shopify-theme/README.md`).
+
 ## 0.2.0 (2026-11-03)
 
 Three shop moments approved at the R0 gate (ADR-0003). Additive: every v0.1 attribute, preset and wrapper works as

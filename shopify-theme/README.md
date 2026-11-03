@@ -46,6 +46,14 @@ the snippet prints the plain image. The frost is computed once in the shopper's 
 In Horizon, put `vitrine-glass-card` (or `vitrine-preorder-card` when `card_product.metafields.custom.release_date`
 is set) where the v0.1 instructions below put `vitrine-card-media`, and keep `data-vitrine-card` on the card root.
 
+**Loupe in Horizon (tested on the dev store, 03.11.2026):** render `vitrine-loupe-media` in `snippets/product-media.liquid`
+for `is_main_product_media and image_ref == blank` (the copy with `image_ref` belongs to Horizon's zoom dialog and its
+`drag-zoom-wrapper`; leave it alone). Horizon lays a transparent zoom button over the product image, so mark the
+first media container as the loupe surface: in `snippets/product-media-gallery-content.liquid` add
+`{% if forloop.first and media.media_type == 'image' %}data-vitrine-card{% endif %}` to the grid `<li ref="media[]">`,
+and append ` data-vitrine-card` to the slideshow `attributes` capture for the first image. The loupe then follows the
+pointer (or a held finger) and a click still opens Horizon's zoom.
+
 ## Install in 10 minutes
 
 1. **Copy** `assets/`, `sections/` and `snippets/` into your theme (keep the file names). Nothing is overwritten.

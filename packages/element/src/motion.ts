@@ -585,6 +585,10 @@ export class Loupe {
 
   #listen(): () => void {
     const el = this.#o.el;
+    // Themes put things on top of the product photo (Horizon: a transparent zoom button over the image), so the
+    // pointer never reaches the element. An explicit [data-vitrine-card] ancestor is the surface, as for the glass;
+    // coordinates stay relative to the element, and clicks still reach whatever the theme put on top.
+    const surface = (el.closest('[data-vitrine-card]') as HTMLElement | null) ?? el;
     const local = (e: PointerEvent) => {
       const r = el.getBoundingClientRect();
       return { x: e.clientX - r.left, y: e.clientY - r.top };
@@ -639,23 +643,23 @@ export class Loupe {
     const onContext = (e: Event) => {
       if (this.#touchId !== null || this.#holdStart) e.preventDefault();
     };
-    el.addEventListener('pointerenter', onEnter);
-    el.addEventListener('pointermove', onMove);
-    el.addEventListener('pointerleave', onLeave);
-    el.addEventListener('pointerdown', onDown);
-    el.addEventListener('pointerup', onUp);
-    el.addEventListener('pointercancel', onUp);
-    el.addEventListener('touchmove', onTouchMove, { passive: false });
-    el.addEventListener('contextmenu', onContext);
+    surface.addEventListener('pointerenter', onEnter);
+    surface.addEventListener('pointermove', onMove);
+    surface.addEventListener('pointerleave', onLeave);
+    surface.addEventListener('pointerdown', onDown);
+    surface.addEventListener('pointerup', onUp);
+    surface.addEventListener('pointercancel', onUp);
+    surface.addEventListener('touchmove', onTouchMove, { passive: false });
+    surface.addEventListener('contextmenu', onContext);
     return () => {
-      el.removeEventListener('pointerenter', onEnter);
-      el.removeEventListener('pointermove', onMove);
-      el.removeEventListener('pointerleave', onLeave);
-      el.removeEventListener('pointerdown', onDown);
-      el.removeEventListener('pointerup', onUp);
-      el.removeEventListener('pointercancel', onUp);
-      el.removeEventListener('touchmove', onTouchMove);
-      el.removeEventListener('contextmenu', onContext);
+      surface.removeEventListener('pointerenter', onEnter);
+      surface.removeEventListener('pointermove', onMove);
+      surface.removeEventListener('pointerleave', onLeave);
+      surface.removeEventListener('pointerdown', onDown);
+      surface.removeEventListener('pointerup', onUp);
+      surface.removeEventListener('pointercancel', onUp);
+      surface.removeEventListener('touchmove', onTouchMove);
+      surface.removeEventListener('contextmenu', onContext);
     };
   }
 

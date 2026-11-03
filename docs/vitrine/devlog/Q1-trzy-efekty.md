@@ -528,3 +528,14 @@ exit 0
 ```
 
 Pierwszy pełny przebieg po zmianach: 111 passed, 2 failed (mój test demo oczekiwał pełnego otwarcia hero na hover, a hero ma teraz drzwi, które na hover się uchylają); test poprawiony (hover = uchylenie na 1 kontekście, fokus = pełne otwarcie), potem przebieg wyżej. Firefox: bez zmian (nie startuje w sesji, krok 8 skryptu wydania).
+
+## Sklep testowy i 0.2.1 (03.11.2026)
+
+Piotrek uruchomił `scripts/release-0.2.sh` (repo publiczne, Pages, Vercel, Release v0.2.0, npm `vitrine-shaders@0.2.0`; npm wymagał 2FA kluczem bezpieczeństwa i przepuścił pierwszą publikację przez staged publishing z placeholderem `0.0.0-stage`) i wgrał motyw testowy. Sprawdzenie na `niwwts.myshopify.com` (motyw `193335820605`, hasło storefrontu ze schowka, nigdzie niezapisane):
+
+- Kolekcja: 12 kart `glass:baked`, 0 płócien w spoczynku, 12 × `[data-vitrine-card]`; hover otwiera szybę (545 ms przy pełnym CPU), po wyjściu 0 płócien.
+- PDP przed poprawką: lupa się nie pokazała, w konsoli `MissingRefError: Required ref "image" not found in component drag-zoom-wrapper`. Przyczyny: (1) Horizon kładzie na zdjęciu przezroczysty `button.product-media-container__zoom-button` (`elementFromPoint` w środku zdjęcia = przycisk), więc wskaźnik nie dochodził do elementu; (2) snippet podmieniał też kopię zdjęcia w oknie zoomu, którą Horizon renderuje z `image_ref` dla `drag-zoom-wrapper`.
+- Poprawka: lupa słucha na najbliższym `[data-vitrine-card]` (jak szyba); w motywie testowym atrybut na kontenerze pierwszego zdjęcia (siatka i slideshow), a kopia z `image_ref` zostaje oryginalna. Test `q1.spec.ts` „loupe under a theme overlay” (Chromium + WebKit).
+- PDP po poprawce (wgrane 3 pliki `--only`): desktop lupa widoczna, 0 płócien po wyjściu, klik dalej otwiera okno zoomu Horizona; telefon (przytrzymany palec przez CDP) lupa widoczna; `MissingRefError` zniknął. Jeden `404` w konsoli przy pierwszym przebiegu nie powtórzył się ani na motywie testowym, ani na żywym Horizonie.
+
+Wydanie 0.2.1 (poprawka lupy): wersje paczek, CHANGELOG, tag `v0.2.1`, GitHub Release z zipem motywu. `npm publish` 0.2.1 wymaga klucza bezpieczeństwa Piotrka.

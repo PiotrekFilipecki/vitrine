@@ -84,6 +84,20 @@
       <h2>Pre-order</h2>
       <div class="grid" id="pre"></div>
     </section>
+    <section>
+      <h2>Loupe under a theme overlay (Horizon zoom button)</h2>
+      <div data-vitrine-card id="overlay-surface" style="position: relative; width: 360px; height: 300px">
+        <button
+          type="button"
+          id="zoom-button"
+          aria-label="Zoom"
+          style="position: absolute; inset: 0; z-index: 2; opacity: 0; border: 0; background: none"
+        ></button>
+        <vitrine-shader effect="lens" preset="loupe" id="overlay-lens" style="width: 360px; height: 300px">
+          <img src="/examples/fixtures/products/07-bag.webp" alt="Satchel" width="1600" height="1000" />
+        </vitrine-shader>
+      </div>
+    </section>
     <section id="pdp">
       <h2>Product page loupe</h2>
       <vitrine-shader effect="lens" preset="loupe" id="lens">

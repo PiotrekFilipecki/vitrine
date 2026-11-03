@@ -233,6 +233,27 @@ test.describe('Q1 · loupe', () => {
   });
 });
 
+test.describe('Q1 · loupe under a theme overlay', () => {
+  test('a transparent button over the image (Horizon zoom) does not stop the loupe; the click still reaches it', async ({
+    page,
+  }) => {
+    await ready(page);
+    const surface = page.locator('#overlay-surface');
+    await surface.scrollIntoViewIfNeeded();
+    await page.evaluate(() => {
+      (window as unknown as { __zoomClicks: number }).__zoomClicks = 0;
+      document.getElementById('zoom-button')!.addEventListener('click', () => {
+        (window as unknown as { __zoomClicks: number }).__zoomClicks += 1;
+      });
+    });
+    const b = (await surface.boundingBox())!;
+    await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 4 });
+    await expect(page.locator('#overlay-lens .vitrine-loupe')).toBeVisible();
+    await page.mouse.click(b.x + b.width / 2, b.y + b.height / 2);
+    expect(await page.evaluate(() => (window as unknown as { __zoomClicks: number }).__zoomClicks)).toBe(1);
+  });
+});
+
 test.describe('Q1 · pre-order', () => {
   test('frost by days left: 30 > 7 > 1 day, clear on and after the release', async ({ page }) => {
     await ready(page);
